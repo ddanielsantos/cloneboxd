@@ -1,21 +1,21 @@
-type pessoa = {
-    nome: string,
-    genero: string,
-    nascidoEm: string,
-    nacionalidade: string,
+type person = {
+    name: string,
+    gender: string,
+    bornAt: string,
+    nationality: string,
     bio: string,
-    cargo: number,
+    role: number,
 }
 
-type filme ={
+type movie = {
     titulo: string,
-    duracao: string,
-    ano: string,
-    nacionalidade: string,
+    duration: string,
+    year: string,
+    nationality: string,
 }
 
-type cargo = {
-    nome: string,
+type role = {
+    name: string,
 }
 
-export { pessoa, filme, cargo }
+export { person, movie, role }
