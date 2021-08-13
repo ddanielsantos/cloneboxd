@@ -6,10 +6,10 @@ export async function up(knex: Knex): Promise<void> {
         CREATE TABLE "cast" (
             "idMovie" integer,
             "idPerson" integer,
-            CONSTRAINT "FK_elenco.idPerson"
+            CONSTRAINT "FK_cast.idPerson"
             FOREIGN KEY ("idPerson")
-                REFERENCES "pessoa"("id"),
-            CONSTRAINT "FK_elenco.idMovie"
+                REFERENCES "person"("id"),
+            CONSTRAINT "FK_cast.idMovie"
             FOREIGN KEY ("idMovie")
                 REFERENCES "movie"("id")
         );
