@@ -9,8 +9,7 @@ export async function up(knex: Knex): Promise<void> {
             "gender" varchar NOT NULL,
             "bornAt" date NOT NULL,
             "nacionality" varchar NOT NULL,
-            "bio" text,
-            "role" integer NOT NULL
+            "bio" text
         );
     `)
 }
