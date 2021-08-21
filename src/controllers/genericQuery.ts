@@ -1,4 +1,4 @@
-import knex from "../../knex/knex.js"
+const knex = require("../../knex/knex")
 
 const genericQuery = (table: string) => knex(table).select()
 
