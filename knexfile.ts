@@ -41,11 +41,11 @@ module.exports = {
   production: {
     client: "postgresql",
     connection: {
-      host: process.env.HOST,
-      database: process.env.DATABASE,
-      user: process.env.USER,
-      password: process.env.PASSWORD,
-      ssl: true
+      host: process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      //ssl: true
     },
     pool: {
       min: 2,
