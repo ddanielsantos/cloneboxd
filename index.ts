@@ -1,7 +1,7 @@
 import express from 'express';
 require('dotenv/config')
 import { router } from './src/routes/routes';
-const port = process.env.PORT
+const port = process.env.PORT || 2020
 const app = express()
 
 app.use(express.json()) // SEMPRE LEMBRAR DESSA PORCARIA ANTES DE QUALQUER UTILIZAÇÃO DO REQUEST
@@ -9,5 +9,5 @@ app.use(express.json()) // SEMPRE LEMBRAR DESSA PORCARIA ANTES DE QUALQUER UTILI
 app.use(router)
 
 app.listen(port, ()=>{
-    console.log('Servidor rodando')
+    console.log('Servidor rodando na porta: ' + port)
 })
