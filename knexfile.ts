@@ -1,6 +1,4 @@
 // Update with your config settings.
-var pg = require('pg')
-pg.defaults.ssl = true
 
 module.exports = {
 
@@ -42,13 +40,14 @@ module.exports = {
 
   production: {
     client: "postgresql",
-    connection: {
-      host: process.env.DB_HOST,
-      database: process.env.DB_NAME,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      // ssl: true
-    },
+    connection: process.env.DATABASE_URL,
+    // connection: {
+    //   host: process.env.DB_HOST,
+    //   database: process.env.DB_NAME,
+    //   user: process.env.DB_USER,
+    //   password: process.env.DB_PASS,
+    //   // ssl: true
+    // },
     pool: {
       min: 2,
       max: 10
