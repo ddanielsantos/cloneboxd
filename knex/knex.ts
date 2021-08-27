@@ -1,4 +1,4 @@
-const environment = process.env.ENVIRONMENT || 'zap'
+const environment = process.env.ENVIRONMENT || 'development'
 
 const config = require('../knexfile')[environment]
 console.log(config)
