@@ -8,10 +8,10 @@ type person = {
 }
 
 type movie = {
-    titulo: string,
+    title: string,
     duration: string,
-    year: string,
-    nationality: string,
+    year: number,
+    origin: string,
 }
 
 type role = {
