@@ -1,4 +1,6 @@
-const environment = process.env.ENVIRONMENT || 'development'
+require('dotenv/config')
+const environment = process.env.ENVIRONMENT 
+// || 'development'
 
 const config = require('../knexfile')[environment]
 console.log(config)
