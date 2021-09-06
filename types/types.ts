@@ -18,4 +18,9 @@ type role = {
     name: string,
 }
 
-export { person, movie, role }
+type user = {
+    email: string,
+    password: string
+}
+
+export { person, movie, role, user}
