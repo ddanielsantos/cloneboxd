@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt';
 import { Knex } from 'knex'
-import { user } from '../../types/types'
+import { user } from '../../../types/types'
 
-const knex = require("../../knex/knex") as Knex
+const knex = require("../../../knex/knex") as Knex
 
 const auth = async(req: Request, res: Response) => {
     const credentials: user = req.body

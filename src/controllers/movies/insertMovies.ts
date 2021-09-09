@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { movie } from "../../types/types";
-import { genericInsert } from "./genericInsert";
+import { movie } from "../../../types/types";
+import { genericInsert } from "../genericInsert";
 
 const insertMovies = async(req: Request, res: Response) =>{
     // console.log(req.body)

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { genericQuery } from "./genericQuery";
+import { genericQuery } from "../genericQuery";
 
 
 const getPerson = async(req: Request, res:Response) =>{

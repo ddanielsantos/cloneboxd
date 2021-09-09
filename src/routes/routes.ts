@@ -1,10 +1,10 @@
 import express from 'express';
-import { insertMovies } from '../controllers/insertMovies';
-import { getPerson } from '../controllers/requestPerson';
-import { getMovies } from '../controllers/requestMovies';
-import { getRoles } from '../controllers/requestRoles';
-import { auth } from '../controllers/authUser';
-import { createUser } from '../controllers/createUser';
+import { insertMovies } from '../controllers/movies/insertMovies';
+import { getPerson } from '../controllers/person/requestPerson';
+import { getMovies } from '../controllers/movies/requestMovies';
+import { getRoles } from '../controllers/roles/requestRoles';
+import { auth } from '../controllers/user/authUser';
+import { createUser } from '../controllers/user/createUser';
 
 const router = express.Router();
 

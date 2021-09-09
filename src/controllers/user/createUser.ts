@@ -1,9 +1,9 @@
 import { Knex } from "knex";
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
-import { user } from "../../types/types";
-import { genericInsert } from "./genericInsert";
-const knex = require("../../knex/knex") as Knex
+import { user } from "../../../types/types";
+import { genericInsert } from "../genericInsert";
+const knex = require("../../../knex/knex") as Knex
 
 const createUser = async (req: Request, res: Response) => {
     const user: user = req.body
