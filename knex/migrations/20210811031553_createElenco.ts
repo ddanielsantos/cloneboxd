@@ -1,8 +1,7 @@
-import { Knex } from "knex";
+import { Knex } from 'knex'
 
-
-export async function up(knex: Knex): Promise<void> {
-    return knex.schema.raw(`
+export async function up (knex: Knex): Promise<void> {
+  return await knex.schema.raw(`
         CREATE TABLE "cast" (
             "idMovie" integer,
             "idPerson" integer,
@@ -20,8 +19,6 @@ export async function up(knex: Knex): Promise<void> {
     `)
 }
 
-
-export async function down(knex: Knex): Promise<void> {
-    return knex.schema.dropTable('cast')
+export async function down (knex: Knex): Promise<void> {
+  return await knex.schema.dropTable('cast')
 }
-

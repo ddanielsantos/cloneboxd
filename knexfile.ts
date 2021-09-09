@@ -1,12 +1,11 @@
 // Update with your config settings.
-
-module.exports = {
+const knexfile = {
 
   development: {
     client: 'postgresql',
     connection: {
       database: 'boxd',
-      user:     'postgres',
+      user: 'postgres',
       password: 'root'
     },
     pool: {
@@ -23,23 +22,23 @@ module.exports = {
   },
 
   staging: {
-    client: "postgresql",
+    client: 'postgresql',
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
+      database: 'my_db',
+      user: 'username',
+      password: 'password'
     },
     pool: {
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations"
+      tableName: 'knex_migrations'
     }
   },
 
   production: {
-    client: "pg",
+    client: 'pg',
     connection: process.env.DATABASE_URL,
     pool: {
       min: 2,
@@ -54,4 +53,6 @@ module.exports = {
     }
   }
 
-};
+}
+
+export { knexfile }

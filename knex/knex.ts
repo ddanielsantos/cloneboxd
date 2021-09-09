@@ -1,7 +1,11 @@
+import { knex as knexDependency } from 'knex'
+import { knexfile } from '../knexfile'
 require('dotenv/config')
-const environment = process.env.ENVIRONMENT 
-// || 'development'
+const environment = process.env.ENVIRONMENT ?? 'development'
 
-const config = require('../knexfile')[environment]
+const config = knexfile[environment]
 console.log(config)
-module.exports = require('knex')(config)
+
+const knex = knexDependency(config)
+
+export { knex }
