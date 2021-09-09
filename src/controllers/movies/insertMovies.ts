@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import { movie } from '../../../types/types'
+import { Movie } from '../../../types/types'
 import { genericInsert } from '../genericInsert'
 
 const insertMovies = async (req: Request, res: Response): Promise<any> => {
-  const data: movie = req.body
+  const data: Movie = req.body
 
   for (const el in data) {
     if (!data[el]) return res.status(500).send('Fill all the fields')

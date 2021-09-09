@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
-import { user } from '../../../types/types'
+import { User } from '../../../types/types'
 import { genericInsert } from '../genericInsert'
 import { knex } from '../../../knex/knex'
 
-const createUser = async (req: Request, res: Response) => {
-  const user: user = req.body
+const createUser = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
+  const user: User = req.body
   // const salt = await bcrypt.genSalt()
   const hasheada = await bcrypt.hash(user.password, 10)
 
@@ -18,9 +18,9 @@ const createUser = async (req: Request, res: Response) => {
       password: hasheada
     })
 
-    res.send('User added')
+    return res.send('User added')
   } catch {
-    res.status(500).send('An error occured')
+    return res.status(500).send('An error occured')
   }
   // return res.send({senha: hasheada})
   // const a = genericInsert('system-user', user)
