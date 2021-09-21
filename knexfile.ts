@@ -1,4 +1,6 @@
 // Update with your config settings.
+import path = require('path')
+
 const knexfile = {
 
   development: {
@@ -14,10 +16,10 @@ const knexfile = {
     },
     migrations: {
       tableName: 'knex_migrations',
-      directory: __dirname + '/knex/migrations'
+      directory: path.join(__dirname, 'knex', 'migrations')
     },
     seeds: {
-      directory: __dirname + '/knex/seeds'
+      directory: path.join(__dirname, 'knex', 'seeds')
     }
   },
 
@@ -46,13 +48,13 @@ const knexfile = {
     },
     migrations: {
       tableName: 'knex_migrations',
-      directory: __dirname + '/knex/migrations'
+      directory: path.join(__dirname, 'knex', 'migrations')
     },
     seeds: {
-      directory: __dirname + '/knex/seeds'
+      directory: path.join(__dirname, 'knex', 'seeds')
     }
   }
 
 }
 
-export { knexfile }
+module.exports = knexfile
