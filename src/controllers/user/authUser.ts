@@ -7,10 +7,11 @@ import { knex } from '../../../knex/knex'
 const auth = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const credentials: User = req.body
 
-  if (credentials.password == null || credentials.email == null) {
-    return res.status(401).send('email or password was not sent')
+  for (const prop in credentials) {
+    if (credentials[prop] == null) {
+      return res.status(401).send('fill all the fields')
+    }
   }
-
   const result = await knex('system-user').select().where('email', credentials.email)
 
   if (result.length < 1) {
