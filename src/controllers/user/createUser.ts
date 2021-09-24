@@ -6,23 +6,28 @@ import { knex } from '../../../knex/knex'
 
 const createUser = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const user: User = req.body
-  // const salt = await bcrypt.genSalt()
-  const hasheada = await bcrypt.hash(user.password, 10)
+
+  if (user.email == null || user.password == null) {
+    return res.status(500).send('email or password was not sent')
+  }
+
+  const crypted = await bcrypt.hash(user.password, 10)
 
   try {
     const result = await knex('system-user').where('email', user.email)
-    if (result.length > 0) return res.status(500).send('E-mail already in use')
+
+    if (result.length > 0) {
+      return res.status(500).send('e-mail already in use')
+    }
 
     await genericInsert('system-user', {
       email: user.email,
-      password: hasheada
+      password: crypted
     })
 
-    return res.send('User added')
+    return res.send('user added')
   } catch {
-    return res.status(500).send('An error occured')
+    return res.status(500).send('an error occurred')
   }
-  // return res.send({senha: hasheada})
-  // const a = genericInsert('system-user', user)
 }
 export { createUser }
