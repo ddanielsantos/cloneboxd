@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { Movie } from '../../../types/types'
 import { genericInsert } from '../genericInsert'
 
-const insertMovies = async (req: Request, res: Response): Promise<any> => {
+const createMovie = async (req: Request, res: Response): Promise<any> => {
   const data: Movie = req.body
 
   for (const el in data) {
@@ -19,4 +19,4 @@ const insertMovies = async (req: Request, res: Response): Promise<any> => {
   }
 }
 
-export { insertMovies }
+export { createMovie }
