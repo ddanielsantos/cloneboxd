@@ -6,13 +6,13 @@ const createMovie = async (req: Request, res: Response): Promise<any> => {
   const data: Movie = req.body
 
   for (const el in data) {
-    if (data[el] == null) {
+    if (data[el] === '') {
       return res.status(500).send('fill all the fields')
     }
-  }
 
-  if (data.year === 0) {
-    return res.status(500).send('the year of release cannot be 0')
+    if (data.year === 0) {
+      return res.status(500).send('the year of release cannot be 0')
+    }
   }
 
   try {
