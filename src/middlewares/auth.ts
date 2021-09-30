@@ -6,7 +6,7 @@ dotenv.config()
 
 const jwtSecret = process.env.JWT_SECRET
 
-export const auth = (req: Request, res: Response, next: NextFunction): Response<any, Record<string, any>> => {
+export const auth = (req: Request, res: Response, next: NextFunction): Response<any, Record<string, any>> | undefined => {
   if (req.headers.authorization === null) {
     return res.status(400).send('Cannot authenticate')
   }
@@ -18,7 +18,11 @@ export const auth = (req: Request, res: Response, next: NextFunction): Response<
     return res.status(400).send('Cannot authenticate')
   }
 
-  const a = jwt.verify(token, jwtSecret)
+  try {
+    jwt.verify(token, jwtSecret)
 
-  return res.send({ r: a })
+    next()
+  } catch {
+    return res.status(500).send('invalid token')
+  }
 }
