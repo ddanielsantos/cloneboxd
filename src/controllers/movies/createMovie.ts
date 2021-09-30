@@ -16,10 +16,7 @@ const createMovie = async (req: Request, res: Response): Promise<any> => {
   }
 
   try {
-    // console.log(data)
-    await genericInsert('movie', {
-      ...data
-    })
+    await genericInsert('movie', { ...data })
     return res.send('movie added')
   } catch {
     return res.status(500).send('an error occurred')
