@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import { User } from '../../../types/types'
 import { genericInsert } from '../genericInsert'
 import { knex } from '../../../knex/knex'
+import { v4 as uuid } from 'uuid'
 
 const createUser = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
   const user: User = req.body
@@ -11,7 +12,7 @@ const createUser = async (req: Request, res: Response): Promise<Response<any, Re
     return res.status(500).send('email or password was not sent')
   }
 
-  const crypted = await bcrypt.hash(user.password, 10)
+  const cryptedPass = await bcrypt.hash(user.password, 10)
 
   try {
     const result = await knex('system-user').where('email', user.email)
@@ -21,8 +22,9 @@ const createUser = async (req: Request, res: Response): Promise<Response<any, Re
     }
 
     await genericInsert('system-user', {
+      uuid: uuid(),
       email: user.email,
-      password: crypted
+      password: cryptedPass
     })
 
     return res.send('user added')
