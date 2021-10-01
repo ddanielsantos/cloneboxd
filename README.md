@@ -7,13 +7,7 @@ As ferramentas principais desse projeto foram:
 - [Typescript](https://github.com/microsoft/TypeScript/#readme)
 - [Express](https://github.com/expressjs/express)
 - [Knex](https://github.com/knex/knex)
-## Endpoints
-Por enquanto, os endpoints são esses:
 
-Filmes:
-```
-GET /movies
-```
-```
-POST /movies
-```
+## Estado
+
+No momento estou revendo o modelo do banco de dados, e a necessidade de autenticação do usuário em certas rotas
