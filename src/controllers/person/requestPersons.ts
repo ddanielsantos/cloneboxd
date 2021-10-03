@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { genericQuery } from '../genericQuery'
 
-const getPerson = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  return res.send(await genericQuery('person'))
+const getPerson = async (req: Request, res: Response): Promise<Response> => {
+  return res.status(200).send(genericQuery('person'))
 }
 
 export { getPerson }

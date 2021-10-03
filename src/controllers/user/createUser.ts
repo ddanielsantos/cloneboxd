@@ -5,7 +5,7 @@ import { genericInsert } from '../genericInsert'
 import { knex } from '../../../knex/knex'
 import { v4 as uuid } from 'uuid'
 
-const createUser = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
+const createUser = async (req: Request, res: Response): Promise<Response> => {
   const user: User = req.body
 
   if (user.email == null || user.password == null) {
@@ -27,9 +27,10 @@ const createUser = async (req: Request, res: Response): Promise<Response<any, Re
       password: cryptedPass
     })
 
-    return res.send('user added')
+    return res.status(200).send('user added')
   } catch {
     return res.status(500).send('an error occurred')
   }
 }
+
 export { createUser }

@@ -9,7 +9,7 @@ dotenv.config()
 
 const secret = process.env.JWT_SECRET ?? 'wrong secret'
 
-const auth = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
+const auth = async (req: Request, res: Response): Promise<Response> => {
   const credentials: User = req.body
 
   for (const prop in credentials) {
@@ -32,7 +32,7 @@ const auth = async (req: Request, res: Response): Promise<Response<any, Record<s
       expiresIn: '15min'
     })
 
-    return res.send({ token: oneMinuteToken })
+    return res.status(200).send({ token: oneMinuteToken })
   } catch {
     return res.status(500).send('an error occurred')
 

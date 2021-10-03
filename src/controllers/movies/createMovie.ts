@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { Movie } from '../../../types/types'
 import { genericInsert } from '../genericInsert'
 
-const createMovie = async (req: Request, res: Response): Promise<any> => {
+const createMovie = async (req: Request, res: Response): Promise<Response> => {
   const data: Movie = req.body
 
   for (const el in data) {
@@ -17,7 +17,7 @@ const createMovie = async (req: Request, res: Response): Promise<any> => {
 
   try {
     await genericInsert('movie', { ...data })
-    return res.send('movie added')
+    return res.status(200).send('movie added')
   } catch {
     return res.status(500).send('an error occurred')
   }
