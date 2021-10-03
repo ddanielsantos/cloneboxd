@@ -1,22 +1,14 @@
 import { Knex } from 'knex'
 
 export async function up (knex: Knex): Promise<void> {
-  return await knex.schema.raw(`
-        CREATE TABLE "cast" (
-            "idMovie" integer,
-            "idPerson" integer,
-            "role" integer NOT NULL,
-            CONSTRAINT "FK_cast.role"
-            FOREIGN KEY ("role")
-                REFERENCES "role"("id"),
-            CONSTRAINT "FK_cast.idPerson"
-            FOREIGN KEY ("idPerson")
-                REFERENCES "person"("id"),
-            CONSTRAINT "FK_cast.idMovie"
-            FOREIGN KEY ("idMovie")
-                REFERENCES "movie"("id")
-        );
-    `)
+  return await knex.schema.createTable('cast', (table) => {
+    table.integer('idMovie')
+    table.integer('idPerson')
+    table.integer('role').notNullable()
+    table.foreign('idMovie').references('id').inTable('movie')
+    table.foreign('idPerson').references('id').inTable('person')
+    table.foreign('role').references('id').inTable('role')
+  })
 }
 
 export async function down (knex: Knex): Promise<void> {
