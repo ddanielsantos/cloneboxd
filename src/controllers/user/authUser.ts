@@ -9,7 +9,7 @@ dotenv.config()
 
 const secret = process.env.JWT_SECRET ?? 'wrong secret'
 
-const auth = async (req: Request, res: Response): Promise<Response> => {
+const authUser = async (req: Request, res: Response): Promise<Response> => {
   const credentials: User = req.body
 
   for (const prop in credentials) {
@@ -35,9 +35,7 @@ const auth = async (req: Request, res: Response): Promise<Response> => {
     return res.status(200).send({ token: oneMinuteToken })
   } catch {
     return res.status(500).send('an error occurred')
-
-    // usar o midd auth nas rotas e checar o funcionamento
   }
 }
 
-export { auth }
+export { authUser }

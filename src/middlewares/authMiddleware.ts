@@ -6,7 +6,7 @@ dotenv.config()
 
 const jwtSecret = process.env.JWT_SECRET
 
-export const auth = async (req: Request, res: Response, next: NextFunction): Promise<Response | undefined> => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<Response | undefined> => {
   if (req.headers.authorization == null) {
     return res.status(400).send('Cannot authenticate')
   }

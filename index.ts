@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { router } from './src/routes/routes'
+import { router } from '@routes/routes'
 require('dotenv/config')
 const port = process.env.PORT ?? 2020
 const app = express()
