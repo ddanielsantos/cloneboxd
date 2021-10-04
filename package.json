@@ -8,7 +8,7 @@
     "build": "rimraf dist && tsc",
     "migrate": "npx knex migrate:up",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --clear --respawn index.ts"
+    "dev": "ts-node-dev -r tsconfig-paths/register --clear --respawn index.ts"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.1.8",
     "ts-standard": "^10.0.0",
+    "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.2"
   }
 }
