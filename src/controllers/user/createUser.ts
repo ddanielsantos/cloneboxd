@@ -1,8 +1,7 @@
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { User } from '../../../types/types'
-import { genericInsert } from '../genericInsert'
-import { knex } from '../../../knex/knex'
+import UserRepository from '../../repositories/UserRepository'
 import { v4 as uuid } from 'uuid'
 
 const createUser = async (req: Request, res: Response): Promise<Response> => {
@@ -15,16 +14,17 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
   const cryptedPass = await bcrypt.hash(user.password, 10)
 
   try {
-    const result = await knex('system-user').where('email', user.email)
+    const result = await UserRepository.findByEmail(user.email)
 
     if (result.length > 0) {
       return res.status(500).send('e-mail already in use')
     }
 
-    await genericInsert('system-user', {
-      uuid: uuid(),
+    await UserRepository.insertUser({
       email: user.email,
-      password: cryptedPass
+      password: cryptedPass,
+      admin: false,
+      uuid: uuid()
     })
 
     return res.status(200).send('user added')

@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { User } from '../../../types/types'
-import { knex } from '../../../knex/knex'
+import UserRepository from 'repositories/UserRepository'
 
 dotenv.config()
 
@@ -17,7 +17,7 @@ const authUser = async (req: Request, res: Response): Promise<Response> => {
       return res.status(401).send('fill all the fields')
     }
   }
-  const result = await knex('system-user').select().where('email', credentials.email)
+  const result = await UserRepository.findByEmail(credentials.email)
 
   if (result.length < 1) {
     return res.status(401).send("the e-mail didn't match")
@@ -28,11 +28,11 @@ const authUser = async (req: Request, res: Response): Promise<Response> => {
 
     if (!passComparation) return res.status(500).send("the credentials didn't match")
 
-    const oneMinuteToken: string = jwt.sign({ uuid: result[0].uuid }, secret, {
+    const minuteToken: string = jwt.sign({ uuid: result[0].uuid }, secret, {
       expiresIn: '15min'
     })
 
-    return res.status(200).send({ token: oneMinuteToken })
+    return res.status(200).send({ token: minuteToken })
   } catch {
     return res.status(500).send('an error occurred')
   }
