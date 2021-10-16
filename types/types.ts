@@ -8,7 +8,7 @@ interface Person {
 }
 
 interface Movie {
-  id?: number
+  id: number
   title: string
   duration: string
   year: number
