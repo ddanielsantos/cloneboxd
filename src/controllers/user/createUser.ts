@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { User } from '../../../types/types'
-import UserRepository from '../../repositories/UserRepository'
+import UserRepository from '@repositories/UserRepository'
 import { v4 as uuid } from 'uuid'
 
 const createUser = async (req: Request, res: Response): Promise<Response> => {

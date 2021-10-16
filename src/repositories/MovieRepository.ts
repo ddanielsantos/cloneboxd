@@ -1,4 +1,4 @@
-import { knex } from '../../knex/knex'
+import { knex } from '@knex/knex'
 import { Movie } from '../../types/types'
 
 const MovieRepository = {

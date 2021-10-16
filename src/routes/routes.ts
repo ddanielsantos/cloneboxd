@@ -1,8 +1,8 @@
 import express from 'express'
-import { movieController } from '@movie/movieController'
-import { personController } from '@person/personController'
-import { roleController } from '@role/roleController'
-import { userController } from '@user/userController'
+import { movieController } from '@controllers/movie/movieController'
+import { personController } from '@controllers/person/personController'
+import { roleController } from '@controllers/role/roleController'
+import { userController } from '@controllers/user/userController'
 
 const router = express.Router()
 
