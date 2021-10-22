@@ -20,6 +20,10 @@ const MovieRepository = {
 
   delete: async (movieId: number): Promise<void> => {
     await knex('movie').delete().where('id', movieId)
+  },
+
+  update: async (movieId: number, newMovieData: Movie): Promise<void> => {
+    await knex('movie').where('id', movieId).update(newMovieData)
   }
 }
 
