@@ -7,7 +7,7 @@ type MovieRequestParams = Request & {
   }
 }
 
-export const deleteMovie = async (req: MovieRequestParams, res: Response): Promise<Response<any, Record<string, any>>> => {
+export const deleteMovie = async (req: MovieRequestParams, res: Response): Promise<Response> => {
   const toDelete = await MovieRepository.findOne(req.params.movieId)
 
   try {
