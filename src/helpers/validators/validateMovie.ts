@@ -19,5 +19,7 @@ export const validateMovie = (data: movieInput): movieInput | errorObject => {
   }
 
   const { duration, origin, title, year } = data
-  return ({ duration, origin, title, year })
+  const validMovie = { duration, origin, title, year }
+
+  return validMovie
 }

@@ -2,7 +2,7 @@ import { Movie } from '../../../types/types'
 
 type inputted<T> = Omit<T, 'id'>
 
-type movieInput = inputted<Movie>
+export type movieInput = inputted<Movie>
 
 const hasProperty = (prop: any): boolean => {
   if (prop === undefined) {
