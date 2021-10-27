@@ -27,7 +27,7 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
       uuid: uuid()
     })
 
-    return res.status(200).send('user added')
+    return res.status(201).send('user added')
   } catch {
     return res.status(500).send('an error occurred')
   }
