@@ -1,4 +1,4 @@
-# Letterboxd Clone
+# Letterboxd Clone - Descontinuado
 
 Projeto básico inspirado no [Letterboxd](https://www.letterboxd.com) e no [IMDB](https://www.imdb.com), pretendo continuar atualizando ele, na medida em que aprendo mais sobre criação de APIs.
 
