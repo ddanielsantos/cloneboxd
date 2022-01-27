@@ -1,14 +1,25 @@
-# Letterboxd Clone - Descontinuado
+# Letterboxd Clone
 
-Projeto básico inspirado no [Letterboxd](https://www.letterboxd.com) e no [IMDB](https://www.imdb.com), pretendo continuar atualizando ele, na medida em que aprendo mais sobre criação de APIs.
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/80872981/151274227-bb88d008-ee5d-4abd-aa1a-c9f93e60961f.png" alt="image showing PostgresSQL and NodeJS logos" width="700"/>
+</p>
+  
+Basic Rest API made using NodeJS and PostgreSQL, inspired by [Letterboxd](https://www.letterboxd.com) and [IMDB](https://www.imdb.com)
 
-## Sobre
+## Endpoints
 
-A ideia da API é possibilitar que usuários criem contas no sistema, manipulem listas de filmes (assistidos ou não), os avaliem tanto com nota quanto com texto, visualizem os seus elencos, acessem informações sobre integrantes do filme e visualizem informações básicas sobre outros usuários.
 
-Com o crescimento dos requisitos do sistema, troquei a ideia inicial de usar um driver comum de banco de dados por um Query Builder, troquei o Javascript pelo Typescript, remodelei alguns pedaços do banco e atualmente estou tentando desacoplar algumas partes para que o código seja mais reutilizável e auto explicativo (meio que o SOLID só que não tão bem implementado)
-## Ferramentas
-As principais ferramentas desse projeto foram:
-- [Typescript](https://github.com/microsoft/TypeScript/#readme)
-- [Express](https://github.com/expressjs/express)
-- [Knex](https://github.com/knex/knex)
+POST `/user/join`<br/>
+POST `/user/auth`<br/>
+GET `/movie`<br/>
+POST `/movie` * <br/>
+PATCH `/movie` * <br/>
+DELETE `/movie/:movieId` * <br/>
+GET `/role`<br/>
+GET `/person`<br/>
+
+note: * = requires authentication first
+
+## Running
+
+To run this project, after clonning it, run `npm install`, from here, you can either run `npm run dev` or `npm run build && npm run start`
