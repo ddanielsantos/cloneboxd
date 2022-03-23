@@ -7,7 +7,7 @@ const app = express()
 
 app.disable('x-powered-by')
 app.use(cors())
-app.use(express.json()) // SEMPRE LEMBRAR DESSA PORCARIA ANTES DE QUALQUER UTILIZAÇÃO DO REQUEST
+app.use(express.json())
 
 app.use(router)
 
