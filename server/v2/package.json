@@ -1,16 +1,29 @@
 {
   "name": "cloneboxd-api-v2",
   "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsnd --respawn --clear  --transpile-only server.ts"
+  },
   "main": "dist/index.js",
   "author": "Daniel Santos",
   "license": "MIT",
   "dependencies": {
+    "@koa/cors": "^3.2.0",
     "graphql": "^16.3.0",
     "koa": "^2.13.4",
-    "mongodb": "^4.4.1"
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.1.1",
+    "mongodb": "^4.4.1",
+    "zod": "^3.14.2"
   },
   "devDependencies": {
+    "@types/koa": "^2.13.4",
+    "@types/koa-bodyparser": "^4.3.7",
+    "@types/koa-router": "^7.4.4",
+    "@types/koa__cors": "^3.1.1",
     "dotenv": "^16.0.0",
-    "ts-node-dev": "^1.1.8"
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.2"
   }
 }
