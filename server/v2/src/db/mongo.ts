@@ -9,4 +9,18 @@ if (!url) {
   throw new Error('No database url was provided')
 }
 
-export const client = new MongoClient(url)
+const client = new MongoClient(url);
+
+(
+  async () => {
+    await client.connect()
+  }
+)()
+
+const dbName = process.env.DATABASE_NAME
+
+if (!dbName) {
+  throw new Error('No database name was provided')
+}
+
+export const db = client.db(dbName)
