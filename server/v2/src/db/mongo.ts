@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
-import { generateEnvironmentVariables } from '../config/env'
+import { getEnvironmentVariables } from '../config/env'
 
-const { URL, DB_NAME } = generateEnvironmentVariables()
+const { URL, DB_NAME } = getEnvironmentVariables()
 const client = new MongoClient(URL);
 
 (
