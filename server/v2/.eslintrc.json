@@ -16,6 +16,14 @@
   ],
   "rules": {
     "space-before-function-paren": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "varsIgnorePattern": "^[A-Z_]",
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "quotes": [
       2,
       "single",

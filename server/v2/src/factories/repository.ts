@@ -28,12 +28,11 @@ function repositoryFactory<T>(collectionName: string): Repository<T> {
     },
 
     findSpecific: async function (id: string, attributes: (keyof T)[]) {
-      type SelectedAttributes = {
-        // eslint-disable-next-line no-unused-vars
+      type SelectedAttributes<T> = {
         [key in (keyof T)]?: 1 | 0;
       }
 
-      const SelectedAttributesMap: SelectedAttributes = {}
+      const SelectedAttributesMap: SelectedAttributes<T> = {}
 
       for (let i = 0; i < attributes.length; i++) {
         SelectedAttributesMap[attributes[i]] = (attributes[i] === '_id' ? 0 : 1)
