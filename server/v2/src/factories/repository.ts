@@ -1,5 +1,5 @@
 import { db } from '../db/mongo'
-import { WithId, InsertOneResult, OptionalUnlessRequiredId, ObjectId, Filter, DeleteResult } from "mongodb"
+import { WithId, InsertOneResult, OptionalUnlessRequiredId, ObjectId, Filter, DeleteResult } from 'mongodb'
 
 type Repository<T> = {
   findAll: () => Promise<WithId<T>[]>,
@@ -29,18 +29,19 @@ function repositoryFactory<T>(collectionName: string): Repository<T> {
 
     findSpecific: async function (id: string, attributes: (keyof T)[]) {
       type SelectedAttributes = {
+        // eslint-disable-next-line no-unused-vars
         [key in (keyof T)]?: 1 | 0;
       }
 
-      const SelectedAttributes: SelectedAttributes = {}
+      const SelectedAttributesMap: SelectedAttributes = {}
 
       for (let i = 0; i < attributes.length; i++) {
-        SelectedAttributes[attributes[i]] = ('_id' === attributes[i] ? 0 : 1)
+        SelectedAttributesMap[attributes[i]] = (attributes[i] === '_id' ? 0 : 1)
       }
 
       const query = new ObjectId(id)
 
-      const documents = await COLLECTION.find(query as Filter<T>).project(SelectedAttributes).toArray()
+      const documents = await COLLECTION.find(query as Filter<T>).project(SelectedAttributesMap).toArray()
 
       return documents
     },

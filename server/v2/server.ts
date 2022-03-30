@@ -1,21 +1,35 @@
 import Koa from 'koa'
-import cors from '@koa/cors'
-import dotenv from 'dotenv'
-import { router } from './src/routes'
-
-dotenv.config()
-
+import bodyParser from 'koa-bodyparser'
+import { getGraphQLParameters, processRequest, renderGraphiQL, sendResult, shouldRenderGraphiQL } from 'graphql-helix'
+import { schema } from './src/schemas'
 const app = new Koa()
-const PORT = Number(process.env.SERVER_PORT)
 
-if (!PORT) {
-  throw new Error('No API Port was defined')
-}
+app.use(bodyParser())
 
-function getOrigin() {
-  return process.env.ORIGIN ?? `http://localhost:${PORT}`
-}
+app.use(async (ctx) => {
+  const request = {
+    body: ctx.request.body,
+    headers: ctx.request.headers,
+    method: ctx.request.method,
+    query: ctx.request.query
+  }
 
-app.use(cors({ origin: getOrigin() }))
-app.use(router.routes())
-app.listen(PORT, () => console.log(`server running on: http://localhost:${PORT}`))
+  if (shouldRenderGraphiQL(request)) {
+    ctx.body = renderGraphiQL({})
+  } else {
+    const { operationName, query, variables } = getGraphQLParameters(request)
+
+    const result = await processRequest({
+      operationName,
+      query,
+      variables,
+      request,
+      schema
+    })
+
+    ctx.respond = false
+    sendResult(result, ctx.res)
+  }
+})
+
+export default app

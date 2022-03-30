@@ -1,15 +1,8 @@
-import dotenv from 'dotenv'
 import { MongoClient } from 'mongodb'
+import { generateEnvironmentVariables } from '../config/env'
 
-dotenv.config()
-
-const url = process.env.MONGODB_URL
-
-if (!url) {
-  throw new Error('No database url was provided')
-}
-
-const client = new MongoClient(url);
+const { URL, DB_NAME } = generateEnvironmentVariables()
+const client = new MongoClient(URL);
 
 (
   async () => {
@@ -17,10 +10,4 @@ const client = new MongoClient(url);
   }
 )()
 
-const dbName = process.env.DATABASE_NAME
-
-if (!dbName) {
-  throw new Error('No database name was provided')
-}
-
-export const db = client.db(dbName)
+export const db = client.db(DB_NAME)

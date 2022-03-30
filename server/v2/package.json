@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "dev": "tsnd --respawn --clear  --transpile-only server.ts"
+    "fake": "tsnd --transpile-only --clear src/faker/generateFakeData.ts",
+    "dev": "tsnd --respawn --clear --transpile-only index.ts"
   },
   "main": "dist/index.js",
   "author": "Daniel Santos",
@@ -11,6 +12,9 @@
   "dependencies": {
     "@koa/cors": "^3.2.0",
     "graphql": "^16.3.0",
+    "graphql-helix": "^1.12.0",
+    "graphql-relay": "^0.10.0",
+    "graphql-tools": "^8.2.3",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.1.1",
@@ -18,11 +22,19 @@
     "zod": "^3.14.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.1.1",
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.7",
     "@types/koa-router": "^7.4.4",
     "@types/koa__cors": "^3.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
     "dotenv": "^16.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.2"
   }
