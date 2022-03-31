@@ -6,19 +6,23 @@ export const cast = new GraphQLObjectType({
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
-      description: 'Unique identifier of the actor'
+      description: 'Unique identifier of the member',
+      resolve: cast => cast.id
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Actor name'
+      description: `Member's name`,
+      resolve: cast => cast.name
     },
     nacionality: {
       type: GraphQLString,
-      description: 'Actor nacionality'
+      description: `Member's nacionality`,
+      resolve: cast => cast.nacionality
     },
     dateOfBirth: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Actor date of birth'
+      description: `Member's date of birth`,
+      resolve: cast => cast.dateOfBirth
     }
   })
 })

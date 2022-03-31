@@ -6,23 +6,28 @@ export const review = new GraphQLObjectType({
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
-      description: 'Unique identifier of the review'
+      description: 'Unique identifier of the review',
+      resolve: review => review.id
     },
     userId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: 'Unique identifier of the user'
+      description: 'Unique identifier of the user',
+      resolve: review => review.userId
     },
     movieId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: 'Unique identifier of the movie'
+      description: 'Unique identifier of the movie',
+      resolve: review => review.movieId
     },
-    review: {
+    text: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'User review'
+      description: 'User review',
+      resolve: review => review.text
     },
     rating: {
       type: new GraphQLNonNull(GraphQLFloat),
-      description: 'User rating'
+      description: 'User rating',
+      resolve: review => review.rating
     }
   })
 })
