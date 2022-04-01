@@ -1,6 +1,12 @@
+import {
+  sendResult,
+  renderGraphiQL,
+  processRequest,
+  shouldRenderGraphiQL,
+  getGraphQLParameters
+} from 'graphql-helix'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import { getGraphQLParameters, processRequest, renderGraphiQL, sendResult, shouldRenderGraphiQL } from 'graphql-helix'
 import { schema } from './src/schemas/schema'
 const app = new Koa()
 
