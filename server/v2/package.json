@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "fake": "tsnd --transpile-only --clear src/faker/generateFakeData.ts",
     "dev": "tsnd --respawn --clear --transpile-only index.ts"
   },
   "main": "dist/index.js",
@@ -22,7 +21,6 @@
     "zod": "^3.14.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.1.1",
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.7",
     "@types/koa-router": "^7.4.4",
