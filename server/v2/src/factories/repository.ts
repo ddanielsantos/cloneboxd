@@ -1,12 +1,22 @@
 import { db } from '../db/mongo'
-import { WithId, InsertOneResult, OptionalUnlessRequiredId, ObjectId, Filter, DeleteResult } from 'mongodb'
+import {
+  WithId,
+  Filter,
+  ObjectId,
+  DeleteResult,
+  UpdateResult,
+  InsertOneResult,
+  OptionalUnlessRequiredId,
+  MatchKeysAndValues
+} from 'mongodb'
 
 type Repository<T> = {
   findAll: () => Promise<WithId<T>[]>,
   findOne: (id: string) => Promise<WithId<T> | null>,
   findSpecific: (id: string, attributes: (keyof T)[]) => Promise<any[]>,
   insertOne: (document: OptionalUnlessRequiredId<T>) => Promise<InsertOneResult<T>>,
-  deleteOne: (id: string) => Promise<DeleteResult>
+  deleteOne: (id: string) => Promise<DeleteResult>,
+  updateOne: (id: string, document: MatchKeysAndValues<T>) => Promise<UpdateResult>
 }
 
 function repositoryFactory<T>(collectionName: string): Repository<T> {
@@ -55,6 +65,14 @@ function repositoryFactory<T>(collectionName: string): Repository<T> {
       const query = ({ _id: new ObjectId(id) }) as unknown as Filter<T>
 
       const serverResponse = await COLLECTION.deleteOne(query)
+
+      return serverResponse
+    },
+
+    updateOne: async function (id: string, document: MatchKeysAndValues<T>): Promise<UpdateResult> {
+      const query = ({ _id: new ObjectId(id) }) as unknown as Filter<T>
+
+      const serverResponse = await COLLECTION.updateOne(query, { $set: document })
 
       return serverResponse
     }
