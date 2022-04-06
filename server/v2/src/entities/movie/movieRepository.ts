@@ -1,7 +1,6 @@
 import { repositoryFactory } from '../../factories/repository'
 
 type Movie = {
-  id: string,
   title: string,
   duration: string,
   releaseDate: string,

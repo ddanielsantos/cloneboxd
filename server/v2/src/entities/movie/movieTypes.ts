@@ -8,7 +8,7 @@ import {
   GraphQLInputObjectType
 } from 'graphql'
 
-export const movie = new GraphQLObjectType({
+export const movieType = new GraphQLObjectType({
   name: 'Movie',
   description: 'Movie type',
   fields: () => ({
@@ -59,33 +59,41 @@ export const movie = new GraphQLObjectType({
   })
 })
 
-export const movieInput = new GraphQLInputObjectType({
+export const movieInputType = new GraphQLInputObjectType({
   name: 'MovieInput',
   description: 'Movie input type',
   fields: {
     title: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Movie's title in its original language`
     },
     duration: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Movie's duration`
     },
     releaseDate: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Movie's global release date`
     },
     genres: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))),
+      description: `Movie's genres`
     },
     ageGroup: {
-      type: new GraphQLNonNull(GraphQLString)
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Movie's age group`
     },
     rating: {
-      type: new GraphQLNonNull(GraphQLFloat)
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: `Movie's rating according to users`
     },
     actors: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))),
+      description: `Movie's actors`
     },
     directors: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))),
+      description: `Movie's directors`
     }
   }
 })
