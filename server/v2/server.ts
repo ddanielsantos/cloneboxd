@@ -6,11 +6,14 @@ import {
   getGraphQLParameters
 } from 'graphql-helix'
 import Koa from 'koa'
+import cors from '@koa/cors'
 import bodyParser from 'koa-bodyparser'
 import { schema } from './src/schemas/schema'
+
 const app = new Koa()
 
 app.use(bodyParser())
+app.use(cors())
 
 app.use(async (ctx) => {
   const request = {
@@ -30,7 +33,8 @@ app.use(async (ctx) => {
       query,
       variables,
       request,
-      schema
+      schema,
+      contextFactory: () => ctx.req.headers
     })
 
     ctx.respond = false
