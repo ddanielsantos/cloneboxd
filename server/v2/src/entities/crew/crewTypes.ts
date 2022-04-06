@@ -6,7 +6,7 @@ import {
   GraphQLID
 } from 'graphql'
 
-export const crew = new GraphQLObjectType({
+export const crewType = new GraphQLObjectType({
   name: 'Crew',
   description: 'Crew type',
   fields: () => ({
@@ -33,7 +33,7 @@ export const crew = new GraphQLObjectType({
   })
 })
 
-export const crewInput = new GraphQLInputObjectType({
+export const crewInputType = new GraphQLInputObjectType({
   name: 'CrewInput',
   description: 'Crew input type',
   fields: () => ({

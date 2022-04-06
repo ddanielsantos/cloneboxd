@@ -3,10 +3,11 @@ import {
   GraphQLFloat,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLObjectType
+  GraphQLObjectType,
+  GraphQLInputObjectType
 } from 'graphql'
 
-export const review = new GraphQLObjectType({
+export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
   description: `Users review's type`,
   fields: () => ({
@@ -38,29 +39,25 @@ export const review = new GraphQLObjectType({
   })
 })
 
-export const reviewInput = new GraphQLObjectType({
+export const reviewInputType = new GraphQLInputObjectType({
   name: 'UserReviewInput',
   description: `User review's input type`,
   fields: () => ({
     userId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: `User's unique identifier`,
-      resolve: review => review.userId
+      description: `User's unique identifier`
     },
     movieId: {
       type: new GraphQLNonNull(GraphQLID),
-      description: `Movie's unique identifier`,
-      resolve: review => review.movieId
+      description: `Movie's unique identifier`
     },
     text: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Users review's text`,
-      resolve: review => review.text
+      description: `Users review's text`
     },
     rating: {
       type: new GraphQLNonNull(GraphQLFloat),
-      description: `User review's rating`,
-      resolve: review => review.rating
+      description: `User review's rating`
     }
   })
 })

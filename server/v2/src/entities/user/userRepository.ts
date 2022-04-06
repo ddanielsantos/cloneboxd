@@ -1,8 +1,7 @@
 import { repositoryFactory } from '../../factories/repository'
 
 type User = {
-  id: string,
-  fullNname: string,
+  fullName: string,
   email: string,
   password: string
 }

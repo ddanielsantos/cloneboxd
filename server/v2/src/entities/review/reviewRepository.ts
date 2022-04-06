@@ -1,7 +1,6 @@
 import { repositoryFactory } from '../../factories/repository'
 
 type Review = {
-  id: string,
   userId: string,
   movieId: string,
   text: string,
