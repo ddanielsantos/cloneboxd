@@ -2,11 +2,12 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLInputObjectType,
-  GraphQLObjectType
+  GraphQLObjectType,
+  GraphQLInputFieldConfig,
+  ThunkObjMap
 } from 'graphql'
 
-export const user = new GraphQLObjectType({
+export const userType = new GraphQLObjectType({
   name: 'User',
   description: 'User type',
   fields: () => ({
@@ -27,26 +28,23 @@ export const user = new GraphQLObjectType({
     },
     password: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `User password`
+      description: `User password`,
+      resolve: user => user.password
     }
   })
 })
 
-export const userInput = new GraphQLInputObjectType({
-  name: 'UserInput',
-  description: `User input type`,
-  fields: () => ({
-    fullName: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `User's full name`
-    },
-    email: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `User's email`
-    },
-    password: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `User's password`
-    }
-  })
-})
+export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
+  fullName: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `User's full name`
+  },
+  email: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `User's email`
+  },
+  password: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `User's password`
+  }
+}
