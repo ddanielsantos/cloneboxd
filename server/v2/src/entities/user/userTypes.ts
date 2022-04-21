@@ -1,21 +1,19 @@
 import {
-  GraphQLID,
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLInputFieldConfig,
   ThunkObjMap
 } from 'graphql'
+import { globalIdField } from 'graphql-relay'
+import { nodeInterface } from '../../graphql/nodeInterface'
 
 export const userType = new GraphQLObjectType({
   name: 'User',
   description: 'User type',
+  interfaces: () => [nodeInterface],
   fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `User's unique identifier`,
-      resolve: user => user._id
-    },
+    id: globalIdField('User'),
     fullName: {
       type: new GraphQLNonNull(GraphQLString),
       description: `User's full name`,
@@ -34,6 +32,9 @@ export const userType = new GraphQLObjectType({
   })
 })
 
+// TODO: do the same to other inputs
+// and find where to insert connections
+// and edges (probably on queries and mut)
 export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   fullName: {
     type: new GraphQLNonNull(GraphQLString),

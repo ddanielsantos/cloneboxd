@@ -14,9 +14,7 @@ export const movieUpdate = mutationWithClientMutationId({
     id: {
       type: new GraphQLNonNull(GraphQLID)
     },
-    movie: {
-      type: new GraphQLNonNull(movieInputType)
-    }
+    ...movieInputType
   },
   outputFields: {
     modifiedCount: {

@@ -17,7 +17,8 @@ type Repository<T> = {
   insertOne: (document: OptionalUnlessRequiredId<T>) => Promise<InsertOneResult<T>>,
   deleteOne: (id: string) => Promise<DeleteResult>,
   updateOne: (id: string, document: MatchKeysAndValues<T>) => Promise<UpdateResult>,
-  findByProperty: (fields: Partial<T>) => Promise<WithId<T>[]>
+  findByProperty: (fields: Partial<T>) => Promise<WithId<T>[]>,
+  findMany: (ids: string[]) => Promise<WithId<T>[]>
 }
 
 function repositoryFactory<T>(collectionName: string): Repository<T> {
@@ -36,6 +37,14 @@ function repositoryFactory<T>(collectionName: string): Repository<T> {
       const document = await COLLECTION.findOne(query as Filter<T>)
 
       return document
+    },
+
+    findMany: async function (ids: string[]): Promise<WithId<T>[]> {
+      const idsToSearch = ids.map(id => new ObjectId(id))
+      const query = { _id: { $in: idsToSearch } } as unknown as Filter<T>
+
+      const documents = await COLLECTION.find(query).toArray()
+      return documents
     },
 
     findSpecific: async function (id: string, attributes: (keyof T)[]) {

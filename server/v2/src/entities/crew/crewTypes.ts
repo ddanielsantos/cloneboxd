@@ -1,14 +1,18 @@
 import {
+  ThunkObjMap,
+  GraphQLID,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLInputObjectType,
   GraphQLObjectType,
-  GraphQLID
+  GraphQLInputFieldConfig
 } from 'graphql'
+import { globalIdField } from 'graphql-relay'
+import { nodeInterface } from '../../graphql/nodeInterface'
 
 export const crewType = new GraphQLObjectType({
   name: 'Crew',
   description: 'Crew type',
+  interfaces: () => [nodeInterface],
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -21,7 +25,7 @@ export const crewType = new GraphQLObjectType({
       resolve: crew => crew.name
     },
     nacionality: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: `Member's nacionality`,
       resolve: crew => crew.nacionality
     },
@@ -33,21 +37,17 @@ export const crewType = new GraphQLObjectType({
   })
 })
 
-export const crewInputType = new GraphQLInputObjectType({
-  name: 'CrewInput',
-  description: 'Crew input type',
-  fields: () => ({
-    name: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `Member's name`
-    },
-    nacionality: {
-      type: GraphQLString,
-      description: `Member's nacionality`
-    },
-    dateOfBirth: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `Member's date of birth`
-    }
-  })
-})
+export const crewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
+  name: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `Member's name`
+  },
+  nacionality: {
+    type: GraphQLString,
+    description: `Member's nacionality`
+  },
+  dateOfBirth: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `Member's date of birth`
+  }
+}

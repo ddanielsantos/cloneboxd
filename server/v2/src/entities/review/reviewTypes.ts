@@ -4,18 +4,19 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLInputObjectType
+  GraphQLInputObjectType,
+  ThunkObjMap,
+  GraphQLInputFieldConfig
 } from 'graphql'
+import { globalIdField } from 'graphql-relay'
+import { nodeInterface } from '../../graphql/nodeInterface'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
   description: `Users review's type`,
+  interfaces: () => [nodeInterface],
   fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `Review's unique identifier`,
-      resolve: review => review._id
-    },
+    id: globalIdField('UserReview'),
     userId: {
       type: new GraphQLNonNull(GraphQLID),
       description: `User's unique identifier`,
@@ -39,25 +40,21 @@ export const reviewType = new GraphQLObjectType({
   })
 })
 
-export const reviewInputType = new GraphQLInputObjectType({
-  name: 'UserReviewInput',
-  description: `User review's input type`,
-  fields: () => ({
-    userId: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `User's unique identifier`
-    },
-    movieId: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `Movie's unique identifier`
-    },
-    text: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `Users review's text`
-    },
-    rating: {
-      type: new GraphQLNonNull(GraphQLFloat),
-      description: `User review's rating`
-    }
-  })
-})
+export const reviewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
+  userId: {
+    type: new GraphQLNonNull(GraphQLID),
+    description: `User's unique identifier`
+  },
+  movieId: {
+    type: new GraphQLNonNull(GraphQLID),
+    description: `Movie's unique identifier`
+  },
+  text: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `Users review's text`
+  },
+  rating: {
+    type: new GraphQLNonNull(GraphQLFloat),
+    description: `User review's rating`
+  }
+}
