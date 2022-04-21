@@ -11,9 +11,7 @@ export const crewUpdate = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
       description: `Member's id`
     },
-    crew: {
-      type: crewInputType
-    }
+    ...crewInputType
   },
   outputFields: {
     updatedId: {
