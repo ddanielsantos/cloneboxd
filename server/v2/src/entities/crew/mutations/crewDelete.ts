@@ -1,6 +1,6 @@
-import { GraphQLNonNull, GraphQLString } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
 import { crewRepository } from '../crewRepository'
+import { GraphQLNonNull, GraphQLString } from 'graphql'
+import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
 export const crewDelete = mutationWithClientMutationId({
   name: 'crewDelete',
@@ -12,12 +12,14 @@ export const crewDelete = mutationWithClientMutationId({
     }
   },
   outputFields: {
-    deletedId: {
+    deletedCount: {
       type: GraphQLString,
-      resolve: response => response.deletedId
+      resolve: response => response.deletedCount
     }
   },
-  mutateAndGetPayload: async (payload) => {
-    return (await crewRepository.deleteOne(payload.id))
+  mutateAndGetPayload: async ({ id }) => {
+    const response = await crewRepository.deleteOne(fromGlobalId(id).id)
+
+    return response
   }
 })

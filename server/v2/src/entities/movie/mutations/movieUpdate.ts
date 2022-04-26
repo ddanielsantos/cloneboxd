@@ -3,9 +3,9 @@ import {
   GraphQLString,
   GraphQLNonNull
 } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
-import { movieRepository } from '../movieRepository'
 import { movieInputType } from '../movieTypes'
+import { movieRepository } from '../movieRepository'
+import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
 export const movieUpdate = mutationWithClientMutationId({
   name: 'movieUpdate',
@@ -22,7 +22,7 @@ export const movieUpdate = mutationWithClientMutationId({
       resolve: response => response.modifiedCount
     }
   },
-  mutateAndGetPayload: async (payload) => {
-    return (await movieRepository.updateOne(payload.id, payload.movie))
+  mutateAndGetPayload: async ({ id, ...movie }) => {
+    return (await movieRepository.updateOne(fromGlobalId(id).id, movie))
   }
 })

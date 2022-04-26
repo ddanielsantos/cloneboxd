@@ -13,4 +13,4 @@ type Movie = {
 
 const movieRepository = repositoryFactory<Movie>('movie')
 
-export { movieRepository }
+export { movieRepository, Movie }

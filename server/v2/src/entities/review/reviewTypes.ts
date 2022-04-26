@@ -8,7 +8,7 @@ import {
   ThunkObjMap,
   GraphQLInputFieldConfig
 } from 'graphql'
-import { globalIdField } from 'graphql-relay'
+import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { nodeInterface } from '../../graphql/nodeInterface'
 
 export const reviewType = new GraphQLObjectType({
@@ -16,7 +16,7 @@ export const reviewType = new GraphQLObjectType({
   description: `Users review's type`,
   interfaces: () => [nodeInterface],
   fields: () => ({
-    id: globalIdField('UserReview'),
+    id: globalIdField('UserReview', review => review._id),
     userId: {
       type: new GraphQLNonNull(GraphQLID),
       description: `User's unique identifier`,
@@ -58,3 +58,7 @@ export const reviewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
     description: `User review's rating`
   }
 }
+
+export const { connectionType: ReviewConnection, edgeType: MovieEdge } = connectionDefinitions({
+  nodeType: reviewType
+})

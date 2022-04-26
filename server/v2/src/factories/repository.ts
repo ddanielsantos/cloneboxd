@@ -10,7 +10,7 @@ import {
   MatchKeysAndValues
 } from 'mongodb'
 
-type Repository<T> = {
+export type Repository<T> = {
   findAll: () => Promise<WithId<T>[]>,
   findOne: (id: string) => Promise<WithId<T> | null>,
   findSpecific: (id: string, attributes: (keyof T)[]) => Promise<any[]>,

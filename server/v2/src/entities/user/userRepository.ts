@@ -8,4 +8,4 @@ type User = {
 
 const userRepository = repositoryFactory<User>('user')
 
-export { userRepository }
+export { userRepository, User }

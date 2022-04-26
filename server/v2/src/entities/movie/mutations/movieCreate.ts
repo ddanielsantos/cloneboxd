@@ -44,15 +44,16 @@ export const movieCreate = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: async (payload: Movie) => {
-    // TODO: the same thing to reviews
-    // and also to mutations
+    // TODO: Add validation and change filter to be perfomed in the database
     const possibleCrewMembers = (await crewRepository.findAll()).map(member => member._id.toString())
 
-    if (payload.actors.some(id => !possibleCrewMembers.includes(id))) {
+    const isntAValidMember = (id: string) => !possibleCrewMembers.includes(id)
+
+    if (payload.actors.some(isntAValidMember)) {
       throw new Error('Actors field must have at least one valid actor id')
     }
 
-    if (payload.directors.some(id => !possibleCrewMembers.includes(id))) {
+    if (payload.directors.some(isntAValidMember)) {
       throw new Error('Directors field must have at least one valid director id')
     }
 
