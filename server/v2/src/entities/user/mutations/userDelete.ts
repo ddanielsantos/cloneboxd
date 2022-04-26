@@ -3,8 +3,8 @@ import {
   GraphQLString,
   GraphQLNonNull
 } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
 import { userRepository } from '../userRepository'
+import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
 export const userDelete = mutationWithClientMutationId({
   name: 'userDelete',
@@ -20,7 +20,9 @@ export const userDelete = mutationWithClientMutationId({
       resolve: response => response.deletedCount
     }
   },
-  mutateAndGetPayload: async (payload) => {
-    return (await userRepository.deleteOne(payload.id))
+  mutateAndGetPayload: async ({ id }) => {
+    const response = await userRepository.deleteOne(fromGlobalId(id).id)
+
+    return response
   }
 })

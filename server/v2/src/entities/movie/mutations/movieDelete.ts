@@ -3,15 +3,16 @@ import {
   GraphQLString,
   GraphQLNonNull
 } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
 import { movieRepository } from '../movieRepository'
+import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
 export const movieDelete = mutationWithClientMutationId({
   name: 'movieDelete',
   description: 'Delete a movie using its id',
   inputFields: {
     id: {
-      type: new GraphQLNonNull(GraphQLID)
+      type: new GraphQLNonNull(GraphQLID),
+      description: `Movie's id`
     }
   },
   outputFields: {
@@ -20,7 +21,9 @@ export const movieDelete = mutationWithClientMutationId({
       resolve: response => response.deletedCount
     }
   },
-  mutateAndGetPayload: async (payload) => {
-    return (await movieRepository.deleteOne(payload.id))
+  mutateAndGetPayload: async ({ id }) => {
+    const response = await movieRepository.deleteOne(fromGlobalId(id).id)
+
+    return response
   }
 })
