@@ -3,6 +3,7 @@ import { movieQueries } from '../entities/movie/queries/queries'
 import { crewQueries } from '../entities/crew/queries/queries'
 import { userQueries } from '../entities/user/queries/queries'
 import { reviewQueries } from '../entities/review/queries/queries'
+import { nodeField } from '../graphql/nodeInterface'
 
 export const query = new GraphQLObjectType({
   name: 'Query',
@@ -11,6 +12,7 @@ export const query = new GraphQLObjectType({
     ...movieQueries,
     ...crewQueries,
     ...userQueries,
-    ...reviewQueries
+    ...reviewQueries,
+    node: nodeField
   })
 })
