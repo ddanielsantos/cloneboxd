@@ -5,7 +5,7 @@ import {
   GraphQLInputFieldConfig,
   ThunkObjMap
 } from 'graphql'
-import { globalIdField } from 'graphql-relay'
+import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { nodeInterface } from '../../graphql/nodeInterface'
 
 export const userType = new GraphQLObjectType({
@@ -13,7 +13,7 @@ export const userType = new GraphQLObjectType({
   description: 'User type',
   interfaces: () => [nodeInterface],
   fields: () => ({
-    id: globalIdField('User'),
+    id: globalIdField('User', user => user._id),
     fullName: {
       type: new GraphQLNonNull(GraphQLString),
       description: `User's full name`,
@@ -49,3 +49,7 @@ export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
     description: `User's password`
   }
 }
+
+export const { connectionType: UserConnection, edgeType: UserEdge } = connectionDefinitions({
+  nodeType: userType
+})

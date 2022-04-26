@@ -9,20 +9,16 @@ import {
   GraphQLObjectType,
   GraphQLInputFieldConfig
 } from 'graphql'
-import { globalIdField } from 'graphql-relay'
-import { nodeInterface } from '../../graphql/nodeInterface'
 import { crewRepository } from '../crew/crewRepository'
+import { nodeInterface } from '../../graphql/nodeInterface'
+import { globalIdField, connectionDefinitions } from 'graphql-relay'
 
 export const movieType = new GraphQLObjectType({
   name: 'Movie',
   description: 'Movie type',
-  // interfaces: () => [nodeInterface],
+  interfaces: () => [nodeInterface],
   fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `Movie's unique id`,
-      resolve: movie => movie._id
-    },
+    id: globalIdField('Movie', movie => movie._id),
     title: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Movie's title in its original language`,
@@ -105,3 +101,7 @@ export const movieInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
     description: `Movie's directors`
   }
 }
+
+export const { connectionType: MovieConnection, edgeType: MovieEdge } = connectionDefinitions({
+  nodeType: movieType
+})

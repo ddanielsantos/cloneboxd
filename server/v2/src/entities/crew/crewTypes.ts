@@ -1,12 +1,11 @@
 import {
   ThunkObjMap,
-  GraphQLID,
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLInputFieldConfig
 } from 'graphql'
-import { globalIdField } from 'graphql-relay'
+import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { nodeInterface } from '../../graphql/nodeInterface'
 
 export const crewType = new GraphQLObjectType({
@@ -14,11 +13,7 @@ export const crewType = new GraphQLObjectType({
   description: 'Crew type',
   interfaces: () => [nodeInterface],
   fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `Member's unique identifier`,
-      resolve: crew => crew._id
-    },
+    id: globalIdField('Crew', crew => crew._id),
     name: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Member's name`,
@@ -51,3 +46,7 @@ export const crewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
     description: `Member's date of birth`
   }
 }
+
+export const { connectionType: CrewConnection, edgeType: CrewEdge } = connectionDefinitions({
+  nodeType: crewType
+})
