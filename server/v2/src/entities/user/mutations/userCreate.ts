@@ -1,7 +1,7 @@
 import { GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { isEmailAlreadyUsed } from '../isEmailAlreadyUsed'
-import { userRepository } from '../userRepository'
+import { User, userRepository } from '../userRepository'
 import { genSaltSync, hashSync } from 'bcrypt'
 import { userInputType } from '../userTypes'
 
@@ -17,8 +17,7 @@ export const userCreate = mutationWithClientMutationId({
       resolve: response => response.insertedId
     }
   },
-  mutateAndGetPayload: async (payload, ctx) => {
-    // console.log(ctx)
+  mutateAndGetPayload: async (payload: User, ctx) => {
     const emailAlreadyUsed = await isEmailAlreadyUsed(payload.email)
 
     if (emailAlreadyUsed) throw new Error('E-mail already used')

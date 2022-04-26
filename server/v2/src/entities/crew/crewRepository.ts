@@ -8,4 +8,4 @@ type Crew = {
 
 const crewRepository = repositoryFactory<Crew>('crew')
 
-export { crewRepository }
+export { crewRepository, Crew }
