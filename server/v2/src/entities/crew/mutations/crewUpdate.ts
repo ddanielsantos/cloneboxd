@@ -3,7 +3,7 @@ import {
   GraphQLString
 } from 'graphql'
 import { crewInputType } from '../crewTypes'
-import { crewRepository } from '../crewRepository'
+import { Crew, crewRepository } from '../crewRepository'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
 export const crewUpdate = mutationWithClientMutationId({
@@ -22,7 +22,7 @@ export const crewUpdate = mutationWithClientMutationId({
       resolve: response => response.updatedId
     }
   },
-  mutateAndGetPayload: async ({ id, ...crew }) => {
+  mutateAndGetPayload: async ({ id, ...crew }: Crew & { id: string }) => {
     return (await crewRepository.updateOne(fromGlobalId(id).id, crew))
   }
 })
