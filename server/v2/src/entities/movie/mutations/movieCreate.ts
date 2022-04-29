@@ -1,41 +1,16 @@
 import {
-  GraphQLList,
-  GraphQLFloat,
-  GraphQLString,
-  GraphQLNonNull
+  GraphQLString
 } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { Movie, movieRepository } from '../movieRepository'
 import { crewRepository } from '../../crew/crewRepository'
+import { movieInputType } from '../movieTypes'
 
 export const movieCreate = mutationWithClientMutationId({
   name: 'movieCreate',
   description: 'Add a movie',
   inputFields: {
-    title: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    duration: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    releaseDate: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    genres: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
-    },
-    ageGroup: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    rating: {
-      type: new GraphQLNonNull(GraphQLFloat)
-    },
-    actors: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
-    },
-    directors: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
-    }
+    ...movieInputType
   },
   outputFields: {
     insertedId: {
@@ -45,16 +20,15 @@ export const movieCreate = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async (payload: Movie) => {
     // TODO: Add validation and change filter to be perfomed in the database
-    const possibleCrewMembers = (await crewRepository.findAll()).map(member => member._id.toString())
+    const validActors = await crewRepository.findMany(payload.actors)
+    const validDirectors = await crewRepository.findMany(payload.directors)
 
-    const isntAValidMember = (id: string) => !possibleCrewMembers.includes(id)
-
-    if (payload.actors.some(isntAValidMember)) {
-      throw new Error('Actors field must have at least one valid actor id')
+    if (validActors.length !== payload.actors.length) {
+      throw new Error('All actors must be valid members of the crew')
     }
 
-    if (payload.directors.some(isntAValidMember)) {
-      throw new Error('Directors field must have at least one valid director id')
+    if (validDirectors.length !== payload.directors.length) {
+      throw new Error('All directors must be valid members of the crew')
     }
 
     return (await movieRepository.insertOne({ ...payload }))
