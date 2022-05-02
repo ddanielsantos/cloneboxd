@@ -2,13 +2,16 @@ import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { isEmailAlreadyUsed } from '../isEmailAlreadyUsed'
 import { compareSync } from 'bcrypt'
-import { randomBytes } from 'crypto'
 import { userRepository } from '../userRepository'
+import * as jwt from 'jsonwebtoken'
+import { getEnvironmentVariables } from '../../../config/env'
 
 type LoginInput = {
   email: string,
   password: string
 }
+
+const jwtSecret = getEnvironmentVariables().JWT_SECRET || ''
 
 export const loginUser = mutationWithClientMutationId({
   name: 'loginUser',
@@ -44,8 +47,10 @@ export const loginUser = mutationWithClientMutationId({
       }
     }
 
+    const token = jwt.sign({ id: user._id.toString(), admin: user.isAdmin }, jwtSecret, { expiresIn: '0.5h' })
+
     return {
-      token: randomBytes(16).toString('hex'),
+      token,
       error: null
     }
   },

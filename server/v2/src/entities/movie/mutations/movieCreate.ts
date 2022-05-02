@@ -1,10 +1,12 @@
 import {
   GraphQLString
 } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
-import { Movie, movieRepository } from '../movieRepository'
-import { crewRepository } from '../../crew/crewRepository'
+import { ObjectId } from 'mongodb'
 import { movieInputType } from '../movieTypes'
+import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { crewRepository } from '../../crew/crewRepository'
+import { Movie, movieRepository } from '../movieRepository'
+import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay'
 
 export const movieCreate = mutationWithClientMutationId({
   name: 'movieCreate',
@@ -15,22 +17,41 @@ export const movieCreate = mutationWithClientMutationId({
   outputFields: {
     insertedId: {
       type: GraphQLString,
-      resolve: response => response.insertedId
+      // TODO: add this to other insertions
+      resolve: response => toGlobalId('Movie', response.insertedId)
+    },
+    error: {
+      type: GraphQLString,
+      resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async (payload: Movie) => {
-    // TODO: Add validation and change filter to be perfomed in the database
-    const validActors = await crewRepository.findMany(payload.actors)
-    const validDirectors = await crewRepository.findMany(payload.directors)
+  mutateAndGetPayload: async ({ ...movie }: Movie, ctx) => {
+    const { error, payload } = getHeadersPayload(ctx)
+    console.log(payload)
 
-    if (validActors.length !== payload.actors.length) {
-      throw new Error('All actors must be valid members of the crew')
+    if (error || payload?.admin !== true) {
+      return {
+        error: 'Unauthorized',
+        insertedId: null
+      }
     }
 
-    if (validDirectors.length !== payload.directors.length) {
-      throw new Error('All directors must be valid members of the crew')
+    const submitedBy = new ObjectId(payload.id)
+
+    const actors = movie.actors.map(actor => fromGlobalId(actor).id)
+    const directors = movie.directors.map(director => fromGlobalId(director).id)
+
+    // TODO: improve this
+    try {
+      await crewRepository.findMany(actors)
+      await crewRepository.findMany(directors)
+    } catch {
+      return {
+        error: 'Invalid actors or directors',
+        insertedId: null
+      }
     }
 
-    return (await movieRepository.insertOne({ ...payload }))
+    return (await movieRepository.insertOne({ ...movie, actors, directors, submitedBy }))
   }
 })
