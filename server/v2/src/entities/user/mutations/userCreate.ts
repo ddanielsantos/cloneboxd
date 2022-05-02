@@ -1,9 +1,9 @@
 import { GraphQLString } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
-import { isEmailAlreadyUsed } from '../isEmailAlreadyUsed'
-import { User, userRepository } from '../userRepository'
-import { genSaltSync, hashSync } from 'bcrypt'
 import { userInputType } from '../userTypes'
+import { genSaltSync, hashSync } from 'bcrypt'
+import { User, userRepository } from '../userRepository'
+import { isEmailAlreadyUsed } from '../isEmailAlreadyUsed'
+import { mutationWithClientMutationId } from 'graphql-relay'
 
 export const userCreate = mutationWithClientMutationId({
   name: 'userCreate',
@@ -15,18 +15,34 @@ export const userCreate = mutationWithClientMutationId({
     insertedId: {
       type: GraphQLString,
       resolve: response => response.insertedId
+    },
+    error: {
+      type: GraphQLString,
+      resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async (payload: User, ctx) => {
+  mutateAndGetPayload: async ({ confirmPassword, ...payload }: User & { confirmPassword: string }) => {
+    if (payload.password !== confirmPassword) {
+      return {
+        error: 'Passwords do not match',
+        insertedId: null
+      }
+    }
+
     const emailAlreadyUsed = await isEmailAlreadyUsed(payload.email)
 
-    if (emailAlreadyUsed) throw new Error('E-mail already used')
+    if (emailAlreadyUsed) {
+      return {
+        error: 'Invalid credentials',
+        insertedId: null
+      }
+    }
 
     const salt = genSaltSync()
     const hashedPassword = hashSync(payload.password, salt)
 
-    const { insertedId } = await userRepository.insertOne({ ...payload, password: hashedPassword })
+    const { insertedId } = await userRepository.insertOne({ ...payload, password: hashedPassword, isAdmin: false })
 
-    return { insertedId }
+    return { insertedId, error: null }
   }
 })

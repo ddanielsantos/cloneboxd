@@ -23,18 +23,10 @@ export const userType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `User's email`,
       resolve: user => user.email
-    },
-    password: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `User password`,
-      resolve: user => user.password
     }
   })
 })
 
-// TODO: do the same to other inputs
-// and find where to insert connections
-// and edges (probably on queries and mut)
 export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   fullName: {
     type: new GraphQLNonNull(GraphQLString),
@@ -47,6 +39,10 @@ export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   password: {
     type: new GraphQLNonNull(GraphQLString),
     description: `User's password`
+  },
+  confirmPassword: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `User's confirm password`
   }
 }
 
