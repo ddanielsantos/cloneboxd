@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb'
 import { repositoryFactory } from '../../factories/repository'
 
 type Movie = {
@@ -8,7 +9,8 @@ type Movie = {
   ageGroup: string,
   rating: number,
   actors: string[],
-  directors: string[]
+  directors: string[],
+  submitedBy: ObjectId
 }
 
 const movieRepository = repositoryFactory<Movie>('movie')
