@@ -39,7 +39,6 @@ export function getHeadersPayload(header: KoaHeader): Response {
 
   try {
     const payload = jwt.verify(token, jwtSecret) as jwt.JwtPayload & TokenPayload
-    // console.log(payload)
     return {
       error: null,
       payload
