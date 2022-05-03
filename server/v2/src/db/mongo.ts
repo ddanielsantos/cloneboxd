@@ -2,7 +2,7 @@ import { MongoClient } from 'mongodb'
 import { getEnvironmentVariables } from '../config/env'
 
 const { MONGODB_URL, DB_NAME } = getEnvironmentVariables()
-const client = new MongoClient(MONGODB_URL!);
+export const client = new MongoClient(MONGODB_URL!);
 
 (
   async () => {
