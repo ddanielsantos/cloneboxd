@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import { movieRepository } from '../entities/movie/movieRepository'
 import { crewRepository } from '../entities/crew/crewRepository'
 import { userRepository } from '../entities/user/userRepository'
+import { createUser } from '../entities/user/fixture/createUser'
 
 async function populateMovieCollecion(quantity: number) {
   for (let x = 0; x < quantity; x++) {
@@ -26,7 +27,8 @@ async function populateMovieCollecion(quantity: number) {
         .fill('')
         .map(() => faker.word.noun()),
       rating: faker.mersenne
-        .rand(0, 5)
+        .rand(0, 5),
+      submitedBy: (await createUser())._id
     })
   }
 }
@@ -36,7 +38,8 @@ async function populateUserCollection(quantity: number) {
     await userRepository.insertOne({
       fullName: faker.name.findName(),
       email: faker.internet.email(),
-      password: faker.internet.password(20)
+      password: faker.internet.password(20),
+      isAdmin: false
     })
   }
 }
@@ -75,7 +78,7 @@ async function execute() {
     }
 
     case 'user': {
-      await populateUserCollection(50)
+      await populateUserCollection(5)
       break
     }
 
