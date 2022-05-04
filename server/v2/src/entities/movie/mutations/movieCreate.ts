@@ -1,62 +1,59 @@
 import {
-  GraphQLList,
-  GraphQLFloat,
-  GraphQLString,
-  GraphQLNonNull
+  GraphQLString
 } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
+import { ObjectId } from 'mongodb'
+import { movieInputType } from '../movieTypes'
 import { Movie, movieRepository } from '../movieRepository'
-import { crewRepository } from '../../crew/crewRepository'
+import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { validateCrewMembers } from '../../crew/validateCrewMembers'
+import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay'
 
 export const movieCreate = mutationWithClientMutationId({
   name: 'movieCreate',
   description: 'Add a movie',
   inputFields: {
-    title: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    duration: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    releaseDate: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    genres: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
-    },
-    ageGroup: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    rating: {
-      type: new GraphQLNonNull(GraphQLFloat)
-    },
-    actors: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
-    },
-    directors: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
-    }
+    ...movieInputType
   },
   outputFields: {
     insertedId: {
       type: GraphQLString,
+      // TODO: add this to other insertions
       resolve: response => response.insertedId
+    },
+    error: {
+      type: GraphQLString,
+      resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async (payload: Movie) => {
-    // TODO: Add validation and change filter to be perfomed in the database
-    const possibleCrewMembers = (await crewRepository.findAll()).map(member => member._id.toString())
+  mutateAndGetPayload: async ({ ...movie }: Movie, ctx) => {
+    const { error, payload } = getHeadersPayload(ctx)
 
-    const isntAValidMember = (id: string) => !possibleCrewMembers.includes(id)
-
-    if (payload.actors.some(isntAValidMember)) {
-      throw new Error('Actors field must have at least one valid actor id')
+    if (error || payload?.admin !== true) {
+      return {
+        error: 'Unauthorized',
+        insertedId: null
+      }
     }
 
-    if (payload.directors.some(isntAValidMember)) {
-      throw new Error('Directors field must have at least one valid director id')
+    const submitedBy = new ObjectId(payload.id)
+
+    const actors = movie.actors.map(actor => fromGlobalId(actor).id)
+    const directors = movie.directors.map(director => fromGlobalId(director).id)
+
+    const { error: invalidCrewMembersError } = await validateCrewMembers([...actors, ...directors])
+
+    if (invalidCrewMembersError) {
+      return {
+        error: invalidCrewMembersError || '',
+        insertedId: null
+      }
     }
 
-    return (await movieRepository.insertOne({ ...payload }))
+    const { insertedId } = await movieRepository.insertOne({ ...movie, actors, directors, submitedBy })
+
+    return {
+      insertedId: toGlobalId('Movie', insertedId.toString()),
+      error: null
+    }
   }
 })
