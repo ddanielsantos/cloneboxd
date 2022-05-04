@@ -1,11 +1,16 @@
 import { graphql } from 'graphql'
-import { toGlobalId } from 'graphql-relay'
+import { fromGlobalId, toGlobalId } from 'graphql-relay'
 import { client } from '../../../../db/mongo'
 import { schema } from '../../../../schemas/schema'
 import { createUser } from '../../../user/fixture/createUser'
 import { createCrew } from '../../../crew/fixture/createCrew'
+import { movieRepository } from '../../../movie/movieRepository'
+
+let movieId: string
 
 afterAll(async () => {
+  await movieRepository.deleteOne(movieId)
+
   await client.close()
 })
 
@@ -71,5 +76,7 @@ describe('MovieCreateMutation', () => {
 
     expect(createMovieError).toBeFalsy()
     expect(insertedId).toBeTruthy()
+
+    movieId = fromGlobalId(insertedId).id
   })
 })
