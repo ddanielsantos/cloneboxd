@@ -1,0 +1,398 @@
+"""The root query type"""
+type Query {
+  movieList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): MovieConnection
+  singleMovie(id: ID!): Movie
+  crewList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): CrewConnection
+  singleCrewMember(id: ID!): Crew
+  me(id: ID!): User
+  userList: [User]
+  reviewList: [UserReview]
+  singleReview(id: ID!): UserReview
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+"""A connection to a list of items."""
+type MovieConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MovieEdge]
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type MovieEdge {
+  """The item at the end of the edge"""
+  node: Movie
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Movie type"""
+type Movie implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Movie's title in its original language"""
+  title: String!
+
+  """Movie's duration"""
+  duration: String!
+
+  """Movie's global release date"""
+  releaseDate: String!
+
+  """Movie's genres"""
+  genres: [String!]!
+
+  """Movie's age group"""
+  ageGroup: String!
+
+  """Movie's rating according to users"""
+  rating: Float!
+
+  """Movie's actors"""
+  actors: [Crew]
+
+  """Movie's directors"""
+  directors: [Crew]
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Crew type"""
+type Crew implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Member's name"""
+  name: String!
+
+  """Member's nacionality"""
+  nacionality: String!
+
+  """Member's date of birth"""
+  dateOfBirth: String!
+}
+
+"""A connection to a list of items."""
+type CrewConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CrewEdge]
+}
+
+"""An edge in a connection."""
+type CrewEdge {
+  """The item at the end of the edge"""
+  node: Crew
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""User type"""
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """User's full name"""
+  fullName: String!
+
+  """User's email"""
+  email: String!
+}
+
+"""Users review's type"""
+type UserReview implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """User's unique identifier"""
+  userId: ID!
+
+  """Movie's unique identifier"""
+  movieId: ID!
+
+  """User's review"""
+  text: String!
+
+  """User's rating"""
+  rating: Float!
+}
+
+"""The root mutation type"""
+type Mutation {
+  """Add a movie"""
+  movieCreate(input: movieCreateInput!): movieCreatePayload
+
+  """Delete a movie using its id"""
+  movieDelete(input: movieDeleteInput!): movieDeletePayload
+
+  """Update a movie using its id"""
+  movieUpdate(input: movieUpdateInput!): movieUpdatePayload
+
+  """Add a crew member"""
+  crewCreate(input: crewCreateInput!): crewCreatePayload
+
+  """Delete a crew member using its id"""
+  crewDelete(input: crewDeleteInput!): crewDeletePayload
+
+  """Update a crew member using its id"""
+  crewUpdate(input: crewUpdateInput!): crewUpdatePayload
+
+  """Creates a new user"""
+  userCreate(input: userCreateInput!): userCreatePayload
+
+  """Update a user using its id"""
+  userUpdate(input: userUpdateInput!): userUpdatePayload
+
+  """Delete a user using its id"""
+  userDelete(input: userDeleteInput!): userDeletePayload
+
+  """Login a user"""
+  loginUser(input: loginUserInput!): loginUserPayload
+}
+
+type movieCreatePayload {
+  insertedId: String
+  error: String
+  clientMutationId: String
+}
+
+input movieCreateInput {
+  """Movie's title in its original language"""
+  title: String!
+
+  """Movie's duration"""
+  duration: String!
+
+  """Movie's global release date"""
+  releaseDate: String!
+
+  """Movie's genres"""
+  genres: [String!]!
+
+  """Movie's age group"""
+  ageGroup: String!
+
+  """Movie's rating according to users"""
+  rating: Float!
+
+  """Movie's actors"""
+  actors: [ID!]!
+
+  """Movie's directors"""
+  directors: [ID!]!
+  clientMutationId: String
+}
+
+type movieDeletePayload {
+  deletedCount: String
+  clientMutationId: String
+}
+
+input movieDeleteInput {
+  """Movie's id"""
+  id: ID!
+  clientMutationId: String
+}
+
+type movieUpdatePayload {
+  modifiedCount: String
+  clientMutationId: String
+}
+
+input movieUpdateInput {
+  id: ID!
+
+  """Movie's title in its original language"""
+  title: String!
+
+  """Movie's duration"""
+  duration: String!
+
+  """Movie's global release date"""
+  releaseDate: String!
+
+  """Movie's genres"""
+  genres: [String!]!
+
+  """Movie's age group"""
+  ageGroup: String!
+
+  """Movie's rating according to users"""
+  rating: Float!
+
+  """Movie's actors"""
+  actors: [ID!]!
+
+  """Movie's directors"""
+  directors: [ID!]!
+  clientMutationId: String
+}
+
+type crewCreatePayload {
+  insertedId: String
+  clientMutationId: String
+}
+
+input crewCreateInput {
+  """Member's name"""
+  name: String!
+
+  """Member's nacionality"""
+  nacionality: String
+
+  """Member's date of birth"""
+  dateOfBirth: String!
+  clientMutationId: String
+}
+
+type crewDeletePayload {
+  deletedCount: String
+  clientMutationId: String
+}
+
+input crewDeleteInput {
+  """Member's id"""
+  id: String!
+  clientMutationId: String
+}
+
+type crewUpdatePayload {
+  updatedId: String
+  clientMutationId: String
+}
+
+input crewUpdateInput {
+  """Member's id"""
+  id: String!
+
+  """Member's name"""
+  name: String!
+
+  """Member's nacionality"""
+  nacionality: String
+
+  """Member's date of birth"""
+  dateOfBirth: String!
+  clientMutationId: String
+}
+
+type userCreatePayload {
+  insertedId: String
+  error: String
+  clientMutationId: String
+}
+
+input userCreateInput {
+  """User's full name"""
+  fullName: String!
+
+  """User's email"""
+  email: String!
+
+  """User's password"""
+  password: String!
+
+  """User's confirm password"""
+  confirmPassword: String!
+  clientMutationId: String
+}
+
+type userUpdatePayload {
+  modifiedCount: String
+  error: String
+  clientMutationId: String
+}
+
+input userUpdateInput {
+  id: ID!
+
+  """User's full name"""
+  fullName: String!
+
+  """User's email"""
+  email: String!
+
+  """User's password"""
+  password: String!
+
+  """User's confirm password"""
+  confirmPassword: String!
+  clientMutationId: String
+}
+
+type userDeletePayload {
+  deletedCount: String
+  clientMutationId: String
+}
+
+input userDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type loginUserPayload {
+  token: String
+  error: String
+  clientMutationId: String
+}
+
+input loginUserInput {
+  email: String!
+  password: String!
+  clientMutationId: String
+}
