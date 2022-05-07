@@ -1,4 +1,3 @@
-import { Login } from './pages/Login'
 import {
   HiOutlineSun,
   HiOutlineMoon
@@ -8,6 +7,9 @@ import {
   useColorMode,
   Circle
 } from '@chakra-ui/react'
+import { Login } from './pages/Login/Login'
+import RelayEnvironment from './relay/environment'
+import { RelayEnvironmentProvider } from 'react-relay/hooks'
 
 function App() {
   const { colorMode, setColorMode } = useColorMode()
@@ -18,6 +20,8 @@ function App() {
         h={'100vh'}
         backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}
       >
+
+        {/* TODO: add router */}
         <Login />
       </Center>
 
@@ -34,4 +38,12 @@ function App() {
   )
 }
 
-export default App
+function AppRoot() {
+  return (
+    <RelayEnvironmentProvider environment={RelayEnvironment}>
+      <App />
+    </RelayEnvironmentProvider>
+  )
+}
+
+export default AppRoot
