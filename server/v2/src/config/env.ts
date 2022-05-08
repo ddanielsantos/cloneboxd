@@ -3,11 +3,11 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export function getEnvironmentVariables() {
-  const SERVER_PORT = Number(process.env.SERVER_PORT)
+  const PORT = Number(process.env.PORT)
   const { MONGODB_URL, DB_NAME, JWT_SECRET } = process.env
 
   const envArray = [
-    SERVER_PORT,
+    PORT,
     MONGODB_URL,
     DB_NAME,
     JWT_SECRET
@@ -19,5 +19,5 @@ export function getEnvironmentVariables() {
     }
   }
 
-  return { SERVER_PORT, MONGODB_URL, DB_NAME, JWT_SECRET }
+  return { PORT, MONGODB_URL, DB_NAME, JWT_SECRET }
 }
