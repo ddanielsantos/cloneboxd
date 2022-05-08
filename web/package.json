@@ -24,6 +24,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/node": "^17.0.31",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "@types/react-relay": "^13.0.2",
