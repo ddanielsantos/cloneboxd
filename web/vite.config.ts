@@ -8,4 +8,5 @@ export default defineConfig({
     react(),
     relay
   ],
+  envDir: '.',
 })

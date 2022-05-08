@@ -1,6 +1,7 @@
 async function fetchGraphQL(text: string, variables: {}) {
-  // Fetch data from GitHub's GraphQL API:
-  const response = await fetch(process.env.API_URL || 'http://localhost:4000/', {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/'
+
+  const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -11,7 +12,6 @@ async function fetchGraphQL(text: string, variables: {}) {
     }),
   });
 
-  // Get the response as JSON
   return await response.json();
 }
 
