@@ -7,22 +7,17 @@ import {
   useColorMode,
   Circle
 } from '@chakra-ui/react'
-import { Login } from './pages/Login/Login'
 import RelayEnvironment from './relay/environment'
 import { RelayEnvironmentProvider } from 'react-relay/hooks'
+import { Routes } from './routes/Authentication'
 
 function App() {
   const { colorMode, setColorMode } = useColorMode()
 
   return (
     <>
-      <Center
-        h={'100vh'}
-        backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}
-      >
-
-        {/* TODO: add router */}
-        <Login />
+      <Center h={'100vh'} backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}>
+        <Routes />
       </Center>
 
       <Circle
