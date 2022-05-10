@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import RelayEnvironment from './relay/environment'
 import { RelayEnvironmentProvider } from 'react-relay/hooks'
-import { Routes } from './routes/Authentication'
+import { Routes } from './routes/authRoute'
 
 function App() {
   const { colorMode, setColorMode } = useColorMode()
