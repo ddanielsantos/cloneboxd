@@ -1,17 +1,24 @@
 import {
-  Stack,
+  Flex,
   Text,
+  Link,
   Input,
+  Stack,
   Button,
+  Spinner,
+  useToast,
   FormLabel,
   FormControl,
   FormErrorMessage
 } from '@chakra-ui/react'
 import * as yup from 'yup'
+import { useMutation } from 'react-relay'
 import { useForm } from 'react-hook-form'
-import { commitSignUp } from './commitSignUp'
-import { useRelayEnvironment } from 'react-relay'
+import { signUpMutation } from './signUpMutation'
+import { Link as RouterLink } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { TextDivider } from '../../components/TextDivider'
+import { commitSignUpMutation } from './__generated__/commitSignUpMutation.graphql'
 
 type FormData = {
   email: string,
@@ -28,16 +35,37 @@ const schema = yup.object({
 }).required('Os dados de login são obrigatórios')
 
 export const SignUp = () => {
-  const environment = useRelayEnvironment()
+  const toast = useToast()
+  const [commitSignUp, isSignUpLoading] = useMutation<commitSignUpMutation>(signUpMutation)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema)
   })
 
   const onSubmit = async (formData: FormData) => {
-    commitSignUp(environment, {
-      input: {
-        ...formData
+    commitSignUp({
+      variables: {
+        input: {
+          ...formData
+        }
+      },
+      onCompleted: (data) => {
+        if (data?.userCreate?.error) {
+          toast({
+            title: 'Erro',
+            description: 'Credenciais inválidas',
+            status: 'error',
+            duration: 2500
+          })
+        }
+
+        if (data?.userCreate?.insertedId) {
+          toast({
+            title: 'Sucesso',
+            description: 'Usuário criado com sucesso',
+            status: 'success',
+          })
+        }
       }
     })
   }
@@ -48,7 +76,7 @@ export const SignUp = () => {
       p={['1em']}
       display={'flex'}
       flexDir={'column'}
-      spacing={3}
+      spacing={'1em'}
     >
       <Text
         fontSize={['2em']}
@@ -76,6 +104,7 @@ export const SignUp = () => {
             )
           }
         </FormControl>
+
         <FormControl
           isInvalid={!!errors.email}
         >
@@ -114,6 +143,7 @@ export const SignUp = () => {
             )
           }
         </FormControl>
+
         <FormControl
           isInvalid={!!errors.confirmPassword}
         >
@@ -134,17 +164,36 @@ export const SignUp = () => {
           }
         </FormControl>
 
-        <Button
-          flex={1}
-          type="submit"
-          variant={'solid'}
-          mt='0.5em'
+        <Flex
+          alignItems={'flex-end'}
+          mt={'1.5em'}
         >
-          Criar conta
-        </Button>
+          <Button
+            flex={1}
+            type="submit"
+            colorScheme={'green'}
+            isLoading={isSignUpLoading}
+          >
+            Criar
+          </Button>
+        </Flex>
 
+        <TextDivider text='ou' />
+
+        <Text
+          textAlign={'center'}
+          mt={'0.5em'}
+        >
+          Possui uma conta? {' '}
+          <Link
+            flex={1}
+            as={RouterLink}
+            to="/login"
+          >
+            Faça login
+          </Link>
+        </Text>
       </form>
-
     </Stack>
   )
 }

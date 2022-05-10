@@ -1,18 +1,25 @@
-import * as yup from 'yup'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useRelayEnvironment } from 'react-relay'
 import {
-  Stack,
+  Flex,
+  Link,
   Text,
+  Stack,
   Input,
   Button,
-  FormControl,
+  useToast,
   FormLabel,
+  FormControl,
   FormErrorMessage
 } from '@chakra-ui/react'
-
-import { commitLogin } from './commitLogin'
+import * as yup from 'yup'
+import { useEffect } from 'react'
+import { useMutation } from 'react-relay'
+import { useForm } from 'react-hook-form'
+import { loginMutation } from './loginMutation'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { TextDivider } from '../../components/TextDivider'
+import { getToken, saveToken } from '../../helpers/localStorage'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { commitLoginMutation } from './__generated__/commitLoginMutation.graphql'
 
 type FormData = {
   email: string,
@@ -25,16 +32,51 @@ const schema = yup.object({
 }).required('Os dados de login são obrigatórios')
 
 export const Login = () => {
-  const environment = useRelayEnvironment()
+  const navigate = useNavigate()
+  const toast = useToast()
+  const [commitLogin, isLoginLoading] = useMutation<commitLoginMutation>(loginMutation)
+
+  useEffect(() => {
+    const isLoggedIn = getToken() !== null ? true : false
+
+    if (isLoggedIn) {
+      navigate('/')
+    }
+  }, [])
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema)
   })
 
   const onSubmit = async (formData: FormData) => {
-    commitLogin(environment, {
-      input: {
-        ...formData
+    commitLogin({
+      variables: {
+        input: {
+          ...formData
+        }
+      },
+      onCompleted: (data) => {
+        if (data?.loginUser?.error) {
+          toast({
+            title: 'Erro',
+            description: 'Credenciais inválidas',
+            status: 'error',
+            duration: 2500
+          })
+        }
+
+        if (data?.loginUser?.token) {
+          saveToken(data.loginUser.token)
+          navigate('/')
+        }
+      },
+      onError: (_) => {
+        toast({
+          title: 'Erro',
+          description: 'Ocorreu um erro interno',
+          status: 'error',
+          duration: 2500
+        })
       }
     })
   }
@@ -45,7 +87,7 @@ export const Login = () => {
       p={['1em']}
       display={'flex'}
       flexDir={'column'}
-      spacing={3}
+      spacing={'1em'}
     >
       <Text
         fontSize={['2em']}
@@ -94,17 +136,35 @@ export const Login = () => {
           }
         </FormControl>
 
-        <Button
-          flex={1}
-          type="submit"
-          variant={'solid'}
-          mt='0.5em'
+        <Flex
+          alignItems={'flex-end'}
+          my={'1em'}
         >
-          Entrar
-        </Button>
+          <Button
+            flex={1}
+            type="submit"
+            colorScheme={'green'}
+            isLoading={isLoginLoading}
+          >
+            Entrar
+          </Button>
+        </Flex>
 
-      </form>
+        <TextDivider text={'ou'} />
 
-    </Stack>
+        <Text
+          textAlign={'center'}
+        >
+          Não possui uma conta? {' '}
+          <Link
+            flex={1}
+            as={RouterLink}
+            to="/signUp"
+          >
+            Crie aqui
+          </Link>
+        </Text>
+      </form >
+    </Stack >
   )
 }
