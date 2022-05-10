@@ -1,62 +1,56 @@
 import {
   Flex,
-  Link,
   Text,
-  Stack,
+  Link,
   Input,
+  Stack,
   Button,
+  Spinner,
   useToast,
   FormLabel,
   FormControl,
   FormErrorMessage
 } from '@chakra-ui/react'
 import * as yup from 'yup'
-import { useEffect } from 'react'
 import { useMutation } from 'react-relay'
 import { useForm } from 'react-hook-form'
-import { loginMutation } from './loginMutation'
+import { signUpMutation } from './signUpMutation'
+import { Link as RouterLink } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider'
-import { getToken, saveToken } from '../../helpers/localStorage'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { commitLoginMutation } from './__generated__/commitLoginMutation.graphql'
+import { commitSignUpMutation } from './__generated__/commitSignUpMutation.graphql'
 
 type FormData = {
   email: string,
-  password: string
+  password: string,
+  confirmPassword: string,
+  fullName: string
 }
 
 const schema = yup.object({
   email: yup.string().email('O email fornecido é inválido').required('O email é obrigatório'),
-  password: yup.string().min(6, 'A senha deve conter ao menos 6 caracteres').required('A senha é obrigatória')
+  password: yup.string().min(6, 'A senha deve conter ao menos 6 caracteres').required('A senha é obrigatória'),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'As senhas não conferem').required('A confirmação de senha é obrigatória'),
+  fullName: yup.string().required('O nome é obrigatório')
 }).required('Os dados de login são obrigatórios')
 
-export const Login = () => {
-  const navigate = useNavigate()
+export const SignUp = () => {
   const toast = useToast()
-  const [commitLogin, isLoginLoading] = useMutation<commitLoginMutation>(loginMutation)
-
-  useEffect(() => {
-    const isLoggedIn = getToken() !== null ? true : false
-
-    if (isLoggedIn) {
-      navigate('/')
-    }
-  }, [])
+  const [commitSignUp, isSignUpLoading] = useMutation<commitSignUpMutation>(signUpMutation)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema)
   })
 
   const onSubmit = async (formData: FormData) => {
-    commitLogin({
+    commitSignUp({
       variables: {
         input: {
           ...formData
         }
       },
       onCompleted: (data) => {
-        if (data?.loginUser?.error) {
+        if (data?.userCreate?.error) {
           toast({
             title: 'Erro',
             description: 'Credenciais inválidas',
@@ -65,18 +59,13 @@ export const Login = () => {
           })
         }
 
-        if (data?.loginUser?.token) {
-          saveToken(data.loginUser.token)
-          navigate('/')
+        if (data?.userCreate?.insertedId) {
+          toast({
+            title: 'Sucesso',
+            description: 'Usuário criado com sucesso',
+            status: 'success',
+          })
         }
-      },
-      onError: (_) => {
-        toast({
-          title: 'Erro',
-          description: 'Ocorreu um erro interno',
-          status: 'error',
-          duration: 2500
-        })
       }
     })
   }
@@ -93,16 +82,35 @@ export const Login = () => {
         fontSize={['2em']}
         fontWeight={['bold']}
       >
-        Login
+        Criar conta
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl
+          isInvalid={!!errors.fullName}
+        >
+          <FormLabel mt={'0.5em'} htmlFor='email'>Nome completo</FormLabel>
+          <Input
+            placeholder="ex.: João da Silva"
+            id="fullName"
+            {...register('fullName')}
+          />
+
+          {
+            errors.fullName && (
+              <FormErrorMessage>
+                {errors.fullName.message}
+              </FormErrorMessage>
+            )
+          }
+        </FormControl>
+
         <FormControl
           isInvalid={!!errors.email}
         >
           <FormLabel mt={'0.5em'} htmlFor='email'>E-mail</FormLabel>
           <Input
-            placeholder="Insira o seu e-mail"
+            placeholder="ex.: mail@mail.com"
             id="email"
             {...register('email')}
           />
@@ -120,7 +128,7 @@ export const Login = () => {
           isInvalid={!!errors.password}
         >
           <FormLabel mt={'0.5em'} htmlFor='password'>Senha</FormLabel>
-          <Input placeholder="Insira a sua senha"
+          <Input placeholder="(ao menos 6 caracteres)"
             type='password'
             min={6}
             id="password"
@@ -136,35 +144,56 @@ export const Login = () => {
           }
         </FormControl>
 
+        <FormControl
+          isInvalid={!!errors.confirmPassword}
+        >
+          <FormLabel mt={'0.5em'} htmlFor='password'>Confirme a sua senha</FormLabel>
+          <Input placeholder="confirme a sua senha"
+            type='password'
+            min={6}
+            id="confirmPassword"
+            {...register('confirmPassword')}
+          />
+
+          {
+            errors.confirmPassword && (
+              <FormErrorMessage>
+                {errors.confirmPassword.message}
+              </FormErrorMessage>
+            )
+          }
+        </FormControl>
+
         <Flex
           alignItems={'flex-end'}
-          my={'1em'}
+          mt={'1.5em'}
         >
           <Button
             flex={1}
             type="submit"
             colorScheme={'green'}
-            isLoading={isLoginLoading}
+            isLoading={isSignUpLoading}
           >
-            Entrar
+            Criar
           </Button>
         </Flex>
 
-        <TextDivider text={'ou'} />
+        <TextDivider text='ou' />
 
         <Text
           textAlign={'center'}
+          mt={'0.5em'}
         >
-          Não possui uma conta? {' '}
+          Possui uma conta? {' '}
           <Link
             flex={1}
             as={RouterLink}
-            to="/signUp"
+            to="/login"
           >
-            Crie aqui
+            Faça login
           </Link>
         </Text>
-      </form >
-    </Stack >
+      </form>
+    </Stack>
   )
 }
