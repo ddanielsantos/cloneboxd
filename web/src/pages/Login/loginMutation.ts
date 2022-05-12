@@ -1,7 +1,7 @@
 import { graphql } from 'react-relay'
 
 export const loginMutation = graphql`
-  mutation commitLoginMutation($input: loginUserInput!) {
+  mutation loginMutation($input: loginUserInput!) {
     loginUser (input: $input) {
       token
       error
