@@ -8,7 +8,8 @@ import {
   useToast,
   FormLabel,
   FormControl,
-  FormErrorMessage
+  FormErrorMessage,
+  Box
 } from '@chakra-ui/react'
 import * as yup from 'yup'
 import { useEffect } from 'react'
@@ -19,6 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider'
 import { getToken, saveToken } from '../../helpers/localStorage'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
 import { commitLoginMutation } from './__generated__/commitLoginMutation.graphql'
 
 type FormData = {
@@ -89,6 +91,13 @@ export const Login = () => {
       flexDir={'column'}
       spacing={'1em'}
     >
+      <Box
+        position={'absolute'}
+        right={'1em'}
+        top={'1em'}
+      >
+        <ThemeSwitcher />
+      </Box>
       <Text
         fontSize={['2em']}
         fontWeight={['bold']}

@@ -1,11 +1,11 @@
 import {
+  Box,
   Flex,
   Text,
   Link,
   Input,
   Stack,
   Button,
-  Spinner,
   useToast,
   FormLabel,
   FormControl,
@@ -18,6 +18,7 @@ import { signUpMutation } from './signUpMutation'
 import { Link as RouterLink } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider'
+import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
 import { commitSignUpMutation } from './__generated__/commitSignUpMutation.graphql'
 
 type FormData = {
@@ -78,6 +79,13 @@ export const SignUp = () => {
       flexDir={'column'}
       spacing={'1em'}
     >
+      <Box
+        position={'absolute'}
+        right={'1em'}
+        top={'1em'}
+      >
+        <ThemeSwitcher />
+      </Box>
       <Text
         fontSize={['2em']}
         fontWeight={['bold']}
