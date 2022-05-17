@@ -5,7 +5,6 @@ import { SignUp } from '../pages/SignUp/SignUp'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
 import { Routes as RRoutes, Route } from 'react-router-dom'
 import { Review } from '../pages/Review/Review'
-import { Header } from '../components/Header/Header'
 
 export const Routes = () => {
   return (

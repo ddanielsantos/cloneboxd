@@ -2,6 +2,8 @@ import { Routes } from './routes/authRoute'
 import RelayEnvironment from './relay/environment'
 import { Center, useColorMode } from '@chakra-ui/react'
 import { RelayEnvironmentProvider } from 'react-relay/hooks'
+import { AuthProvider } from './contexts/AuthContext'
+import { Suspense } from 'react'
 
 function App() {
   const { colorMode } = useColorMode()
@@ -9,7 +11,9 @@ function App() {
   return (
     <>
       <Center h={'100vh'} backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}>
-        <Routes />
+        <Suspense fallback={'Loading...'}>
+          <Routes />
+        </Suspense>
       </Center>
     </>
   )
@@ -18,7 +22,9 @@ function App() {
 function AppRoot() {
   return (
     <RelayEnvironmentProvider environment={RelayEnvironment}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </RelayEnvironmentProvider>
   )
 }

@@ -18,10 +18,10 @@ import { useForm } from 'react-hook-form'
 import { loginMutation } from './loginMutation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider'
-import { getToken, saveToken } from '../../helpers/localStorage'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
-import { commitLoginMutation } from './__generated__/commitLoginMutation.graphql'
+import { useAuth } from '../../contexts/AuthContext'
+import { loginMutation as loginMutationType } from './__generated__/loginMutation.graphql'
 
 type FormData = {
   email: string,
@@ -35,11 +35,12 @@ const schema = yup.object({
 
 export const Login = () => {
   const navigate = useNavigate()
+  const { token, signIn } = useAuth()
   const toast = useToast()
-  const [commitLogin, isLoginLoading] = useMutation<commitLoginMutation>(loginMutation)
+  const [commitLogin, isLoginLoading] = useMutation<loginMutationType>(loginMutation)
 
   useEffect(() => {
-    const isLoggedIn = getToken() !== null ? true : false
+    const isLoggedIn = token !== '' ? true : false
 
     if (isLoggedIn) {
       navigate('/')
@@ -68,7 +69,7 @@ export const Login = () => {
         }
 
         if (data?.loginUser?.token) {
-          saveToken(data.loginUser.token)
+          signIn(data.loginUser.token)
           navigate('/')
         }
       },
@@ -79,7 +80,13 @@ export const Login = () => {
           status: 'error',
           duration: 2500
         })
-      }
+      },
+      // TODO: work with relay store
+      // updater: (store) => {
+      //   const record = store.getRootField('loginUser').getLinkedRecord('user')
+
+      //   console.log(record)
+      // }
     })
   }
 
