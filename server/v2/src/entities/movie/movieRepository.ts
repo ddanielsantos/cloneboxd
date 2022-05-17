@@ -8,8 +8,8 @@ type Movie = {
   genres: string[],
   ageGroup: string,
   rating: number,
-  actors: string[],
-  directors: string[],
+  actors: ObjectId[],
+  directors: ObjectId[],
   submitedBy: ObjectId
 }
 

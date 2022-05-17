@@ -63,6 +63,11 @@ export const movieType = new GraphQLObjectType({
         const directors = await crewRepository.findMany(movie.directors)
         return directors
       }
+    },
+    submitedBy: {
+      type: GraphQLString,
+      description: `Admin who submited the movie`,
+      resolve: movie => movie.submitedBy
     }
   })
 })
