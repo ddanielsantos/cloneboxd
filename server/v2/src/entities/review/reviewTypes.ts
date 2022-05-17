@@ -1,15 +1,18 @@
 import {
   GraphQLID,
+  ThunkObjMap,
   GraphQLFloat,
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLInputObjectType,
-  ThunkObjMap,
   GraphQLInputFieldConfig
 } from 'graphql'
-import { connectionDefinitions, globalIdField } from 'graphql-relay'
+import { userType } from '../user/userTypes'
+import { movieType } from '../movie/movieTypes'
+import { userRepository } from '../user/userRepository'
+import { movieRepository } from '../movie/movieRepository'
 import { nodeInterface } from '../../graphql/nodeInterface'
+import { connectionDefinitions, globalIdField } from 'graphql-relay'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
@@ -17,45 +20,57 @@ export const reviewType = new GraphQLObjectType({
   interfaces: () => [nodeInterface],
   fields: () => ({
     id: globalIdField('UserReview', review => review._id),
-    userId: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `User's unique identifier`,
-      resolve: review => review.userId
+    user: {
+      type: new GraphQLNonNull(userType),
+      description: `The user who wrote the review`,
+      resolve: async review => {
+        const user = await userRepository.findOne(review.user)
+        return user
+      }
     },
-    movieId: {
-      type: new GraphQLNonNull(GraphQLID),
-      description: `Movie's unique identifier`,
-      resolve: review => review.movieId
+    movie: {
+      type: new GraphQLNonNull(movieType),
+      description: `The movie being reviewed`,
+      resolve: async review => {
+        console.log('review: ', review)
+        const movie = await movieRepository.findOne(review.movie)
+        return movie
+      }
     },
     text: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
       description: `User's review`,
       resolve: review => review.text
     },
     rating: {
-      type: new GraphQLNonNull(GraphQLFloat),
+      type: GraphQLFloat,
       description: `User's rating`,
       resolve: review => review.rating
+    },
+    watchedAt: {
+      type: GraphQLString,
+      description: `When the user watched the movie`,
+      resolve: review => review.watchedAt
     }
   })
 })
 
 export const reviewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
-  userId: {
-    type: new GraphQLNonNull(GraphQLID),
-    description: `User's unique identifier`
-  },
-  movieId: {
+  movie: {
     type: new GraphQLNonNull(GraphQLID),
     description: `Movie's unique identifier`
   },
   text: {
-    type: new GraphQLNonNull(GraphQLString),
+    type: GraphQLString,
     description: `Users review's text`
   },
   rating: {
-    type: new GraphQLNonNull(GraphQLFloat),
+    type: GraphQLFloat,
     description: `User review's rating`
+  },
+  watchedAt: {
+    type: GraphQLString,
+    description: `When the user watched the movie`
   }
 }
 
