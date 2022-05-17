@@ -5,6 +5,7 @@ import { compareSync } from 'bcrypt'
 import { userRepository } from '../userRepository'
 import * as jwt from 'jsonwebtoken'
 import { getEnvironmentVariables } from '../../../config/env'
+import { userType } from '../userTypes'
 
 type LoginInput = {
   email: string,
@@ -32,6 +33,7 @@ export const loginUser = mutationWithClientMutationId({
     if (!isEmailUsed) {
       return {
         error: 'Invalid credentials',
+        user: null,
         token: null
       }
     }
@@ -43,6 +45,7 @@ export const loginUser = mutationWithClientMutationId({
     if (!isCorrectPassword) {
       return {
         error: 'Invalid credentials',
+        user: null,
         token: null
       }
     }
@@ -51,6 +54,7 @@ export const loginUser = mutationWithClientMutationId({
 
     return {
       token,
+      user: user,
       error: null
     }
   },
@@ -58,6 +62,10 @@ export const loginUser = mutationWithClientMutationId({
     token: {
       type: GraphQLString,
       resolve: response => response.token
+    },
+    user: {
+      type: userType,
+      resolve: response => response.user
     },
     error: {
       type: GraphQLString,

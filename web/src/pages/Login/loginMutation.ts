@@ -5,6 +5,11 @@ export const loginMutation = graphql`
     loginUser (input: $input) {
       token
       error
+      user {
+        id
+        fullName
+        email
+      }
     }
   }
 `
