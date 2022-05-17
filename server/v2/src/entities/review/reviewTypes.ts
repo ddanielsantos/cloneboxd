@@ -32,7 +32,6 @@ export const reviewType = new GraphQLObjectType({
       type: new GraphQLNonNull(movieType),
       description: `The movie being reviewed`,
       resolve: async review => {
-        console.log('review: ', review)
         const movie = await movieRepository.findOne(review.movie)
         return movie
       }

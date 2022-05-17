@@ -31,7 +31,6 @@ const schema = yup.object({
   text: yup.string(),
   rating: yup.number().test({
     test: (value) => {
-      console.log("rating: ", value)
       return value! % 0.5 === 0
     },
     name: 'aaa',
