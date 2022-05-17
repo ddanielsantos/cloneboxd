@@ -1,9 +1,9 @@
-import { RequestParameters } from 'relay-runtime'
+import { RequestParameters, Variables } from 'relay-runtime'
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import fetchGraphQL from './fetchGraphQL'
 
-async function fetchRelay(params: RequestParameters, variables: {}) {
+async function fetchRelay(params: RequestParameters, variables: Variables) {
   return fetchGraphQL(params.text || '', variables)
 }
 
