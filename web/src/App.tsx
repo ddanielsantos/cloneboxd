@@ -1,31 +1,23 @@
-import { Routes } from './routes/authRoute'
-import RelayEnvironment from './relay/environment'
-import { Center, useColorMode } from '@chakra-ui/react'
-import { RelayEnvironmentProvider } from 'react-relay/hooks'
-import { AuthProvider } from './contexts/AuthContext'
 import { Suspense } from 'react'
+import { Center } from '@chakra-ui/react'
+import { Routes } from './routes/authRoute'
+import { Providers } from './Providers'
 
 function App() {
-  const { colorMode } = useColorMode()
-
   return (
-    <>
-      <Center h={'100vh'} backgroundColor={colorMode === 'light' ? 'white' : 'gray.800'}>
-        <Suspense fallback={'Loading...'}>
-          <Routes />
-        </Suspense>
+    <Suspense fallback={'Loading...'}>
+      <Center h={'100vh'}>
+        <Routes />
       </Center>
-    </>
+    </Suspense>
   )
 }
 
 function AppRoot() {
   return (
-    <RelayEnvironmentProvider environment={RelayEnvironment}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </RelayEnvironmentProvider>
+    <Providers>
+      <App />
+    </Providers>
   )
 }
 
