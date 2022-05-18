@@ -16,11 +16,11 @@ import { useEffect } from 'react'
 import { useMutation } from 'react-relay'
 import { useForm } from 'react-hook-form'
 import { loginMutation } from './loginMutation'
+import { useAuth } from '../../contexts/AuthContext'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
-import { useAuth } from '../../contexts/AuthContext'
 import { loginMutation as loginMutationType } from './__generated__/loginMutation.graphql'
 
 type FormData = {
@@ -58,20 +58,24 @@ export const Login = () => {
           ...formData
         }
       },
-      onCompleted: (data) => {
-        if (data?.loginUser?.error) {
+      onCompleted: ({ loginUser }) => {
+        if (loginUser?.error) {
           toast({
             title: 'Erro',
             description: 'Credenciais inválidas',
             status: 'error',
             duration: 2500
           })
+
+          return
         }
 
-        if (data?.loginUser?.token) {
-          signIn(data.loginUser.token)
-          navigate('/')
+        if (loginUser?.token) {
+          signIn(loginUser.token)
+          localStorage.setItem('loggedUser', JSON.stringify(loginUser))
         }
+
+        navigate('/')
       },
       onError: (_) => {
         toast({
@@ -80,13 +84,7 @@ export const Login = () => {
           status: 'error',
           duration: 2500
         })
-      },
-      // TODO: work with relay store
-      // updater: (store) => {
-      //   const record = store.getRootField('loginUser').getLinkedRecord('user')
-
-      //   console.log(record)
-      // }
+      }
     })
   }
 

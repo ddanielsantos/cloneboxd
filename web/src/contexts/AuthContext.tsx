@@ -8,7 +8,7 @@ type AuthContextProps = {
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  token: getToken() || '',
+  token: '',
   signIn: (token: string) => { },
   signOut: () => { }
 })
@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signOut = () => {
     setToken('')
     removeToken()
+    localStorage.removeItem('loggedUser')
   }
 
   return (
