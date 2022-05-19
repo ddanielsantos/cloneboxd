@@ -16,6 +16,7 @@ import { Main } from "../../components/Main/Main"
 import { Subtitle } from "../../components/Subtitle"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Header } from "../../components/Header/Header"
+import { SearchMovie } from "../../components/SearchMovie/SearchMovie"
 
 type FormData = {
   userId: string
@@ -88,31 +89,7 @@ export const Review = () => {
         >
           <Subtitle content="registrar filme assistido:" />
 
-          <FormControl
-            isInvalid={!!errors.movieId}
-          >
-            <FormLabel
-              htmlFor="movieid"
-            >
-              buscar o filme:
-            </FormLabel>
-
-            <HStack>
-              <Input
-                type={'search'}
-                id="movieid"
-                {...register('movieId')}
-              />
-            </HStack>
-
-            {
-              errors.movieId && (
-                <FormErrorMessage>
-                  {errors.movieId.message}
-                </FormErrorMessage>
-              )
-            }
-          </FormControl>
+          <SearchMovie />
 
           <FormControl
             isInvalid={!!errors.text}
@@ -218,4 +195,8 @@ export const Review = () => {
       </Main>
     </VStack >
   )
+}
+
+function useEnvironment() {
+  throw new Error("Function not implemented.")
 }
