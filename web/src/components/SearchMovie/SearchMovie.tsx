@@ -3,6 +3,7 @@ import { Suspense, useState } from "react"
 import { useQueryLoader } from "react-relay"
 import { Input, Button } from "@chakra-ui/react"
 import { SearchList } from "../SearchList/SearchList"
+import { SearchMovieByTitleQuery } from "./__generated__/SearchMovieByTitleQuery.graphql"
 
 export const SearchMovie = () => {
   const [titleToSearch, setTitleToSearch] = useState('')
@@ -21,7 +22,7 @@ export const SearchMovie = () => {
   }
 `
 
-  const [queryRef, loadQuery] = useQueryLoader(SearchMovieBytTitleQuery)
+  const [queryRef, loadQuery] = useQueryLoader<SearchMovieByTitleQuery>(SearchMovieBytTitleQuery)
 
   return (
     <Suspense fallback={'loading...'}>

@@ -1,37 +1,46 @@
-import React from 'react';
-import { Button, Center, Text } from '@chakra-ui/react';
+// I picked this code from ↓ and adapted it 
+// https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/error_boundaries/
 
-/**
- * A reusable component for handling errors in a React (sub)tree.
- */
-type Props = {};
-type State = {
-  error: Error | null;
-};
-class ErrorBoundaryRetry extends React.Component<Props, State> {
-  state = {
+import { Button, Center, Text } from "@chakra-ui/react";
+import { Component, ErrorInfo, ReactNode } from "react";
+
+interface Props {
+  children: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+  error: {
+    message: string;
+    source: Error | null | undefined;
+  } | null
+}
+
+class ErrorBoundaryRetry extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
     error: null,
   };
 
-  static getDerivedStateFromError(error: Error) {
-    return {
-      error,
-    };
+  public static getDerivedStateFromError(_: Error): State {
+    return { hasError: true, error: { message: _.message, source: _.cause } };
   }
 
-  render() {
-    const { error } = this.state;
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
+  }
 
-    if (error != null) {
+  public render() {
+    if (this.state.hasError) {
       return (
         <Center>
-          <Text>Error: {error.message}</Text>
-          <pre>{JSON.stringify(error.source, null, 2)}</pre>
+          <Text>Error: {this?.state?.error?.message}</Text>
+          <pre>{JSON.stringify(this?.state?.error?.source, null, 2)}</pre>
           <Button mt='10px' onClick={() => this.setState({ error: null })}>
             retry
           </Button>
         </Center>
-      );
+      )
     }
 
     return this.props.children;
