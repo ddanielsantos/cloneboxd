@@ -1,22 +1,22 @@
-import { Suspense } from 'react'
 import { Center } from '@chakra-ui/react'
 import { Routes } from './routes/authRoute'
 import { Providers } from './Providers'
+import ErrorBoundaryRetry from './ErrorBoundary'
 
 function App() {
   return (
-    <Suspense fallback={'Loading...'}>
-      <Center h={'100vh'}>
-        <Routes />
-      </Center>
-    </Suspense>
+    <Center h={'100vh'}>
+      <Routes />
+    </Center>
   )
 }
 
 function AppRoot() {
   return (
     <Providers>
-      <App />
+      <ErrorBoundaryRetry>
+        <App />
+      </ErrorBoundaryRetry>
     </Providers>
   )
 }
