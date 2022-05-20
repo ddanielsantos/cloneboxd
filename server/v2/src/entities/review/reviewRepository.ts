@@ -1,12 +1,14 @@
+import { ObjectId } from 'mongodb'
 import { repositoryFactory } from '../../factories/repository'
 
 type Review = {
-  userId: string,
-  movieId: string,
+  user: ObjectId,
+  movie: ObjectId,
   text: string,
-  rating: number
+  rating: number,
+  watchedAt: string
 }
 
 const reviewRepository = repositoryFactory<Review>('review')
 
-export { reviewRepository }
+export { reviewRepository, Review }

@@ -4,53 +4,59 @@ import {
   Button,
   VStack,
   Textarea,
+  useToast,
   FormLabel,
   FormControl,
   useNumberInput,
   FormErrorMessage
 } from "@chakra-ui/react"
 import * as yup from "yup"
-import { useForm } from 'react-hook-form'
+import { useMutation } from "react-relay"
 import { useNavigate } from "react-router-dom"
 import { Main } from "../../components/Main/Main"
 import { Subtitle } from "../../components/Subtitle"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { FormProvider, useForm } from 'react-hook-form'
 import { Header } from "../../components/Header/Header"
+import { createReviewMutation } from "./createReviewMutation"
+import { SearchMovie } from "../../components/SearchMovie/SearchMovie"
+import { createReviewMutation as createReviewMutationType } from "./__generated__/createReviewMutation.graphql"
 
-type FormData = {
-  userId: string
-  movieId: string
+export type FormData = {
+  movie: string
   text?: string
   rating?: number
-  viewedAt?: string
+  watchedAt?: string
 }
 
 const schema = yup.object({
-  userId: yup.string().required('O usuário é obrigatório'),
-  movieId: yup.string().required('O filme é obrigatório'),
+  movie: yup.string().required('The movie is required'),
   text: yup.string(),
   rating: yup.number().test({
     test: (value) => {
-      console.log("rating: ", value)
       return value! % 0.5 === 0
     },
-    name: 'aaa',
-    message: 'A avaliação deve ser um valor inteiro ou terminado por .5',
+    name: 'rating',
+    message: 'The rating must be a multiple of 0.5',
     exclusive: false,
     params: {
       min: 0,
     }
-  }).min(0, 'O valor mínimo é 0').max(5, 'O valor máximo é 5').typeError('A avaliação deve ser um número válido'),
-  viewedAt: yup.date().typeError('A data deve ser no formato dd/mm/aaaa').max(new Date(), 'A data não deve ser maior que a atual')
+  }).min(0, 'The minimum is 0').max(5, 'The maximum is 5').typeError('The rating must be a number'),
+  watchedAt: yup.date().typeError('The watched date must be valid').max(new Date(), 'The date cannot be in the future')
 
 })
 
 export const Review = () => {
   const navigate = useNavigate()
+  const [commitReviewCreation, isReviewCommitLoading] = useMutation<createReviewMutationType>(createReviewMutation)
+  const toast = useToast()
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { formState, register, handleSubmit, reset, ...methods } = useForm<FormData>({
     resolver: yupResolver(schema)
   })
+
+  const { errors } = formState
 
   const { getDecrementButtonProps, getIncrementButtonProps, getInputProps } = useNumberInput({
     step: 0.5,
@@ -64,7 +70,49 @@ export const Review = () => {
   const decrementRatingButton = getDecrementButtonProps()
 
   const onSubmit = (data: FormData) => {
-    console.log(data)
+    const { watchedAt } = data
+    const formatedDate = watchedAt && new Date(watchedAt).toISOString()
+
+    commitReviewCreation({
+      variables: {
+        input: {
+          ...data,
+          watchedAt: formatedDate
+        }
+      },
+      onCompleted: ({ reviewCreate }) => {
+        if (reviewCreate?.error) {
+          toast({
+            title: 'Error',
+            description: 'Verify your session',
+            status: 'error',
+            duration: 2500
+          })
+
+        }
+
+        if (reviewCreate?.insertedId) {
+          toast({
+            title: 'Review created',
+            description: 'Your review has been created',
+            status: 'success',
+            duration: 2500
+          })
+
+          reset()
+        }
+
+        return
+      },
+      onError: (_) => {
+        toast({
+          title: 'Error',
+          description: 'An internal error has occurred',
+          status: 'error',
+          duration: 2500
+        })
+      }
+    })
   }
 
   return (
@@ -77,145 +125,130 @@ export const Review = () => {
     >
       <Header />
       <Main>
-        <form
-          style={{
-            width: '100%',
-            margin: 0,
-            gap: '1em',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-          onSubmit={handleSubmit(onSubmit)}
+        <FormProvider
+          {...methods}
+          formState={formState}
+          register={register}
+          reset={reset}
+          handleSubmit={handleSubmit}
         >
-          <Subtitle content="registrar filme assistido:" />
-
-          <FormControl
-            isInvalid={!!errors.movieId}
+          <form
+            style={{
+              width: '100%',
+              margin: 0,
+              gap: '1em',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <FormLabel
-              htmlFor="movieid"
-            >
-              buscar o filme:
-            </FormLabel>
+            <Subtitle content="log watched movie:" />
 
-            <HStack>
-              <Input
-                type={'search'}
-                id="movieid"
-                {...register('movieId')}
+            <SearchMovie />
+
+            <FormControl
+              isInvalid={!!errors.text}
+            >
+              <FormLabel
+                htmlFor="text"
+              >
+                your review:
+              </FormLabel>
+
+              <Textarea
+                id={'text'}
+                w={['100%']}
+                resize={'vertical'}
+                {...register('text')}
+                placeholder="i think..."
               />
-            </HStack>
 
-            {
-              errors.movieId && (
-                <FormErrorMessage>
-                  {errors.movieId.message}
-                </FormErrorMessage>
-              )
-            }
-          </FormControl>
+              {
+                errors.text && (
+                  <FormErrorMessage>
+                    {errors.text.message}
+                  </FormErrorMessage>
+                )
+              }
+            </FormControl>
 
-          <FormControl
-            isInvalid={!!errors.text}
-          >
-            <FormLabel
-              htmlFor="text"
+            <FormControl
+              isInvalid={!!errors.rating}
             >
-              sua review:
-            </FormLabel>
+              <FormLabel
+                htmlFor="rating"
+              >
+                your rating:
+              </FormLabel>
 
-            <Textarea
-              id={'text'}
-              w={['100%']}
-              resize={'vertical'}
-              {...register('text')}
-            />
+              <HStack>
+                <Button {...decrementRatingButton}>-</Button>
 
-            {
-              errors.text && (
-                <FormErrorMessage>
-                  {errors.text.message}
-                </FormErrorMessage>
-              )
-            }
-          </FormControl>
+                <Input
+                  {...ratingInput}
+                  id="rating"
+                  textAlign={'center'}
+                  {...register('rating')}
+                  width={['100%', '4em']}
+                />
+                <Button {...incrementRatingButton}>+</Button>
+              </HStack>
+              {
+                errors.rating && (
+                  <FormErrorMessage>
+                    {errors.rating.message}
+                  </FormErrorMessage>
+                )
+              }
+            </FormControl>
 
-          <FormControl
-            isInvalid={!!errors.rating}
-          >
-            <FormLabel
-              htmlFor="rating"
+            <FormControl
+              isInvalid={!!errors.watchedAt}
             >
-              nota para o filme:
-            </FormLabel>
 
-            <HStack>
-              <Button {...decrementRatingButton}>-</Button>
+              <FormLabel
+                htmlFor="watchedAt"
+              >
+                the date you watched the movie:
+              </FormLabel>
 
               <Input
-                {...ratingInput}
-                id="rating"
-                textAlign={'center'}
-                {...register('rating')}
-                width={['100%', '4em']}
+                type={'date'}
+                id="watchedAt"
+                {...register('watchedAt')}
+                width={['100%', 'fit-content']}
               />
-              <Button {...incrementRatingButton}>+</Button>
+
+              {
+                errors.watchedAt && (
+                  <FormErrorMessage>
+                    {errors.watchedAt.message}
+                  </FormErrorMessage>
+                )
+              }
+            </FormControl>
+
+            <HStack
+              justifyContent={['space-between', 'flex-end']}
+            >
+              <Button
+                onClick={() => {
+                  navigate('/')
+                }}
+              >
+                cancel
+              </Button>
+
+              <Button
+                type="submit"
+                colorScheme={'green'}
+                isLoading={isReviewCommitLoading}
+              >
+                log watched film
+              </Button>
             </HStack>
-            {
-              errors.rating && (
-                <FormErrorMessage>
-                  {errors.rating.message}
-                </FormErrorMessage>
-              )
-            }
-          </FormControl>
-
-          <FormControl
-            isInvalid={!!errors.viewedAt}
-          >
-
-            <FormLabel
-              htmlFor="viewedAt"
-            >
-              a data em que você o assistiu:
-            </FormLabel>
-
-            <Input
-              type={'date'}
-              id="viewedAt"
-              {...register('viewedAt')}
-              width={['100%', 'fit-content']}
-            />
-
-            {
-              errors.viewedAt && (
-                <FormErrorMessage>
-                  {errors.viewedAt.message}
-                </FormErrorMessage>
-              )
-            }
-          </FormControl>
-
-          <HStack
-            justifyContent={['space-between', 'flex-end']}
-          >
-            <Button
-              onClick={() => {
-                navigate('/')
-              }}
-            >
-              cancelar
-            </Button>
-
-            <Button
-              type="submit"
-              colorScheme={'green'}
-            >
-              adicionar registro
-            </Button>
-          </HStack>
-
-        </form>
+          </form>
+        </FormProvider>
       </Main>
     </VStack >
   )

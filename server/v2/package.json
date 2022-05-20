@@ -6,7 +6,8 @@
     "dev": "tsnd --respawn --clear --transpile-only index.ts",
     "start": "node dist/index.js",
     "populate": "tsnd --clear --transpile-only src/scripts/populateDatabase.ts",
-    "test": "jest"
+    "test": "jest",
+    "schema": "tsnd --clear --transpile-only src/scripts/printSchema.ts"
   },
   "main": "dist/index.js",
   "author": "Daniel Santos",

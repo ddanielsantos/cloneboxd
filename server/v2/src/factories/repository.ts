@@ -1,14 +1,22 @@
 import { db } from '../db/mongo'
 import {
+  Sort,
   WithId,
   Filter,
+  Document,
   ObjectId,
   DeleteResult,
   UpdateResult,
   InsertOneResult,
-  OptionalUnlessRequiredId,
-  MatchKeysAndValues
+  MatchKeysAndValues,
+  OptionalUnlessRequiredId
 } from 'mongodb'
+
+type FindObject<T> = {
+  filter: Filter<T>,
+  project?: Document,
+  sort?: Sort
+}
 
 export type Repository<T> = {
   findAll: () => Promise<WithId<T>[]>,
@@ -18,7 +26,8 @@ export type Repository<T> = {
   deleteOne: (id: string) => Promise<DeleteResult>,
   updateOne: (id: string, document: MatchKeysAndValues<T>) => Promise<UpdateResult>,
   findByProperty: (fields: Partial<T>) => Promise<WithId<T>[]>,
-  findMany: (ids: string[]) => Promise<WithId<T>[]>
+  findMany: (ids: string[]) => Promise<WithId<T>[]>,
+  findManyExperimental: (FindObject: FindObject<T>) => Promise<Document[]>
 }
 
 function repositoryFactory<T>(collectionName: string): Repository<T> {
@@ -45,6 +54,16 @@ function repositoryFactory<T>(collectionName: string): Repository<T> {
 
       const documents = await COLLECTION.find(query).toArray()
       return documents
+    },
+
+    findManyExperimental: async function ({ filter, project, sort }: FindObject<T>) {
+      const cursor = sort ? COLLECTION.find(filter).sort(sort, -1) : COLLECTION.find(filter)
+
+      if (project) {
+        return await cursor.project(project).toArray()
+      }
+
+      return await cursor.toArray()
     },
 
     findSpecific: async function (id: string, attributes: (keyof T)[]) {

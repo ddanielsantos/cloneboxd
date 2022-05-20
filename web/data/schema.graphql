@@ -14,6 +14,20 @@ type Query {
     last: Int
   ): MovieConnection
   singleMovie(id: ID!): Movie
+  searchMovieByTitle(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    title: String!
+  ): MovieConnection
   crewList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -28,9 +42,33 @@ type Query {
     last: Int
   ): CrewConnection
   singleCrewMember(id: ID!): Crew
-  me(id: ID!): User
-  userList: [User]
-  reviewList: [UserReview]
+  me: User
+  userList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): UserConnection
+  reviewList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): UserReviewConnection
   singleReview(id: ID!): UserReview
 
   """Fetches an object given its ID"""
@@ -101,6 +139,9 @@ type Movie implements Node {
 
   """Movie's directors"""
   directors: [Crew]
+
+  """Admin who submited the movie"""
+  submitedBy: String
 }
 
 """An object with an ID"""
@@ -154,22 +195,61 @@ type User implements Node {
   email: String!
 }
 
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge"""
+  node: User
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""A connection to a list of items."""
+type UserReviewConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserReviewEdge]
+}
+
+"""An edge in a connection."""
+type UserReviewEdge {
+  """The item at the end of the edge"""
+  node: UserReview
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 """Users review's type"""
 type UserReview implements Node {
   """The ID of an object"""
   id: ID!
 
-  """User's unique identifier"""
-  userId: ID!
+  """The user who wrote the review"""
+  user: User!
 
-  """Movie's unique identifier"""
-  movieId: ID!
+  """The movie being reviewed"""
+  movie: Movie!
 
   """User's review"""
-  text: String!
+  text: String
 
   """User's rating"""
-  rating: Float!
+  rating: Float
+
+  """When the user watched the movie"""
+  watchedAt: String
 }
 
 """The root mutation type"""
@@ -203,6 +283,9 @@ type Mutation {
 
   """Login a user"""
   loginUser(input: loginUserInput!): loginUserPayload
+
+  """Add a review"""
+  reviewCreate(input: reviewCreateInput!): reviewCreatePayload
 }
 
 type movieCreatePayload {
@@ -387,6 +470,7 @@ input userDeleteInput {
 
 type loginUserPayload {
   token: String
+  user: User
   error: String
   clientMutationId: String
 }
@@ -394,5 +478,26 @@ type loginUserPayload {
 input loginUserInput {
   email: String!
   password: String!
+  clientMutationId: String
+}
+
+type reviewCreatePayload {
+  insertedId: String
+  error: String
+  clientMutationId: String
+}
+
+input reviewCreateInput {
+  """Movie's unique identifier"""
+  movie: ID!
+
+  """Users review's text"""
+  text: String
+
+  """User review's rating"""
+  rating: Float
+
+  """When the user watched the movie"""
+  watchedAt: String
   clientMutationId: String
 }

@@ -29,11 +29,11 @@ type FormData = {
 }
 
 const schema = yup.object({
-  email: yup.string().email('O email fornecido é inválido').required('O email é obrigatório'),
-  password: yup.string().min(6, 'A senha deve conter ao menos 6 caracteres').required('A senha é obrigatória'),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'As senhas não conferem').required('A confirmação de senha é obrigatória'),
-  fullName: yup.string().required('O nome é obrigatório')
-}).required('Os dados de login são obrigatórios')
+  email: yup.string().email('The supplied email is invalid').required('Email is required'),
+  password: yup.string().min(6, 'The password must be at least 6 characters long').required('Password is required'),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'The passwords didn\'t match').required('Confirm password is required'),
+  fullName: yup.string().required('Your full name is required')
+})
 
 export const SignUp = () => {
   const toast = useToast()
@@ -53,8 +53,8 @@ export const SignUp = () => {
       onCompleted: (data) => {
         if (data?.userCreate?.error) {
           toast({
-            title: 'Erro',
-            description: 'Credenciais inválidas',
+            title: 'Error',
+            description: 'Invalid credentials',
             status: 'error',
             duration: 2500
           })
@@ -62,8 +62,8 @@ export const SignUp = () => {
 
         if (data?.userCreate?.insertedId) {
           toast({
-            title: 'Sucesso',
-            description: 'Usuário criado com sucesso',
+            title: 'Sucess',
+            description: 'User created',
             status: 'success',
           })
         }
@@ -90,16 +90,16 @@ export const SignUp = () => {
         fontSize={['2em']}
         fontWeight={['bold']}
       >
-        Criar conta
+        Create account
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl
           isInvalid={!!errors.fullName}
         >
-          <FormLabel mt={'0.5em'} htmlFor='email'>Nome completo</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='email'>Your name</FormLabel>
           <Input
-            placeholder="ex.: João da Silva"
+            placeholder="ex.: John Doe"
             id="fullName"
             {...register('fullName')}
           />
@@ -116,7 +116,7 @@ export const SignUp = () => {
         <FormControl
           isInvalid={!!errors.email}
         >
-          <FormLabel mt={'0.5em'} htmlFor='email'>E-mail</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='email'>Email</FormLabel>
           <Input
             placeholder="ex.: mail@mail.com"
             id="email"
@@ -135,8 +135,8 @@ export const SignUp = () => {
         <FormControl
           isInvalid={!!errors.password}
         >
-          <FormLabel mt={'0.5em'} htmlFor='password'>Senha</FormLabel>
-          <Input placeholder="(ao menos 6 caracteres)"
+          <FormLabel mt={'0.5em'} htmlFor='password'>Password</FormLabel>
+          <Input placeholder="(at least 6 characters)"
             type='password'
             min={6}
             id="password"
@@ -155,8 +155,8 @@ export const SignUp = () => {
         <FormControl
           isInvalid={!!errors.confirmPassword}
         >
-          <FormLabel mt={'0.5em'} htmlFor='password'>Confirme a sua senha</FormLabel>
-          <Input placeholder="confirme a sua senha"
+          <FormLabel mt={'0.5em'} htmlFor='password'>Confirm your password</FormLabel>
+          <Input placeholder="confirm your password"
             type='password'
             min={6}
             id="confirmPassword"
@@ -182,23 +182,23 @@ export const SignUp = () => {
             colorScheme={'green'}
             isLoading={isSignUpLoading}
           >
-            Criar
+            Create
           </Button>
         </Flex>
 
-        <TextDivider text='ou' />
+        <TextDivider text='or' />
 
         <Text
           textAlign={'center'}
           mt={'0.5em'}
         >
-          Possui uma conta? {' '}
+          Already has an account? {' '}
           <Link
             flex={1}
             as={RouterLink}
             to="/login"
           >
-            Faça login
+            Login
           </Link>
         </Text>
       </form>

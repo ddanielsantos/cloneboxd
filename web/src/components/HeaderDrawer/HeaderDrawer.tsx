@@ -1,7 +1,6 @@
 import { Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex } from "@chakra-ui/react"
 import { Fragment } from "react"
-import { useNavigate } from "react-router-dom"
-import { removeToken } from "../../helpers/localStorage"
+import { useAuth } from "../../contexts/AuthContext"
 import { ThemeSwitcher } from "../ThemeSwitcher/ThemeSwitcher"
 
 type Props = {
@@ -10,18 +9,15 @@ type Props = {
 }
 
 export const HeaderDrawer = ({ onClose, isOpen }: Props) => {
-  const navigate = useNavigate()
+  const { signOut } = useAuth()
   const drawerOptions = [
     {
-      label: 'Ver perfil',
+      label: 'See profile',
       onClick: () => { }
     },
     {
-      label: 'Sair',
-      onClick: () => {
-        removeToken()
-        navigate('/login')
-      }
+      label: 'Log out',
+      onClick: () => signOut()
     }
   ]
 

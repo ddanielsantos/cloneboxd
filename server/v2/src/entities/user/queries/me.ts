@@ -1,15 +1,17 @@
-import { GraphQLID, GraphQLNonNull } from 'graphql'
-import { userRepository } from '../userRepository'
 import { userType } from '../userTypes'
+import { userRepository } from '../userRepository'
+import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { IncomingHttpHeaders } from 'http'
 
 export const me = {
   type: userType,
-  args: {
-    id: {
-      type: new GraphQLNonNull(GraphQLID)
+  resolve: async (_: any, _args: any, ctx: IncomingHttpHeaders) => {
+    const { payload } = getHeadersPayload(ctx)
+    // console.log(payload)
+    if (!payload) {
+      return null
     }
-  },
-  resolve: async (_: any, args: { id: string }) => {
-    return await userRepository.findOne(args.id)
+
+    return await userRepository.findOne(payload.id)
   }
 }

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f1cc121585806ea99a1af51552f0fff7>>
+ * @generated SignedSource<<5266b78780ae9293f4cfe6809a712cca>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,23 +9,25 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type loginUserInput = {
-  email: string;
-  password: string;
+export type reviewCreateInput = {
+  movie: string;
+  text?: string | null;
+  rating?: number | null;
+  watchedAt?: string | null;
   clientMutationId?: string | null;
 };
-export type commitLoginMutation$variables = {
-  input: loginUserInput;
+export type createReviewMutation$variables = {
+  input: reviewCreateInput;
 };
-export type commitLoginMutation$data = {
-  readonly loginUser: {
-    readonly token: string | null;
+export type createReviewMutation$data = {
+  readonly reviewCreate: {
+    readonly insertedId: string | null;
     readonly error: string | null;
   } | null;
 };
-export type commitLoginMutation = {
-  variables: commitLoginMutation$variables;
-  response: commitLoginMutation$data;
+export type createReviewMutation = {
+  variables: createReviewMutation$variables;
+  response: createReviewMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -46,16 +48,16 @@ v1 = [
         "variableName": "input"
       }
     ],
-    "concreteType": "loginUserPayload",
+    "concreteType": "reviewCreatePayload",
     "kind": "LinkedField",
-    "name": "loginUser",
+    "name": "reviewCreate",
     "plural": false,
     "selections": [
       {
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "token",
+        "name": "insertedId",
         "storageKey": null
       },
       {
@@ -74,7 +76,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "commitLoginMutation",
+    "name": "createReviewMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -83,20 +85,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "commitLoginMutation",
+    "name": "createReviewMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "aa99aa9d61df19ed54fbb53c1539ba92",
+    "cacheID": "cecf72d55bf498bdda585791de5c7589",
     "id": null,
     "metadata": {},
-    "name": "commitLoginMutation",
+    "name": "createReviewMutation",
     "operationKind": "mutation",
-    "text": "mutation commitLoginMutation(\n  $input: loginUserInput!\n) {\n  loginUser(input: $input) {\n    token\n    error\n  }\n}\n"
+    "text": "mutation createReviewMutation(\n  $input: reviewCreateInput!\n) {\n  reviewCreate(input: $input) {\n    insertedId\n    error\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "bae1a423f53f841c2916a9ba38cdbac6";
+(node as any).hash = "b058d111d9915f5e3b45f69e696efeae";
 
 export default node;

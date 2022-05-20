@@ -32,7 +32,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     if (obj.fullName) {
       return 'User'
     }
-    if (obj.userId && obj.movieId) {
+    if (obj.user && obj.movie) {
       return 'UserReview'
     }
 

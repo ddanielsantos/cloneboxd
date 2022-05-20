@@ -5,6 +5,7 @@ import {
 import { movieMutations } from '../entities/movie/mutations/movie'
 import { crewMutations } from '../entities/crew/mutations/crew'
 import { userMutations } from '../entities/user/mutations/user'
+import { reviewMutations } from '../entities/review/mutations/review'
 
 export const mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -12,6 +13,7 @@ export const mutation = new GraphQLObjectType({
   fields: {
     ...movieMutations,
     ...crewMutations,
-    ...userMutations
+    ...userMutations,
+    ...reviewMutations
   }
 })

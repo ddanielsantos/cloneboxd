@@ -1,4 +1,5 @@
 import {
+  Box,
   Flex,
   Link,
   Text,
@@ -8,20 +9,19 @@ import {
   useToast,
   FormLabel,
   FormControl,
-  FormErrorMessage,
-  Box
+  FormErrorMessage
 } from '@chakra-ui/react'
 import * as yup from 'yup'
 import { useEffect } from 'react'
 import { useMutation } from 'react-relay'
 import { useForm } from 'react-hook-form'
 import { loginMutation } from './loginMutation'
+import { useAuth } from '../../contexts/AuthContext'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider'
-import { getToken, saveToken } from '../../helpers/localStorage'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
-import { commitLoginMutation } from './__generated__/commitLoginMutation.graphql'
+import { loginMutation as loginMutationType } from './__generated__/loginMutation.graphql'
 
 type FormData = {
   email: string,
@@ -29,17 +29,18 @@ type FormData = {
 }
 
 const schema = yup.object({
-  email: yup.string().email('O email fornecido é inválido').required('O email é obrigatório'),
-  password: yup.string().min(6, 'A senha deve conter ao menos 6 caracteres').required('A senha é obrigatória')
-}).required('Os dados de login são obrigatórios')
+  email: yup.string().email('Email is required').required('Email is required'),
+  password: yup.string().min(6, 'The password must be at least 6 characters long').required('Password is required')
+})
 
 export const Login = () => {
   const navigate = useNavigate()
+  const { token, signIn } = useAuth()
   const toast = useToast()
-  const [commitLogin, isLoginLoading] = useMutation<commitLoginMutation>(loginMutation)
+  const [commitLogin, isLoginLoading] = useMutation<loginMutationType>(loginMutation)
 
   useEffect(() => {
-    const isLoggedIn = getToken() !== null ? true : false
+    const isLoggedIn = token !== '' ? true : false
 
     if (isLoggedIn) {
       navigate('/')
@@ -57,25 +58,29 @@ export const Login = () => {
           ...formData
         }
       },
-      onCompleted: (data) => {
-        if (data?.loginUser?.error) {
+      onCompleted: ({ loginUser }) => {
+        if (loginUser?.error) {
           toast({
-            title: 'Erro',
-            description: 'Credenciais inválidas',
+            title: 'Error',
+            description: 'Invalid credentials',
             status: 'error',
             duration: 2500
           })
+
+          return
         }
 
-        if (data?.loginUser?.token) {
-          saveToken(data.loginUser.token)
-          navigate('/')
+        if (loginUser?.token) {
+          signIn(loginUser.token)
+          localStorage.setItem('loggedUser', JSON.stringify(loginUser))
         }
+
+        navigate('/')
       },
       onError: (_) => {
         toast({
           title: 'Erro',
-          description: 'Ocorreu um erro interno',
+          description: 'An internal error occurred',
           status: 'error',
           duration: 2500
         })
@@ -109,9 +114,9 @@ export const Login = () => {
         <FormControl
           isInvalid={!!errors.email}
         >
-          <FormLabel mt={'0.5em'} htmlFor='email'>E-mail</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='email'>Email</FormLabel>
           <Input
-            placeholder="Insira o seu e-mail"
+            placeholder="Enter your email"
             id="email"
             {...register('email')}
           />
@@ -129,7 +134,7 @@ export const Login = () => {
           isInvalid={!!errors.password}
         >
           <FormLabel mt={'0.5em'} htmlFor='password'>Senha</FormLabel>
-          <Input placeholder="Insira a sua senha"
+          <Input placeholder="Enter your password"
             type='password'
             min={6}
             id="password"
@@ -155,22 +160,22 @@ export const Login = () => {
             colorScheme={'green'}
             isLoading={isLoginLoading}
           >
-            Entrar
+            Login
           </Button>
         </Flex>
 
-        <TextDivider text={'ou'} />
+        <TextDivider text={'or'} />
 
         <Text
           textAlign={'center'}
         >
-          Não possui uma conta? {' '}
+          Don't have an account? {' '}
           <Link
             flex={1}
             as={RouterLink}
             to="/signUp"
           >
-            Crie aqui
+            Create here
           </Link>
         </Text>
       </form >

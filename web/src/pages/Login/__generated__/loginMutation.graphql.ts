@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9d6306f4285a9cf763cedb36d8fbb0c2>>
+ * @generated SignedSource<<185e7aa75274c1cb8b6aecd5664e132b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,11 @@ export type loginMutation$data = {
   readonly loginUser: {
     readonly token: string | null;
     readonly error: string | null;
+    readonly user: {
+      readonly id: string;
+      readonly fullName: string;
+      readonly email: string;
+    } | null;
   } | null;
 };
 export type loginMutation = {
@@ -64,6 +69,38 @@ v1 = [
         "kind": "ScalarField",
         "name": "error",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "fullName",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "email",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -87,16 +124,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "a6bb12c2a218b037d6a1e3e143c543a4",
+    "cacheID": "3031c2a4284dcf6f01b6af96021ac5ad",
     "id": null,
     "metadata": {},
     "name": "loginMutation",
     "operationKind": "mutation",
-    "text": "mutation loginMutation(\n  $input: loginUserInput!\n) {\n  loginUser(input: $input) {\n    token\n    error\n  }\n}\n"
+    "text": "mutation loginMutation(\n  $input: loginUserInput!\n) {\n  loginUser(input: $input) {\n    token\n    error\n    user {\n      id\n      fullName\n      email\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "e8f5ef0a3bbb289fab3b9b6dde12c9fe";
+(node as any).hash = "905acfe8a7464a540ab634d897222dd6";
 
 export default node;

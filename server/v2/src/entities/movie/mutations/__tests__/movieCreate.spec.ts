@@ -5,6 +5,7 @@ import { schema } from '../../../../schemas/schema'
 import { createUser } from '../../../user/fixture/createUser'
 import { createCrew } from '../../../crew/fixture/createCrew'
 import { movieRepository } from '../../../movie/movieRepository'
+import { loginUser } from '../../../user/fixture/loginUser'
 
 let movieId: string
 
@@ -22,27 +23,7 @@ describe('MovieCreateMutation', () => {
     const crewMemberId = crewMember._id.toString()
     const crewMemberGlobalId = toGlobalId('Crew', crewMemberId)
 
-    const loginMutation = `
-    mutation dfjgnd {
-      loginUser (input: {
-        email: "${adminUser.email}",
-        password: "123456"
-      }) {
-        token
-        error
-      }
-    }
-    `
-
-    const loginResponse = await graphql({
-      schema,
-      source: loginMutation
-    }) as unknown as { data: { loginUser: { token: string, error: string } } }
-
-    const { token, error: loginError } = loginResponse.data.loginUser
-
-    expect(loginError).toBeFalsy()
-    expect(token).toBeTruthy()
+    const { token } = loginUser(adminUser)
 
     const createMovieMutation = `
     mutation d {

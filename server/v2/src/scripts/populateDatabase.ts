@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker'
+import { createCrew } from '../entities/crew/fixture/createCrew'
 import { movieRepository } from '../entities/movie/movieRepository'
 import { crewRepository } from '../entities/crew/crewRepository'
 import { userRepository } from '../entities/user/userRepository'
 import { createUser } from '../entities/user/fixture/createUser'
 
 async function populateMovieCollecion(quantity: number) {
+  const crew = await createCrew()
+
   for (let x = 0; x < quantity; x++) {
     await movieRepository.insertOne({
       title: faker.word.adjective() + ' ' + faker.word.noun(),
@@ -17,12 +20,10 @@ async function populateMovieCollecion(quantity: number) {
         .toISOString()
         .slice(0, 10),
       actors: Array(3)
-        .fill('')
-        .map(() => faker.name.findName()),
+        .fill(crew._id),
       ageGroup: 'E',
       directors: Array(3)
-        .fill('')
-        .map(() => faker.name.findName()),
+        .fill(crew._id),
       genres: Array(3)
         .fill('')
         .map(() => faker.word.noun()),

@@ -1,10 +1,13 @@
-import { GraphQLList } from 'graphql'
+import { GraphQLFieldConfig } from 'graphql'
+import { UserConnection } from '../userTypes'
 import { userRepository } from '../userRepository'
-import { userType } from '../userTypes'
+import { connectionArgs, connectionFromArray } from 'graphql-relay'
 
-export const userList = {
-  type: new GraphQLList(userType),
-  resolve: async () => {
-    return (await userRepository.findAll())
+export const userList: GraphQLFieldConfig<any, any, any> = {
+  type: UserConnection,
+  args: connectionArgs,
+  resolve: async (_, args) => {
+    const users = await userRepository.findAll()
+    return connectionFromArray(users, args)
   }
 }
