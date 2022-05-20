@@ -25,7 +25,8 @@ export const movieCreate = mutationWithClientMutationId({
       resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async ({ ...movie }: Movie, ctx) => {
+  // TODO: #29 input types vs mongo types
+  mutateAndGetPayload: async ({ ...movie }: any, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
 
     if (error || payload?.admin !== true) {
@@ -35,12 +36,7 @@ export const movieCreate = mutationWithClientMutationId({
       }
     }
 
-    const submitedBy = new ObjectId(payload.id)
-
-    const actors = movie.actors.map(actor => fromGlobalId(actor).id)
-    const directors = movie.directors.map(director => fromGlobalId(director).id)
-
-    const { error: invalidCrewMembersError } = await validateCrewMembers([...actors, ...directors])
+    const { error: invalidCrewMembersError } = await validateCrewMembers([...movie.actors, ...movie.directors])
 
     if (invalidCrewMembersError) {
       return {
@@ -48,6 +44,10 @@ export const movieCreate = mutationWithClientMutationId({
         insertedId: null
       }
     }
+    const submitedBy = new ObjectId(payload.id)
+
+    const actors = movie.actors.map((actor: string) => new ObjectId(fromGlobalId(actor).id))
+    const directors = movie.directors.map((director: string) => new ObjectId(fromGlobalId(director).id))
 
     const { insertedId } = await movieRepository.insertOne({ ...movie, actors, directors, submitedBy })
 

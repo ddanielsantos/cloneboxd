@@ -23,7 +23,8 @@ export const movieUpdate = mutationWithClientMutationId({
       resolve: response => response.modifiedCount
     }
   },
-  mutateAndGetPayload: async ({ id, ...movie }: Movie & { id: string }) => {
+  // TODO: #29 input types vs mongo types
+  mutateAndGetPayload: async ({ id, ...movie }) => {
     const validActors = await crewRepository.findMany(movie.actors)
     const validDirectors = await crewRepository.findMany(movie.directors)
 
