@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { GraphQLTaggedNode, PreloadedQuery, usePreloadedQuery } from 'react-relay'
 
 import type { SearchMovieByTitleQuery } from '../SearchMovie/__generated__/SearchMovieByTitleQuery.graphql'
@@ -7,22 +8,32 @@ type Props = {
   queryReference: PreloadedQuery<SearchMovieByTitleQuery>
 }
 
-export const SearchList = ({ queryReference, query }: Props) => {
+export const SearchList = ({ queryReference, query, }: Props) => {
   const data = usePreloadedQuery(query, queryReference)
 
   const { searchMovieByTitle } = data
 
   return (
-    <ul>
+    <Suspense fallback={<h1>searching</h1>}>
+      {/* {
+        searchMovieByTitle?.edges?.length === 0 &&
+        <option>
+          any movie found
+        </option>
+      } */}
       {
-        searchMovieByTitle?.edges?.map((edge) => {
+        searchMovieByTitle?.edges?.map(edge => {
           return (
-            <li key={edge?.node?.id}>
+            <option
+              // id="movie"
+              key={edge?.node?.id}
+              value={edge?.node?.id}
+            >
               {edge?.node?.title}
-            </li>
+            </option>
           )
         })
       }
-    </ul>
+    </Suspense>
   )
 }
