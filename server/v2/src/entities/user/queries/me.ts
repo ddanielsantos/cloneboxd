@@ -7,7 +7,7 @@ export const me = {
   type: userType,
   resolve: async (_: any, _args: any, ctx: IncomingHttpHeaders) => {
     const { payload } = getHeadersPayload(ctx)
-    // console.log(payload)
+
     if (!payload) {
       return null
     }

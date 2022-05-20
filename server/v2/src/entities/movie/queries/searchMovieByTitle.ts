@@ -21,8 +21,6 @@ export const searchMovieByTitle: GraphQLFieldConfig<any, any, any> = {
       }
     })
 
-    console.log(movies)
-
     return connectionFromArray(movies, args)
   }
 }
