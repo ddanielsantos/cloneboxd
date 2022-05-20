@@ -36,7 +36,7 @@ export const Home = () => {
                 navigate('/review')
               }}
             >
-              registrar filme
+              log watched movie
             </Button>
           </HStack>
         </Flex>

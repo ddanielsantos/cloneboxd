@@ -22,10 +22,10 @@ export function Greeting() {
   return (
     <>
       <Subtitle
-        content={`bem-vindo, ${user?.user?.fullName}`}
+        content={`welcome, ${user?.user?.fullName}`}
       />
       <Text>
-        assistiu algum filme recentemente? Registre-o agora
+        saw any movies lately? register it right now
       </Text>
     </>
   )

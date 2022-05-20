@@ -12,11 +12,11 @@ export const HeaderDrawer = ({ onClose, isOpen }: Props) => {
   const { signOut } = useAuth()
   const drawerOptions = [
     {
-      label: 'Ver perfil',
+      label: 'See profile',
       onClick: () => { }
     },
     {
-      label: 'Sair',
+      label: 'Log out',
       onClick: () => signOut()
     }
   ]
