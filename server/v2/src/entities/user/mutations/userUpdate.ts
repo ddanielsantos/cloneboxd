@@ -4,7 +4,7 @@ import {
   GraphQLNonNull
 } from 'graphql'
 import { userInputType } from '../userTypes'
-import { User, userRepository } from '../userRepository'
+import { UserModel } from '../userModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
 export const userUpdate = mutationWithClientMutationId({
@@ -17,17 +17,22 @@ export const userUpdate = mutationWithClientMutationId({
     ...userInputType
   },
   outputFields: {
-    modifiedCount: {
+    result: {
       type: GraphQLString,
-      resolve: response => response.modifiedCount
+      resolve: response => response.result
     },
     error: {
       type: GraphQLString,
       resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async ({ id, ...user }: User & { id: string }) => {
-    // FIXME: improve this later
-    return (await userRepository.updateOne(fromGlobalId(id).id, user))
+  mutateAndGetPayload: async ({ id, ...user }) => {
+    const result = await UserModel.updateOne({
+      _id: fromGlobalId(id).id
+    }, {
+      $set: user
+    })
+
+    return result
   }
 })

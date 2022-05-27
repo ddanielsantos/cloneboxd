@@ -9,8 +9,8 @@ import {
 } from 'graphql'
 import { userType } from '../user/userTypes'
 import { movieType } from '../movie/movieTypes'
-import { userRepository } from '../user/userRepository'
-import { movieRepository } from '../movie/movieRepository'
+import { UserModel } from '../user/userModel'
+import { MovieModel } from '../movie/movieModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 
@@ -24,7 +24,9 @@ export const reviewType = new GraphQLObjectType({
       type: new GraphQLNonNull(userType),
       description: `The user who wrote the review`,
       resolve: async review => {
-        const user = await userRepository.findOne(review.user)
+        const user = await UserModel.findOne({
+          _id: review.user
+        })
         return user
       }
     },
@@ -32,7 +34,9 @@ export const reviewType = new GraphQLObjectType({
       type: new GraphQLNonNull(movieType),
       description: `The movie being reviewed`,
       resolve: async review => {
-        const movie = await movieRepository.findOne(review.movie)
+        const movie = await MovieModel.findOne({
+          _id: review.movie
+        })
         return movie
       }
     },

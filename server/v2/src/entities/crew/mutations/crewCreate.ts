@@ -1,7 +1,7 @@
 import { GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
-import { Crew, crewRepository } from '../crewRepository'
-import { crewInputType } from '../crewTypes'
+import { CrewModel } from '../crewModel'
+import { crewInputType, crewType } from '../crewTypes'
 
 export const crewCreate = mutationWithClientMutationId({
   name: 'crewCreate',
@@ -10,12 +10,30 @@ export const crewCreate = mutationWithClientMutationId({
     ...crewInputType
   },
   outputFields: {
-    insertedId: {
+    crew: {
+      type: crewType,
+      resolve: response => response.crew
+    },
+    error: {
       type: GraphQLString,
-      resolve: response => response.insertedId
+      resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async (payload: Crew) => {
-    return (await crewRepository.insertOne({ ...payload }))
+  mutateAndGetPayload: async (payload) => {
+    const document = new CrewModel(payload)
+
+    try {
+      await document.validate()
+      await document.save()
+
+      return {
+        crew: document
+      }
+    } catch {
+      return {
+        crew: null,
+        error: 'Invalid crew member'
+      }
+    }
   }
 })

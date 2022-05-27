@@ -1,8 +1,7 @@
 import { GraphQLString } from 'graphql'
-import { userInputType } from '../userTypes'
+import { UserModel } from '../userModel'
 import { genSaltSync, hashSync } from 'bcrypt'
-import { User, userRepository } from '../userRepository'
-import { isEmailAlreadyUsed } from '../isEmailAlreadyUsed'
+import { userInputType, userType } from '../userTypes'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
 export const userCreate = mutationWithClientMutationId({
@@ -12,16 +11,16 @@ export const userCreate = mutationWithClientMutationId({
     ...userInputType
   },
   outputFields: {
-    insertedId: {
-      type: GraphQLString,
-      resolve: response => response.insertedId
+    user: {
+      type: userType,
+      resolve: response => response.user
     },
     error: {
       type: GraphQLString,
       resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async ({ confirmPassword, ...payload }: User & { confirmPassword: string }) => {
+  mutateAndGetPayload: async ({ confirmPassword, ...payload }) => {
     if (payload.password !== confirmPassword) {
       return {
         error: 'Passwords do not match',
@@ -29,9 +28,9 @@ export const userCreate = mutationWithClientMutationId({
       }
     }
 
-    const emailAlreadyUsed = await isEmailAlreadyUsed(payload.email)
+    const isEmailAlreadyUsed = !!(await UserModel.findOne({ email: payload.email }))
 
-    if (emailAlreadyUsed) {
+    if (isEmailAlreadyUsed) {
       return {
         error: 'Invalid credentials',
         insertedId: null
@@ -41,8 +40,16 @@ export const userCreate = mutationWithClientMutationId({
     const salt = genSaltSync()
     const hashedPassword = hashSync(payload.password, salt)
 
-    const { insertedId } = await userRepository.insertOne({ ...payload, password: hashedPassword, isAdmin: false })
+    const document = new UserModel({
+      ...payload,
+      password: hashedPassword,
+      isAdmin: false
+    })
 
-    return { insertedId, error: null }
+    await document.validate()
+
+    await document.save()
+
+    return { user: document, error: null }
   }
 })

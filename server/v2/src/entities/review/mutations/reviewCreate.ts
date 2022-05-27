@@ -1,14 +1,16 @@
 import {
   fromGlobalId,
-  mutationWithClientMutationId,
-  toGlobalId
+  mutationWithClientMutationId
 } from 'graphql-relay'
 import { ObjectId } from 'mongodb'
 import { GraphQLString } from 'graphql'
-import { reviewInputType } from '../reviewTypes'
-import { reviewRepository } from '../reviewRepository'
-import { validadeMovies } from '../../movie/validateMovie'
+import { IReview, ReviewModel } from '../reviewModel'
+import { validateMovies } from '../../movie/validateMovie'
+import { reviewInputType, reviewType } from '../reviewTypes'
+import { BetaMongoose2GQLInput } from '../../../types/types'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+
+type Review = BetaMongoose2GQLInput<IReview>
 
 export const reviewCreate = mutationWithClientMutationId({
   name: 'reviewCreate',
@@ -17,46 +19,51 @@ export const reviewCreate = mutationWithClientMutationId({
     ...reviewInputType
   },
   outputFields: {
-    insertedId: {
-      type: GraphQLString,
-      resolve: response => response.insertedId
+    review: {
+      type: reviewType,
+      resolve: response => response.review
     },
     error: {
       type: GraphQLString,
       resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async ({ ...review }, ctx) => {
+  mutateAndGetPayload: async ({ ...review }: Review, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
 
     if (error || payload === null) {
       return {
         error: 'Unauthorized',
-        insertedId: null
+        review: null
       }
     }
 
     const movieIdFromGlobal = fromGlobalId(review.movie).id
 
-    const { error: invalidMovieError } = await validadeMovies([movieIdFromGlobal])
+    const { error: invalidMovieError } = await validateMovies([movieIdFromGlobal])
 
     if (invalidMovieError) {
       return {
-        error: invalidMovieError,
-        insertedId: null
+        error: invalidMovieError
       }
     }
 
     const user = new ObjectId(payload.id)
-    const { insertedId } = await reviewRepository.insertOne({
-      ...review,
-      user,
-      movie: new ObjectId(movieIdFromGlobal)
-    })
 
-    return {
-      insertedId: toGlobalId('Review', insertedId.toString()),
-      error: null
+    try {
+      const document = new ReviewModel({
+        ...review,
+        user,
+        movie: new ObjectId(movieIdFromGlobal)
+      }).save()
+
+      return {
+        review: document
+      }
+    } catch {
+      return {
+        error: 'Invalid review'
+      }
     }
   }
 })

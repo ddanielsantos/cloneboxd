@@ -1,5 +1,5 @@
 import { userType } from '../userTypes'
-import { userRepository } from '../userRepository'
+import { UserModel } from '../userModel'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { IncomingHttpHeaders } from 'http'
 
@@ -12,6 +12,8 @@ export const me = {
       return null
     }
 
-    return await userRepository.findOne(payload.id)
+    return await UserModel.findOne({
+      _id: payload.id
+    })
   }
 }

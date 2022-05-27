@@ -6,7 +6,7 @@
     "dev": "tsnd --respawn --clear --transpile-only index.ts",
     "start": "node dist/index.js",
     "populate": "tsnd --clear --transpile-only src/scripts/populateDatabase.ts",
-    "test": "jest",
+    "test": "jest --runInBand --detectOpenHandles",
     "schema": "tsnd --clear --transpile-only src/scripts/printSchema.ts"
   },
   "main": "dist/index.js",
@@ -15,16 +15,17 @@
   "dependencies": {
     "@koa/cors": "^3.2.0",
     "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.0",
     "graphql": "^16.3.0",
     "graphql-helix": "^1.12.0",
     "graphql-relay": "^0.10.0",
     "graphql-tools": "^8.2.3",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
-    "dotenv": "^16.0.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.1.1",
-    "mongodb": "^4.4.1"
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.3.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.2",
@@ -44,7 +45,9 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
-    "jest": "^27.5.1",
+    "jest": "^28.1.0",
+    "mongodb-memory-server": "^8.6.0",
+    "ts-jest": "^28.0.3",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.2"
   }

@@ -1,15 +1,15 @@
 import { faker } from '@faker-js/faker'
-import { createCrew } from '../entities/crew/fixture/createCrew'
-import { movieRepository } from '../entities/movie/movieRepository'
-import { crewRepository } from '../entities/crew/crewRepository'
-import { userRepository } from '../entities/user/userRepository'
+import { CrewModel } from '../entities/crew/crewModel'
+import { UserModel } from '../entities/user/userModel'
+import { MovieModel } from '../entities/movie/movieModel'
 import { createUser } from '../entities/user/fixture/createUser'
+import { createCrew } from '../entities/crew/fixture/createCrew'
 
 async function populateMovieCollecion(quantity: number) {
   const crew = await createCrew()
 
   for (let x = 0; x < quantity; x++) {
-    await movieRepository.insertOne({
+    await MovieModel.insertMany({
       title: faker.word.adjective() + ' ' + faker.word.noun(),
       duration: `${faker.mersenne.rand(0, 180)} min`,
       releaseDate: faker.date
@@ -36,18 +36,20 @@ async function populateMovieCollecion(quantity: number) {
 
 async function populateUserCollection(quantity: number) {
   for (let x = 0; x < quantity; x++) {
-    await userRepository.insertOne({
+    const document = new UserModel({
       fullName: faker.name.findName(),
       email: faker.internet.email(),
       password: faker.internet.password(20),
       isAdmin: false
     })
+
+    await document.save()
   }
 }
 
 async function populateCrewCollection(quantity: number) {
   for (let x = 0; x < quantity; x++) {
-    await crewRepository.insertOne({
+    await CrewModel.insertMany({
       name: faker.name.findName(),
       dateOfBirth: faker.date
         .between(

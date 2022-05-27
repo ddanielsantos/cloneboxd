@@ -1,6 +1,6 @@
 import { reviewType } from '../reviewTypes'
 import { GraphQLID, GraphQLNonNull } from 'graphql'
-import { reviewRepository } from '../reviewRepository'
+import { ReviewModel } from '../reviewModel'
 
 export const singleReview = {
   type: reviewType,
@@ -10,6 +10,8 @@ export const singleReview = {
     }
   },
   resolve: async (_: any, args: { id: string }) => {
-    return await reviewRepository.findOne(args.id)
+    return await ReviewModel.findOne({
+      _id: args.id
+    })
   }
 }

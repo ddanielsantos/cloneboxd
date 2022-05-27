@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql'
-import { crewRepository } from '../crewRepository'
+import { CrewModel } from '../crewModel'
 import { crewType } from '../crewTypes'
 
 export const singleCrewMember = {
@@ -10,6 +10,8 @@ export const singleCrewMember = {
     }
   },
   resolve: async (_: any, args: { id: string }) => {
-    return await crewRepository.findOne(args.id)
+    return await CrewModel.findOne({
+      _id: args.id
+    })
   }
 }

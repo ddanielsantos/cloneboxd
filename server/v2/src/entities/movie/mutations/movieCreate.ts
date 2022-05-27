@@ -2,11 +2,14 @@ import {
   GraphQLString
 } from 'graphql'
 import { ObjectId } from 'mongodb'
-import { movieInputType } from '../movieTypes'
-import { Movie, movieRepository } from '../movieRepository'
+import { MovieModel, IMovie } from '../movieModel'
+import { movieInputType, movieType } from '../movieTypes'
+import { BetaMongoose2GQLInput } from '../../../types/types'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { validateCrewMembers } from '../../crew/validateCrewMembers'
-import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay'
+import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
+
+type Movie = BetaMongoose2GQLInput<IMovie>
 
 export const movieCreate = mutationWithClientMutationId({
   name: 'movieCreate',
@@ -15,10 +18,10 @@ export const movieCreate = mutationWithClientMutationId({
     ...movieInputType
   },
   outputFields: {
-    insertedId: {
-      type: GraphQLString,
+    movie: {
+      type: movieType,
       // TODO: add this to other insertions
-      resolve: response => response.insertedId
+      resolve: response => response.movie
     },
     error: {
       type: GraphQLString,
@@ -26,13 +29,12 @@ export const movieCreate = mutationWithClientMutationId({
     }
   },
   // TODO: #29 input types vs mongo types
-  mutateAndGetPayload: async ({ ...movie }: any, ctx) => {
+  mutateAndGetPayload: async ({ ...movie }: Movie, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
 
     if (error || payload?.admin !== true) {
       return {
-        error: 'Unauthorized',
-        insertedId: null
+        error: 'Unauthorized'
       }
     }
 
@@ -40,8 +42,7 @@ export const movieCreate = mutationWithClientMutationId({
 
     if (invalidCrewMembersError) {
       return {
-        error: invalidCrewMembersError || '',
-        insertedId: null
+        error: invalidCrewMembersError
       }
     }
     const submitedBy = new ObjectId(payload.id)
@@ -49,11 +50,21 @@ export const movieCreate = mutationWithClientMutationId({
     const actors = movie.actors.map((actor: string) => new ObjectId(fromGlobalId(actor).id))
     const directors = movie.directors.map((director: string) => new ObjectId(fromGlobalId(director).id))
 
-    const { insertedId } = await movieRepository.insertOne({ ...movie, actors, directors, submitedBy })
+    try {
+      const document = new MovieModel({
+        ...movie,
+        submitedBy,
+        actors,
+        directors
+      }).save()
 
-    return {
-      insertedId: toGlobalId('Movie', insertedId.toString()),
-      error: null
+      return {
+        movie: document
+      }
+    } catch {
+      return {
+        error: 'Error saving movie'
+      }
     }
   }
 })

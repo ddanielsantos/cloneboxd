@@ -1,4 +1,4 @@
-import { crewRepository } from '../crewRepository'
+import { CrewModel } from '../crewModel'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
@@ -18,7 +18,9 @@ export const crewDelete = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: async ({ id }) => {
-    const response = await crewRepository.deleteOne(fromGlobalId(id).id)
+    const response = await CrewModel.deleteOne({
+      _id: fromGlobalId(id).id
+    })
 
     return response
   }

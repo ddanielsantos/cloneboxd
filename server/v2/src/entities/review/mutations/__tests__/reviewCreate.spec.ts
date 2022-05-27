@@ -1,19 +1,9 @@
 import { graphql } from 'graphql'
-import { client } from '../../../../db/mongo'
-import { fromGlobalId, toGlobalId } from 'graphql-relay'
+import { toGlobalId } from 'graphql-relay'
 import { schema } from '../../../../schemas/schema'
-import { reviewRepository } from '../../reviewRepository'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
 import { createMovie } from '../../../movie/fixture/createMovie'
-
-let reviewId: string
-
-afterAll(async () => {
-  await reviewRepository.deleteOne(reviewId)
-
-  await client.close()
-})
 
 describe('ReviewCreateMutation', () => {
   it('should create a review', async () => {
@@ -31,11 +21,24 @@ describe('ReviewCreateMutation', () => {
           text: "test review"
           rating: 4.5
         }) {
-          insertedId
+          review {
+            id
+          }
           error
         }
       }
     `
+
+    type CreateReviewResponse = {
+      data: {
+        reviewCreate: {
+          review: {
+            id: string
+          },
+          error: string
+        }
+      }
+    }
 
     const createReviewResponse = await graphql({
       schema,
@@ -43,15 +46,13 @@ describe('ReviewCreateMutation', () => {
       contextValue: {
         authorization: `Bearer ${token}`
       }
-    }) as unknown as { data: { reviewCreate: { insertedId: string, error: string } } }
+    }) as unknown as CreateReviewResponse
 
     expect(createReviewMutation).toBeDefined()
 
-    const { insertedId, error: createMovieError } = createReviewResponse.data.reviewCreate
+    const { review, error: createMovieError } = createReviewResponse.data.reviewCreate
 
     expect(createMovieError).toBeFalsy()
-    expect(insertedId).toBeTruthy()
-
-    reviewId = fromGlobalId(insertedId).id
+    expect(review.id).toBeDefined()
   })
 })
