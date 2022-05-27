@@ -1,9 +1,8 @@
-import { WithId } from 'mongodb'
 import * as jwt from 'jsonwebtoken'
-import { User } from '../userRepository'
+import { IUser } from '../userModel'
 import { getEnvironmentVariables } from '../../../config/env'
 
-export function loginUser(user: WithId<User>): { token: string } {
+export function loginUser(user: IUser): { token: string } {
   const jwtSecret = getEnvironmentVariables().JWT_SECRET || ''
 
   const token = jwt.sign(

@@ -1,18 +1,12 @@
+import { UserModel } from '../userModel'
+import { userType } from '../userTypes'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
-import { isEmailAlreadyUsed } from '../isEmailAlreadyUsed'
-import { compareSync } from 'bcrypt'
-import { userRepository } from '../userRepository'
-import * as jwt from 'jsonwebtoken'
-import { getEnvironmentVariables } from '../../../config/env'
-import { userType } from '../userTypes'
 
 type LoginInput = {
   email: string,
   password: string
 }
-
-const jwtSecret = getEnvironmentVariables().JWT_SECRET || ''
 
 export const loginUser = mutationWithClientMutationId({
   name: 'loginUser',
@@ -28,34 +22,28 @@ export const loginUser = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async (payload: LoginInput) => {
     const { email, password } = payload
-    const isEmailUsed = await isEmailAlreadyUsed(email)
 
-    if (!isEmailUsed) {
+    const user = await UserModel.findOne({ email })
+
+    if (!user) {
       return {
-        error: 'Invalid credentials',
-        user: null,
-        token: null
+        error: 'Invalid credentials'
       }
     }
 
-    const [user] = await userRepository.findByProperty({ email })
-
-    const isCorrectPassword = compareSync(password, user.password)
+    const isCorrectPassword = user.validatePassword(password)
 
     if (!isCorrectPassword) {
       return {
-        error: 'Invalid credentials',
-        user: null,
-        token: null
+        error: 'Invalid credentials'
       }
     }
 
-    const token = jwt.sign({ id: user._id.toString(), admin: user.isAdmin }, jwtSecret, { expiresIn: '0.5h' })
+    const token = user.generateToken()
 
     return {
       token,
-      user: user,
-      error: null
+      user
     }
   },
   outputFields: {

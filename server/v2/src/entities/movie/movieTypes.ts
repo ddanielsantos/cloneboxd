@@ -9,7 +9,7 @@ import {
   GraphQLObjectType,
   GraphQLInputFieldConfig
 } from 'graphql'
-import { crewRepository } from '../crew/crewRepository'
+import { CrewModel } from '../crew/crewModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { globalIdField, connectionDefinitions } from 'graphql-relay'
 
@@ -52,7 +52,12 @@ export const movieType = new GraphQLObjectType({
       type: new GraphQLList(crewType),
       description: `Movie's actors`,
       resolve: async movie => {
-        const actors = await crewRepository.findMany(movie.actors)
+        const actors = await CrewModel.find({
+          _id: {
+            $in: movie.actors
+          }
+        })
+
         return actors
       }
     },
@@ -60,7 +65,12 @@ export const movieType = new GraphQLObjectType({
       type: new GraphQLList(crewType),
       description: `Movie's directors`,
       resolve: async movie => {
-        const directors = await crewRepository.findMany(movie.directors)
+        const directors = await CrewModel.find({
+          _id: {
+            $in: movie.directors
+          }
+        })
+
         return directors
       }
     },

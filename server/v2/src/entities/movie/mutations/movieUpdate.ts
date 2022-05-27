@@ -4,9 +4,9 @@ import {
   GraphQLNonNull
 } from 'graphql'
 import { movieInputType } from '../movieTypes'
-import { Movie, movieRepository } from '../movieRepository'
+import { MovieModel } from '../movieModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
-import { crewRepository } from '../../../entities/crew/crewRepository'
+import { validateCrewMembers } from '../../crew/validateCrewMembers'
 
 export const movieUpdate = mutationWithClientMutationId({
   name: 'movieUpdate',
@@ -18,24 +18,31 @@ export const movieUpdate = mutationWithClientMutationId({
     ...movieInputType
   },
   outputFields: {
-    modifiedCount: {
+    result: {
       type: GraphQLString,
-      resolve: response => response.modifiedCount
+      resolve: response => response.result
+    },
+    error: {
+      type: GraphQLString,
+      resolve: response => response.error
     }
   },
   // TODO: #29 input types vs mongo types
   mutateAndGetPayload: async ({ id, ...movie }) => {
-    const validActors = await crewRepository.findMany(movie.actors)
-    const validDirectors = await crewRepository.findMany(movie.directors)
+    const { error } = await validateCrewMembers([...movie.actors, ...movie.directors])
 
-    if (validActors.length !== movie.actors.length) {
-      throw new Error('All actors must be valid members of the crew')
+    if (error) {
+      return {
+        error
+      }
     }
 
-    if (validDirectors.length !== movie.directors.length) {
-      throw new Error('All directors must be valid members of the crew')
-    }
+    const result = await MovieModel.updateOne({
+      _id: fromGlobalId(id).id
+    }, { $set: movie })
 
-    return (await movieRepository.updateOne(fromGlobalId(id).id, movie))
+    return {
+      result
+    }
   }
 })

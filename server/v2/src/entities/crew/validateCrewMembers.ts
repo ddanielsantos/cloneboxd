@@ -1,15 +1,38 @@
-import { crewRepository } from './crewRepository'
+import mongoose from 'mongoose'
+import { CrewModel } from './crewModel'
+import { fromGlobalId } from 'graphql-relay'
+
+const INVALID_CREW_MEMBER = 'Some invalid crew member id was provided'
 
 export async function validateCrewMembers(ids: string[]) {
-  try {
-    await crewRepository.findMany(ids)
+  const mongoIds = new Set<string>()
 
-    return {
-      error: null
+  ids.forEach(id => {
+    const mongoId = fromGlobalId(id).id
+    mongoIds.add(mongoId)
+  })
+
+  const isInvalid = (element: string) => {
+    return !mongoose.Types.ObjectId.isValid(element)
+  }
+
+  for (const item of mongoIds) {
+    if (isInvalid(item)) {
+      return {
+        error: INVALID_CREW_MEMBER
+      }
     }
-  } catch {
+  }
+
+  const crewMembers = await CrewModel.find({ _id: { $in: [...mongoIds] } })
+
+  if (crewMembers.length !== mongoIds.size) {
     return {
-      error: 'Invalid actors or directors'
+      error: INVALID_CREW_MEMBER
     }
+  }
+
+  return {
+    error: null
   }
 }

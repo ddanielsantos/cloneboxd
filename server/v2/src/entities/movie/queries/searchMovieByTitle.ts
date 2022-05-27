@@ -1,7 +1,7 @@
 import { MovieConnection } from '../movieTypes'
 import { GraphQLFieldConfig, GraphQLNonNull, GraphQLString } from 'graphql'
 import { connectionArgs, connectionFromArray } from 'graphql-relay'
-import { movieRepository } from '../movieRepository'
+import { MovieModel } from '../movieModel'
 
 export const searchMovieByTitle: GraphQLFieldConfig<any, any, any> = {
   type: MovieConnection,
@@ -12,14 +12,9 @@ export const searchMovieByTitle: GraphQLFieldConfig<any, any, any> = {
   resolve: async (_, args) => {
     const { title } = args
 
-    const movies = await movieRepository.findManyExperimental({
-      filter: {
-        $text: { $search: title }
-      },
-      sort: {
-        score: { $meta: 'textScore' }
-      }
-    })
+    const movies = await MovieModel.find({
+      $text: { $search: title }
+    }).sort({ score: { $meta: 'textScore' } })
 
     return connectionFromArray(movies, args)
   }

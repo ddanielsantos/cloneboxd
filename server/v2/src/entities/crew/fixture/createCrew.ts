@@ -1,23 +1,18 @@
-import { WithId } from 'mongodb'
-import { Crew, crewRepository } from '../crewRepository'
+import { CrewModel } from '../crewModel'
 
-export async function createCrew(): Promise<WithId<Crew>> {
-  const [crewMember] = await crewRepository.findByProperty({
+export async function createCrew() {
+  const crewMember = await CrewModel.findOne({
     name: 'a long one just to make sure that it is unique'
   })
 
   if (crewMember) return crewMember
 
-  const dummyCrewMember = {
+  const document = new CrewModel({
     name: 'a long one just to make sure that it is unique',
-    nacionality: 'USA',
     dateOfBirth: '1981-03-11'
-  }
+  })
 
-  const { insertedId } = await crewRepository.insertOne(dummyCrewMember)
+  await document.save()
 
-  return {
-    ...dummyCrewMember,
-    _id: insertedId
-  }
+  return document
 }

@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql'
-import { movieRepository } from '../movieRepository'
+import { MovieModel } from '../movieModel'
 import { movieType } from '../movieTypes'
 
 export const singleMovie = {
@@ -10,6 +10,8 @@ export const singleMovie = {
     }
   },
   resolve: async (_: any, args: { id: string }) => {
-    return await movieRepository.findOne(args.id)
+    return await MovieModel.findOne({
+      _id: args.id
+    })
   }
 }

@@ -1,8 +1,12 @@
-import { movieRepository } from './movieRepository'
+import { MovieModel } from './movieModel'
 
-export async function validadeMovies(ids: string[]) {
+export async function validateMovies(ids: string[]) {
   try {
-    await movieRepository.findMany(ids)
+    await MovieModel.find({
+      _id: {
+        $in: ids
+      }
+    })
 
     return {
       error: null

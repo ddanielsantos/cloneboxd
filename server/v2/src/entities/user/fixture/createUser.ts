@@ -1,32 +1,26 @@
 import { genSaltSync, hashSync } from 'bcrypt'
 import { WithId } from 'mongodb'
-import { User, userRepository } from '../userRepository'
+import { UserModel } from '../userModel'
 
-export async function createUser(): Promise<WithId<User>> {
-  const [user] = await userRepository.findByProperty({ email: 'tester@mail.com' })
+export async function createUser() {
+  const user = await UserModel.findOne({ email: 'tester@mail.com' })
 
   if (user) return user
 
-  const userAttributes = {
+  const salt = genSaltSync()
+
+  const document = new UserModel({
     fullName: 'chad admin',
     email: 'tester@mail.com',
     isAdmin: true,
     password: '123456'
-  }
-
-  const salt = genSaltSync()
-  const hashedPassword = hashSync(userAttributes.password, salt)
-
-  const { insertedId } = await userRepository.insertOne({
-    ...userAttributes,
-    password: hashedPassword
   })
 
-  return {
-    _id: insertedId,
-    fullName: 'chad admin',
-    email: 'tester@mail.com',
-    isAdmin: true,
-    password: hashedPassword
-  }
+  await document.save()
+
+  const hashedPassword = hashSync(document.password, salt)
+
+  document.update({ password: hashedPassword })
+
+  return document
 }

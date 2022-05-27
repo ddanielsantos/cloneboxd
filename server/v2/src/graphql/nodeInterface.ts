@@ -1,31 +1,31 @@
 import { fromGlobalId, nodeDefinitions } from 'graphql-relay'
-import { Repository } from '../factories/repository'
-import { userRepository } from '../entities/user/userRepository'
-import { movieRepository } from '../entities/movie/movieRepository'
-import { crewRepository } from '../entities/crew/crewRepository'
-import { reviewRepository } from '../entities/review/reviewRepository'
+import { UserModel } from '../entities/user/userModel'
+import { MovieModel } from '../entities/movie/movieModel'
+import { CrewModel } from '../entities/crew/crewModel'
+import { ReviewModel } from '../entities/review/reviewModel'
 
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     // https://github.com/graphql/graphql-relay-js/blob/main/src/__tests__/starWarsSchema.ts
     // https://github.com/entria/entria-fullstack/blob/master/packages/server/src/interface/NodeInterface.ts
-    const { type, id } = fromGlobalId(globalId)
+    const { id, type } = fromGlobalId(globalId)
 
-    type MappedRepositories = {
-      // TODO: remove any
-      [key: string]: Repository<any>
+    type ModelLookup = {
+      [key: string]: any
     }
 
-    const lookupRepositories: MappedRepositories = {
-      User: userRepository,
-      Movie: movieRepository,
-      Crew: crewRepository,
-      UserReview: reviewRepository
+    // TODO: refactor this
+    const modelLookup: ModelLookup = {
+      User: UserModel,
+      Movie: MovieModel,
+      Crew: CrewModel,
+      UserReview: ReviewModel
     }
 
-    return lookupRepositories[type].findOne(id) || undefined
+    return modelLookup[type].findOne(id) || undefined
   },
   (obj) => {
+    // TODO: refactor this
     if (obj.nacionality) {
       return 'Crew'
     }

@@ -1,19 +1,9 @@
 import { graphql } from 'graphql'
-import { fromGlobalId, toGlobalId } from 'graphql-relay'
-import { client } from '../../../../db/mongo'
+import { toGlobalId } from 'graphql-relay'
 import { schema } from '../../../../schemas/schema'
+import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
 import { createCrew } from '../../../crew/fixture/createCrew'
-import { movieRepository } from '../../../movie/movieRepository'
-import { loginUser } from '../../../user/fixture/loginUser'
-
-let movieId: string
-
-afterAll(async () => {
-  await movieRepository.deleteOne(movieId)
-
-  await client.close()
-})
 
 describe('MovieCreateMutation', () => {
   it('should create a movie', async () => {
@@ -29,18 +19,20 @@ describe('MovieCreateMutation', () => {
     mutation d {
       movieCreate(
         input: {
-          title: "Fast and Furious 67", 
-          duration: "139 min", 
-          releaseDate: "2023-01-01", 
-          genres: ["comedy", "drama", "family"], 
-          ageGroup: "E", 
-          rating: 5, 
-          actors: ["${crewMemberGlobalId}"], 
+          title: "bam bam rhe"
+          duration: "12 min"
+          releaseDate: "2020-02-02"
+          genres: ["comedy"]
+          ageGroup: "E"
+          rating: 4
+          actors: ["${crewMemberGlobalId}"]
           directors: ["${crewMemberGlobalId}"]
         }
       ) {
-        insertedId
         error
+        movie {
+          id
+        }
       }
     }
     `
@@ -51,13 +43,11 @@ describe('MovieCreateMutation', () => {
       contextValue: {
         authorization: `Bearer ${token}`
       }
-    }) as unknown as { data: { movieCreate: { insertedId: string, error: string } } }
+    }) as unknown as { data: { movieCreate: { movie: { id: string }, error: string } } }
 
-    const { insertedId, error: createMovieError } = createMovieResponse.data.movieCreate
+    const { movie, error: createMovieError } = createMovieResponse.data.movieCreate
 
     expect(createMovieError).toBeFalsy()
-    expect(insertedId).toBeTruthy()
-
-    movieId = fromGlobalId(insertedId).id
+    expect(movie).toBeTruthy()
   })
 })
