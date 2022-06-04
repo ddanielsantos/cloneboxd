@@ -1,7 +1,11 @@
 import { GraphQLString } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
-import { CrewModel } from '../crewModel'
+import { CrewModel, ICrew } from '../crewModel'
 import { crewInputType, crewType } from '../crewTypes'
+import { mutationWithClientMutationId } from 'graphql-relay'
+import { BetaMongoose2GQLInput } from '../../../types/types'
+import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+
+type Crew = BetaMongoose2GQLInput<ICrew>
 
 export const crewCreate = mutationWithClientMutationId({
   name: 'crewCreate',
@@ -19,8 +23,16 @@ export const crewCreate = mutationWithClientMutationId({
       resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async (payload) => {
-    const document = new CrewModel(payload)
+  mutateAndGetPayload: async ({ ...crew }: Crew, ctx) => {
+    const { error, payload } = getHeadersPayload(ctx)
+
+    if (error || payload?.admin !== true) {
+      return {
+        error: 'Unauthorized'
+      }
+    }
+
+    const document = new CrewModel(crew)
 
     try {
       await document.validate()

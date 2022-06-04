@@ -4,7 +4,9 @@ import { MovieModel } from '../movieModel'
 
 export async function createMovie() {
   const crew = await createCrew()
-  const user = await createUser()
+  const user = await createUser({
+    admin: true
+  })
 
   const movie = await MovieModel.findOne({ title: 'test movie' })
 
