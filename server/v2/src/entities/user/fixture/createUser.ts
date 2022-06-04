@@ -1,9 +1,12 @@
-import { genSaltSync, hashSync } from 'bcrypt'
-import { WithId } from 'mongodb'
 import { UserModel } from '../userModel'
+import { genSaltSync, hashSync } from 'bcrypt'
 
-export async function createUser() {
-  const user = await UserModel.findOne({ email: 'tester@mail.com' })
+type Options = {
+  admin: boolean
+}
+
+export async function createUser(options: Options) {
+  const user = await UserModel.findOne({ email: 'tester@mail.com', isAdmin: options.admin })
 
   if (user) return user
 
@@ -12,7 +15,7 @@ export async function createUser() {
   const document = new UserModel({
     fullName: 'chad admin',
     email: 'tester@mail.com',
-    isAdmin: true,
+    isAdmin: options.admin,
     password: '123456'
   })
 

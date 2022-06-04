@@ -29,7 +29,9 @@ async function populateMovieCollecion(quantity: number) {
         .map(() => faker.word.noun()),
       rating: faker.mersenne
         .rand(0, 5),
-      submitedBy: (await createUser())._id
+      submitedBy: (await createUser({
+        admin: true
+      }))._id
     })
   }
 }
