@@ -1,31 +1,16 @@
 import { Home } from '../pages/Home/Home'
 import { Login } from '../pages/Login/Login'
-import { AuthRequired } from './AuthRequired'
 import { SignUp } from '../pages/SignUp/SignUp'
+import { Review } from '../pages/Review/Review'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
 import { Routes as RRoutes, Route } from 'react-router-dom'
-import { Review } from '../pages/Review/Review'
+import { ProtectedRoute } from '../helpers/ProtectedRoute'
 
 export const Routes = () => {
   return (
     <RRoutes>
-      {/* TODO: #22 transform this in a component */}
-      <Route
-        path="/"
-        element={
-          <AuthRequired>
-            <Home />
-          </AuthRequired>
-        }
-      />
-      <Route
-        path="/review"
-        element={
-          <AuthRequired>
-            <Review />
-          </AuthRequired>
-        }
-      />
+      <ProtectedRoute path='/' element={<Home />} />
+      <ProtectedRoute path='/review' element={<Review />} />
       <Route path="/signUp" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NoMatch />} />
