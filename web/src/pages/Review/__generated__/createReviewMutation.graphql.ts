@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5266b78780ae9293f4cfe6809a712cca>>
+ * @generated SignedSource<<a890a74afd4ecb6f5a4c61c435f2153f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,9 @@ export type createReviewMutation$variables = {
 };
 export type createReviewMutation$data = {
   readonly reviewCreate: {
-    readonly insertedId: string | null;
+    readonly review: {
+      readonly id: string;
+    } | null;
     readonly error: string | null;
   } | null;
 };
@@ -56,8 +58,19 @@ v1 = [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "insertedId",
+        "concreteType": "UserReview",
+        "kind": "LinkedField",
+        "name": "review",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       },
       {
@@ -89,16 +102,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "cecf72d55bf498bdda585791de5c7589",
+    "cacheID": "f90f89158127f19e29819b1e6f3b2c02",
     "id": null,
     "metadata": {},
     "name": "createReviewMutation",
     "operationKind": "mutation",
-    "text": "mutation createReviewMutation(\n  $input: reviewCreateInput!\n) {\n  reviewCreate(input: $input) {\n    insertedId\n    error\n  }\n}\n"
+    "text": "mutation createReviewMutation(\n  $input: reviewCreateInput!\n) {\n  reviewCreate(input: $input) {\n    review {\n      id\n    }\n    error\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b058d111d9915f5e3b45f69e696efeae";
+(node as any).hash = "40659bdad0b1afea36e82c9c47fd62c7";
 
 export default node;
