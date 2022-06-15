@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b8dd01adf15d230b7264243f6d5c0320>>
+ * @generated SignedSource<<4754b24e45385be9a3f33a79d34daa22>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,9 @@ export type signUpMutation$variables = {
 };
 export type signUpMutation$data = {
   readonly userCreate: {
-    readonly insertedId: string | null;
+    readonly user: {
+      readonly id: string;
+    } | null;
     readonly error: string | null;
   } | null;
 };
@@ -56,8 +58,19 @@ v1 = [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "insertedId",
+        "concreteType": "User",
+        "kind": "LinkedField",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       },
       {
@@ -89,16 +102,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "f3ede64c45e1a32300cb7a66b714ec87",
+    "cacheID": "90ab367fff66d4fce06a75ec2226254c",
     "id": null,
     "metadata": {},
     "name": "signUpMutation",
     "operationKind": "mutation",
-    "text": "mutation signUpMutation(\n  $input: userCreateInput!\n) {\n  userCreate(input: $input) {\n    insertedId\n    error\n  }\n}\n"
+    "text": "mutation signUpMutation(\n  $input: userCreateInput!\n) {\n  userCreate(input: $input) {\n    user {\n      id\n    }\n    error\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2d4bf0c9de82e1ce3da2ad2b7dabb358";
+(node as any).hash = "ebb7f5959065e521e814f703035d4292";
 
 export default node;
