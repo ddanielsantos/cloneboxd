@@ -17,9 +17,9 @@ export const Footer = () => {
           flex={1}
           isExternal
           ml={1}
-          href="https://twitter.com/renat0sp"
+          href="https://github.com/ddanielsantos"
         >
-          @renat0sp
+          @ddanielsantos
         </Link>
       </Text>
     </Flex>

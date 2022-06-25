@@ -276,7 +276,7 @@ export const MovieDetails = () => {
       >
         <GridItem
           order={1}
-          colSpan={3}
+          colSpan={[4, 3]}
           display={['block']}
         >
           <Text
@@ -303,7 +303,7 @@ export const MovieDetails = () => {
         </GridItem>
 
         <GridItem
-          colSpan={[3, 2, 1]}
+          colSpan={[4, 1]}
           alignContent={'end'}
           order={[2, 3]}
           justifySelf={['center', 'start', 'center']}
@@ -390,7 +390,7 @@ export const MovieDetails = () => {
         </GridItem>
 
         <GridItem
-          colStart={4}
+          colStart={[null, 4]}
           order={5}
         >
           <Text
