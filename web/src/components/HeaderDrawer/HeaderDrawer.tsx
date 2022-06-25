@@ -33,6 +33,10 @@ export const HeaderDrawer = ({ onClose, isOpen }: Props) => {
       onClick: () => navigate('/search-movie')
     },
     {
+      label: 'About',
+      onClick: () => navigate('/about')
+    },
+    {
       label: 'Log out',
       onClick: () => signOut()
     }
@@ -63,6 +67,7 @@ export const HeaderDrawer = ({ onClose, isOpen }: Props) => {
                   >
                     <Button
                       noOfLines={1}
+                      size={'sm'}
                       onClick={item.onClick}
                       variant={'ghost'}
                     >
