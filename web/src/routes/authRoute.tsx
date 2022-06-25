@@ -6,6 +6,7 @@ import { SignUp } from '../pages/SignUp/SignUp'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
 import { Routes as RRoutes, Route } from 'react-router-dom'
 import { SearchMovie } from '../pages/SearchMovie/SearchMovie'
+import { MovieDetails } from '../pages/MovieDetails/MovieDetails'
 
 export const Routes = () => {
   return (
@@ -34,9 +35,14 @@ export const Routes = () => {
           </AuthRequired>
         }
       />
+      <Route
+        path="/movie"
+      >
+        <Route path=":movieId" element={<MovieDetails />} />
+      </Route>
       <Route path="/signUp" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<NoMatch />} />
-    </RRoutes>
+    </RRoutes >
   )
 }

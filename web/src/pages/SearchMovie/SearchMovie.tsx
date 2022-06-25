@@ -5,6 +5,7 @@ import { useTimedSearch } from '../../hooks/useTimedSearch'
 import { SearchMovieByTitleQuery } from '../../components/SearchMovie/SearchMovie'
 
 import type { SearchMovieByTitleQuery as SearchMovieByTitleQueryType } from '../../components/SearchMovie/__generated__/SearchMovieByTitleQuery.graphql'
+import { useNavigate } from 'react-router-dom'
 
 export const SearchMovie = () => {
   const [titleToSearch, setTitleToSearch] = useState('')
@@ -46,6 +47,7 @@ type Props = {
 
 const ResultContainer = ({ queryRef }: Props) => {
   const { searchMovieByTitle } = usePreloadedQuery<SearchMovieByTitleQueryType>(SearchMovieByTitleQuery, queryRef)
+  const navigate = useNavigate()
 
   return (
     <VStack
@@ -90,6 +92,9 @@ const ResultContainer = ({ queryRef }: Props) => {
                   justifyContent={'space-between'}
                   cursor={'pointer'}
                   borderColor={'Highlight'}
+                  onClick={() => {
+                    navigate('/movie/' + a?.node?.id)
+                  }}
                 >
                   <Text>{a?.node?.title}</Text>
 
