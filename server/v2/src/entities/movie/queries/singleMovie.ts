@@ -1,4 +1,5 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql'
+import { fromGlobalId } from 'graphql-relay'
 import { MovieModel } from '../movieModel'
 import { movieType } from '../movieTypes'
 
@@ -10,8 +11,13 @@ export const singleMovie = {
     }
   },
   resolve: async (_: any, args: { id: string }) => {
-    return await MovieModel.findOne({
-      _id: args.id
-    })
+    try {
+      const { id } = fromGlobalId(args.id)
+      return await MovieModel.findOne({
+        _id: id
+      })
+    } catch {
+      return null
+    }
   }
 }
