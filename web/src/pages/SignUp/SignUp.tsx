@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form'
 import { signUpMutation } from './signUpMutation'
 import { Link as RouterLink } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { TextDivider } from '../../components/TextDivider'
+import { TextDivider } from '../../components/TextDivider/TextDivider'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
 import { commitSignUpMutation } from './__generated__/commitSignUpMutation.graphql'
 
