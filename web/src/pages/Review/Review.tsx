@@ -14,7 +14,7 @@ import * as yup from "yup"
 import { useMutation } from "react-relay"
 import { useNavigate } from "react-router-dom"
 import { Main } from "../../components/Main/Main"
-import { Subtitle } from "../../components/Subtitle"
+import { Subtitle } from "../../components/Subtitle/Subtitle"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { FormProvider, useForm } from 'react-hook-form'
 import { Header } from "../../components/Header/Header"
@@ -91,7 +91,7 @@ export const Review = () => {
 
         }
 
-        if (reviewCreate?.insertedId) {
+        if (reviewCreate?.review?.id) {
           toast({
             title: 'Review created',
             description: 'Your review has been created',

@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import { GraphQLTaggedNode, PreloadedQuery, usePreloadedQuery } from 'react-relay'
 
 import type { SearchMovieByTitleQuery } from '../SearchMovie/__generated__/SearchMovieByTitleQuery.graphql'
@@ -14,13 +13,7 @@ export const SearchList = ({ queryReference, query, }: Props) => {
   const { searchMovieByTitle } = data
 
   return (
-    <Suspense fallback={<h1>searching</h1>}>
-      {/* {
-        searchMovieByTitle?.edges?.length === 0 &&
-        <option>
-          any movie found
-        </option>
-      } */}
+    <>
       {
         searchMovieByTitle?.edges?.map(edge => {
           return (
@@ -34,6 +27,6 @@ export const SearchList = ({ queryReference, query, }: Props) => {
           )
         })
       }
-    </Suspense>
+    </>
   )
 }

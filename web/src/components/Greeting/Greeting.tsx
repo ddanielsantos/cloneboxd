@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Subtitle } from '../Subtitle'
+import { Subtitle } from '../Subtitle/Subtitle'
 import { Text } from '@chakra-ui/react'
 import { loginMutation$data } from '../../pages/Login/__generated__/loginMutation.graphql'
 

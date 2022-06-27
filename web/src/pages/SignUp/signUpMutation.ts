@@ -3,7 +3,9 @@ import { graphql } from 'react-relay'
 export const signUpMutation = graphql`
   mutation signUpMutation($input: userCreateInput!) {
     userCreate(input: $input) {
-      insertedId
+      user{
+        id
+      }
       error
     }
   }
