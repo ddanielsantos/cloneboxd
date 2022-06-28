@@ -4,12 +4,13 @@ dotenv.config()
 
 export function getEnvironmentVariables() {
   const PORT = Number(process.env.PORT)
-  const { MONGODB_URL, DB_NAME, JWT_SECRET } = process.env
+  const { MONGODB_URL, DB_NAME, JWT_SECRET, TMDB_API_KEY } = process.env
 
   const envArray = [
     PORT,
     MONGODB_URL,
     DB_NAME,
+    TMDB_API_KEY,
     JWT_SECRET
   ]
 
@@ -19,5 +20,5 @@ export function getEnvironmentVariables() {
     }
   }
 
-  return { PORT, MONGODB_URL, DB_NAME, JWT_SECRET }
+  return { PORT, MONGODB_URL, DB_NAME, JWT_SECRET, TMDB_API_KEY }
 }

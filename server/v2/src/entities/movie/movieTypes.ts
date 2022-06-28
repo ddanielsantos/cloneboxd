@@ -33,6 +33,11 @@ export const movieType = new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: `Movie's global release date`
     },
+    posterPath: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Movie's poster path`,
+      resolve: movie => movie.posterPath
+    },
     genres: {
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))),
       description: `Movie's genres`,

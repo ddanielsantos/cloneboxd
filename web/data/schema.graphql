@@ -28,6 +28,20 @@ type Query {
     last: Int
     title: String!
   ): MovieConnection
+  searchMovieFromTMDB(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+    title: String!
+  ): MovieConnection
   crewList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -124,6 +138,9 @@ type Movie implements Node {
 
   """Movie's global release date"""
   releaseDate: String!
+
+  """Movie's poster path"""
+  posterPath: String!
 
   """Movie's genres"""
   genres: [String!]!

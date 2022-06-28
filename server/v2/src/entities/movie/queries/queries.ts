@@ -1,5 +1,5 @@
 import { movieList } from './movieList'
 import { singleMovie } from './singleMovie'
-import { searchMovieByTitle } from './searchMovieByTitle'
+import { searchMovieFromTMDB } from './searchMovieFromTMDB'
 
-export const movieQueries = { movieList, singleMovie, searchMovieByTitle }
+export const movieQueries = { movieList, singleMovie, searchMovieFromTMDB }
