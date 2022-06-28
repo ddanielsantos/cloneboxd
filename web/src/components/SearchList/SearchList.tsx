@@ -1,10 +1,8 @@
 import { GraphQLTaggedNode, PreloadedQuery, usePreloadedQuery } from 'react-relay'
 
-import type { SearchMovieByTitleQuery } from '../SearchMovie/__generated__/SearchMovieByTitleQuery.graphql'
-
 type Props = {
   query: GraphQLTaggedNode,
-  queryReference: PreloadedQuery<SearchMovieByTitleQuery>
+  queryReference: any
 }
 
 export const SearchList = ({ queryReference, query, }: Props) => {
