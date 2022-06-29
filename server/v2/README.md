@@ -31,6 +31,10 @@ width="200px"
 alt="color-meaning"
 />
 
+<div align="center">
+<img src="https://user-images.githubusercontent.com/80872981/176450285-54f09a9f-7cf1-469a-93ef-14c2226ada90.png" width="450px"/>
+</div>
+
 ### :house: Running locally:
 
 Considering you already cloned the repository:
