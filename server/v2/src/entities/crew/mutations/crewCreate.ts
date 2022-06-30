@@ -1,6 +1,6 @@
 import { GraphQLString } from 'graphql'
 import { CrewModel, ICrew } from '../crewModel'
-import { crewInputType, crewType } from '../crewTypes'
+import { personType, personInputType } from '../personTypes'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { BetaMongoose2GQLInput } from '../../../types/types'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
@@ -11,11 +11,11 @@ export const crewCreate = mutationWithClientMutationId({
   name: 'crewCreate',
   description: 'Add a crew member',
   inputFields: {
-    ...crewInputType
+    ...personInputType
   },
   outputFields: {
     crew: {
-      type: crewType,
+      type: personType,
       resolve: response => response.crew
     },
     error: {

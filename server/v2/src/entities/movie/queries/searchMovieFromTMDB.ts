@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { MovieConnection } from '../movieTypes'
 import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLNonNull, GraphQLString } from 'graphql'
-import { connectionArgs, connectionFromArray, toGlobalId } from 'graphql-relay'
+import { connectionArgs, connectionFromArray } from 'graphql-relay'
 import { getEnvironmentVariables } from '../../../config/env'
 
 type Args = GraphQLFieldConfigArgumentMap & {
@@ -24,15 +24,6 @@ export async function searchMovieByTitleInTMDB(params: any): Promise<any> {
   return data.results
 }
 
-function mapToEntityMovie(movie: any) {
-  return {
-    _id: movie.id,
-    title: movie.title,
-    releaseDate: new Date(movie.release_date),
-    posterPath: movie.poster_path
-  }
-}
-
 export const searchMovieFromTMDB: GraphQLFieldConfig<any, any, any> = {
   type: MovieConnection,
   args: {
@@ -42,13 +33,13 @@ export const searchMovieFromTMDB: GraphQLFieldConfig<any, any, any> = {
   resolve: async (_, args: Args) => {
     const { title, ...connectionArgs } = args
 
-    const TMDBmovies = await searchMovieByTitleInTMDB({
+    const TMDBmovies = require('../../../../temp/movieSearch.json').results.slice(0, 2)
+
+    /* await searchMovieByTitleInTMDB({
       api_key: TMDB_API_KEY,
       query: title
-    })
+    }) */
 
-    const movies = TMDBmovies.map(mapToEntityMovie)
-
-    return connectionFromArray(movies, connectionArgs)
+    return connectionFromArray(TMDBmovies, connectionArgs)
   }
 }

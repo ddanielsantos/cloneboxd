@@ -1,4 +1,3 @@
-import { crewType } from '../crew/crewTypes'
 import {
   GraphQLID,
   ThunkObjMap,
@@ -9,84 +8,112 @@ import {
   GraphQLObjectType,
   GraphQLInputFieldConfig
 } from 'graphql'
-import { CrewModel } from '../crew/crewModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { globalIdField, connectionDefinitions } from 'graphql-relay'
+import { creditType } from '../credit/creditType'
+
+// import { tmdbAPI } from '../../services/tmdb/api'
+// TODO: change json to TMDB endpoints
 
 export const movieType = new GraphQLObjectType({
   name: 'Movie',
   description: 'Movie type',
   interfaces: () => [nodeInterface],
   fields: () => ({
-    id: globalIdField('Movie', movie => movie._id),
+    id: globalIdField('Movie', movie => movie.id),
     title: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Movie's title in its original language`,
+      description: `Movie's title`,
       resolve: movie => movie.title
     },
     duration: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Movie's duration`,
-      resolve: movie => movie.duration
+      // TODO: fix any inferation
+      resolve: async movie => {
+        const { runtime: duration } = require('../../../temp/movie.json')
+
+        return duration + ' min'
+      }
+    },
+    description: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `Movie's description`,
+      resolve: async movie => {
+        const { overview } = require('../../../temp/movie.json')
+
+        return overview
+      }
     },
     releaseDate: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Movie's global release date`
+      description: `Movie's global release date`,
+      resolve: movie => movie.release_date
     },
     posterPath: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
       description: `Movie's poster path`,
-      resolve: movie => movie.posterPath
+      resolve: movie => movie.poster_path
     },
     genres: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))),
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: `Movie's genres`,
-      resolve: movie => movie.genres
+      resolve: async movie => {
+        const { genres } = require('../../../temp/movie.json') as { genres: { name: string }[] }
+        const a = genres.map(genre => genre.name)
+        return a
+      }
     },
-    ageGroup: {
-      type: new GraphQLNonNull(GraphQLString),
+    ageGroups: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: `Movie's age group`,
       resolve: movie => movie.ageGroup
     },
     rating: {
       type: new GraphQLNonNull(GraphQLFloat),
       description: `Movie's rating according to users`,
-      resolve: movie => movie.rating
-    },
-    actors: {
-      type: new GraphQLList(crewType),
-      description: `Movie's actors`,
       resolve: async movie => {
-        const actors = await CrewModel.find({
-          _id: {
-            $in: movie.actors
+        // find from mongodb
+        return 0
+      }
+    },
+    cast: {
+      type: new GraphQLList(creditType),
+      description: `Movie's cast`,
+      resolve: async movie => {
+        const { cast } = require('../../../temp/credits.json') as { cast: any[] }
+
+        const actors = cast.reduce((acc, actor) => {
+          if (actor.known_for_department === 'Acting') {
+            acc.push({
+              ...actor,
+              role: actor.character
+            })
           }
-        })
+          return acc
+        }, [])
 
         return actors
       }
     },
-    directors: {
-      type: new GraphQLList(crewType),
-      description: `Movie's directors`,
+    crew: {
+      type: new GraphQLList(creditType),
+      description: `Movie's crew  `,
       resolve: async movie => {
-        const directors = await CrewModel.find({
-          _id: {
-            $in: movie.directors
-          }
-        })
+        const { crew } = require('../../../temp/credits.json') as { crew: any[] }
+
+        const directors = crew.map(director => ({
+          ...director,
+          role: director.known_for_department
+        }))
 
         return directors
       }
-    },
-    submitedBy: {
-      type: GraphQLString,
-      description: `Admin who submited the movie`,
-      resolve: movie => movie.submitedBy
     }
   })
 })
 
+// TODO remove this
 export const movieInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   title: {
     type: new GraphQLNonNull(GraphQLString),

@@ -27,7 +27,6 @@ export const movieUpdate = mutationWithClientMutationId({
       resolve: response => response.error
     }
   },
-  // TODO: #29 input types vs mongo types
   mutateAndGetPayload: async ({ id, ...movie }) => {
     const { error } = await validateCrewMembers([...movie.actors, ...movie.directors])
 

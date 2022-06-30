@@ -14,20 +14,6 @@ type Query {
     last: Int
   ): MovieConnection
   singleMovie(id: ID!): Movie
-  searchMovieByTitle(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-    title: String!
-  ): MovieConnection
   searchMovieFromTMDB(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -42,20 +28,6 @@ type Query {
     last: Int
     title: String!
   ): MovieConnection
-  crewList(
-    """Returns the items in the list that come after the specified cursor."""
-    after: String
-
-    """Returns the first n items from the list."""
-    first: Int
-
-    """Returns the items in the list that come before the specified cursor."""
-    before: String
-
-    """Returns the last n items from the list."""
-    last: Int
-  ): CrewConnection
-  singleCrewMember(id: ID!): Crew
   me: User
   userList(
     """Returns the items in the list that come after the specified cursor."""
@@ -130,35 +102,35 @@ type Movie implements Node {
   """The ID of an object"""
   id: ID!
 
-  """Movie's title in its original language"""
+  """Movie's title"""
   title: String!
 
   """Movie's duration"""
   duration: String!
 
+  """Movie's description"""
+  description: String!
+
   """Movie's global release date"""
   releaseDate: String!
 
   """Movie's poster path"""
-  posterPath: String!
+  posterPath: String
 
   """Movie's genres"""
-  genres: [String!]!
+  genres: [String]!
 
   """Movie's age group"""
-  ageGroup: String!
+  ageGroups: [String]!
 
   """Movie's rating according to users"""
   rating: Float!
 
-  """Movie's actors"""
-  actors: [Crew]
+  """Movie's cast"""
+  cast: [Credit]
 
-  """Movie's directors"""
-  directors: [Crew]
-
-  """Admin who submited the movie"""
-  submitedBy: String
+  """Movie's crew  """
+  crew: [Credit]
 }
 
 """An object with an ID"""
@@ -167,37 +139,31 @@ interface Node {
   id: ID!
 }
 
-"""Crew type"""
-type Crew implements Node {
+"""Credit type"""
+type Credit implements Node {
   """The ID of an object"""
   id: ID!
 
-  """Member's name"""
+  """Credit's actor"""
+  person: Person!
+
+  """Person's role"""
+  role: String!
+}
+
+"""Person type"""
+type Person implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Person's name"""
   name: String!
 
-  """Member's nacionality"""
+  """Person's nacionality"""
   nacionality: String!
 
-  """Member's date of birth"""
+  """Person's date of birth"""
   dateOfBirth: String!
-}
-
-"""A connection to a list of items."""
-type CrewConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [CrewEdge]
-}
-
-"""An edge in a connection."""
-type CrewEdge {
-  """The item at the end of the edge"""
-  node: Crew
-
-  """A cursor for use in pagination"""
-  cursor: String!
 }
 
 """User type"""
@@ -280,15 +246,6 @@ type Mutation {
   """Update a movie using its id"""
   movieUpdate(input: movieUpdateInput!): movieUpdatePayload
 
-  """Add a crew member"""
-  crewCreate(input: crewCreateInput!): crewCreatePayload
-
-  """Delete a crew member using its id"""
-  crewDelete(input: crewDeleteInput!): crewDeletePayload
-
-  """Update a crew member using its id"""
-  crewUpdate(input: crewUpdateInput!): crewUpdatePayload
-
   """Creates a new user"""
   userCreate(input: userCreateInput!): userCreatePayload
 
@@ -312,29 +269,6 @@ type movieCreatePayload {
 }
 
 input movieCreateInput {
-  """Movie's title in its original language"""
-  title: String!
-
-  """Movie's duration"""
-  duration: String!
-
-  """Movie's global release date"""
-  releaseDate: String!
-
-  """Movie's genres"""
-  genres: [String!]!
-
-  """Movie's age group"""
-  ageGroup: String!
-
-  """Movie's rating according to users"""
-  rating: Float!
-
-  """Movie's actors"""
-  actors: [ID!]!
-
-  """Movie's directors"""
-  directors: [ID!]!
   clientMutationId: String
 }
 
@@ -357,79 +291,6 @@ type movieUpdatePayload {
 
 input movieUpdateInput {
   id: ID!
-
-  """Movie's title in its original language"""
-  title: String!
-
-  """Movie's duration"""
-  duration: String!
-
-  """Movie's global release date"""
-  releaseDate: String!
-
-  """Movie's genres"""
-  genres: [String!]!
-
-  """Movie's age group"""
-  ageGroup: String!
-
-  """Movie's rating according to users"""
-  rating: Float!
-
-  """Movie's actors"""
-  actors: [ID!]!
-
-  """Movie's directors"""
-  directors: [ID!]!
-  clientMutationId: String
-}
-
-type crewCreatePayload {
-  crew: Crew
-  error: String
-  clientMutationId: String
-}
-
-input crewCreateInput {
-  """Member's name"""
-  name: String!
-
-  """Member's nacionality"""
-  nacionality: String
-
-  """Member's date of birth"""
-  dateOfBirth: String!
-  clientMutationId: String
-}
-
-type crewDeletePayload {
-  deletedCount: String
-  clientMutationId: String
-}
-
-input crewDeleteInput {
-  """Member's id"""
-  id: String!
-  clientMutationId: String
-}
-
-type crewUpdatePayload {
-  updatedId: String
-  clientMutationId: String
-}
-
-input crewUpdateInput {
-  """Member's id"""
-  id: String!
-
-  """Member's name"""
-  name: String!
-
-  """Member's nacionality"""
-  nacionality: String
-
-  """Member's date of birth"""
-  dateOfBirth: String!
   clientMutationId: String
 }
 

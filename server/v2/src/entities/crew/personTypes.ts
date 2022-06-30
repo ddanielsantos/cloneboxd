@@ -8,45 +8,45 @@ import {
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { nodeInterface } from '../../graphql/nodeInterface'
 
-export const crewType = new GraphQLObjectType({
-  name: 'Crew',
-  description: 'Crew type',
+export const personType = new GraphQLObjectType({
+  name: 'Person',
+  description: 'Person type',
   interfaces: () => [nodeInterface],
   fields: () => ({
-    id: globalIdField('Crew', crew => crew._id),
+    id: globalIdField('Person', person => person.id),
     name: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Member's name`,
-      resolve: crew => crew.name
+      description: `Person's name`,
+      resolve: person => person.name
     },
     nacionality: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Member's nacionality`,
-      resolve: crew => crew.nacionality
+      description: `Person's nacionality`,
+      resolve: person => person.nacionality
     },
     dateOfBirth: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `Member's date of birth`,
-      resolve: crew => crew.dateOfBirth
+      description: `Person's date of birth`,
+      resolve: person => person.dateOfBirth
     }
   })
 })
 
-export const crewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
+export const personInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   name: {
     type: new GraphQLNonNull(GraphQLString),
-    description: `Member's name`
+    description: `Person's name`
   },
   nacionality: {
     type: GraphQLString,
-    description: `Member's nacionality`
+    description: `Person's nacionality`
   },
   dateOfBirth: {
     type: new GraphQLNonNull(GraphQLString),
-    description: `Member's date of birth`
+    description: `Person's date of birth`
   }
 }
 
-export const { connectionType: CrewConnection, edgeType: CrewEdge } = connectionDefinitions({
-  nodeType: crewType
+export const { connectionType: PersonConnection, edgeType: PersonEdge } = connectionDefinitions({
+  nodeType: personType
 })
