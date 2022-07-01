@@ -8,12 +8,13 @@ type Props = {
 export const SearchList = ({ queryReference, query, }: Props) => {
   const data = usePreloadedQuery(query, queryReference)
 
-  const { searchMovieByTitle } = data
+  // TODO: avoid using any
+  const { searchMovieByTitle } = data as any
 
   return (
     <>
       {
-        searchMovieByTitle?.edges?.map(edge => {
+        searchMovieByTitle?.edges?.map((edge: any) => {
           return (
             <option
               // id="movie"
