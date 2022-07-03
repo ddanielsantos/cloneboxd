@@ -1,9 +1,9 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql'
 import { CrewModel } from '../crewModel'
-import { crewType } from '../crewTypes'
+import { personType } from '../personTypes'
 
 export const singleCrewMember = {
-  type: crewType,
+  type: personType,
   args: {
     id: {
       type: new GraphQLNonNull(GraphQLID)

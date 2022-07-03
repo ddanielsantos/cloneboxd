@@ -5,7 +5,7 @@ import { Review } from '../pages/Review/Review'
 import { SignUp } from '../pages/SignUp/SignUp'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
 import { Routes as RRoutes, Route } from 'react-router-dom'
-import { SearchMovie } from '../pages/SearchMovie/SearchMovie'
+import { SearchMovieFromTMDB } from '../pages/SearchMovieFromTMDB/SearchMovieFromTMDB'
 import { MovieDetails } from '../pages/MovieDetails/MovieDetails'
 
 export const Routes = () => {
@@ -31,7 +31,7 @@ export const Routes = () => {
         path="/search-movie"
         element={
           <AuthRequired>
-            <SearchMovie />
+            <SearchMovieFromTMDB searchQueryRef={{}} />
           </AuthRequired>
         }
       />

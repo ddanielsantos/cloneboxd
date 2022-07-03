@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "relay": "relay-compiler",
+    "relay:watch": "relay-compiler -w",
     "preview": "vite preview"
   },
   "dependencies": {

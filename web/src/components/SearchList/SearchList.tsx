@@ -1,21 +1,20 @@
-import { GraphQLTaggedNode, PreloadedQuery, usePreloadedQuery } from 'react-relay'
-
-import type { SearchMovieByTitleQuery } from '../SearchMovie/__generated__/SearchMovieByTitleQuery.graphql'
+import { GraphQLTaggedNode, usePreloadedQuery } from 'react-relay'
+import type { SearchMovieQuery } from '../SearchMovie/__generated__/SearchMovieQuery.graphql'
 
 type Props = {
   query: GraphQLTaggedNode,
-  queryReference: PreloadedQuery<SearchMovieByTitleQuery>
+  queryReference: any
 }
 
 export const SearchList = ({ queryReference, query, }: Props) => {
-  const data = usePreloadedQuery(query, queryReference)
+  const data = usePreloadedQuery<SearchMovieQuery>(query, queryReference)
 
-  const { searchMovieByTitle } = data
+  const { searchMovieFromTMDB } = data
 
   return (
     <>
       {
-        searchMovieByTitle?.edges?.map(edge => {
+        searchMovieFromTMDB?.edges?.map((edge: any) => {
           return (
             <option
               // id="movie"

@@ -14,16 +14,16 @@ import { SearchList } from "../SearchList/SearchList"
 import { useTimedSearch } from "../../hooks/useTimedSearch"
 
 import type { FormData } from "../../pages/Review/Review"
-import type { SearchMovieByTitleQuery as SearchMovieByTitleQueryType } from "./__generated__/SearchMovieByTitleQuery.graphql"
+import type { SearchMovieQuery as SearchMovieQueryType } from "./__generated__/SearchMovieQuery.graphql"
 
-export const SearchMovieByTitleQuery = graphql`
-  query SearchMovieByTitleQuery($title: String!) {
-    searchMovieByTitle(title: $title, first: 5){
+export const SearchMovieQuery = graphql`
+  query SearchMovieQuery($title: String!) {
+    searchMovieFromTMDB(title: $title){
       edges {
         node {
           id
           title
-          duration
+          releaseDate
         }
       }
     }
@@ -34,7 +34,7 @@ export const SearchMovie = () => {
   const { register, formState: { errors } } = useFormContext<FormData>()
   const [titleToSearch, setTitleToSearch] = useState('')
 
-  const [queryRef, loadQuery] = useQueryLoader<SearchMovieByTitleQueryType>(SearchMovieByTitleQuery)
+  const [queryRef, loadQuery] = useQueryLoader<SearchMovieQueryType>(SearchMovieQuery)
 
   useTimedSearch({
     titleToSearch,
@@ -80,7 +80,7 @@ export const SearchMovie = () => {
             {
               queryRef != null &&
               <SearchList
-                query={SearchMovieByTitleQuery}
+                query={SearchMovieQuery}
                 queryReference={queryRef}
               />
             }

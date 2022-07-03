@@ -2,7 +2,7 @@ import {
   GraphQLNonNull,
   GraphQLString
 } from 'graphql'
-import { crewInputType } from '../crewTypes'
+import { personInputType } from '../personTypes'
 import { CrewModel } from '../crewModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 
@@ -14,7 +14,7 @@ export const crewUpdate = mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
       description: `Member's id`
     },
-    ...crewInputType
+    ...personInputType
   },
   outputFields: {
     updatedId: {

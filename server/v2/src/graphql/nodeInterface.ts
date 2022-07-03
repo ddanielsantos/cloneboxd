@@ -7,6 +7,8 @@ import { ReviewModel } from '../entities/review/reviewModel'
 const { nodeInterface, nodeField } = nodeDefinitions(
   (globalId) => {
     // https://github.com/graphql/graphql-relay-js/blob/main/src/__tests__/starWarsSchema.ts
+
+    // TODO: understand this abstraction
     // https://github.com/entria/entria-fullstack/blob/master/packages/server/src/interface/NodeInterface.ts
     const { id, type } = fromGlobalId(globalId)
 
