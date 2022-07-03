@@ -140,10 +140,7 @@ interface Node {
 }
 
 """Credit type"""
-type Credit implements Node {
-  """The ID of an object"""
-  id: ID!
-
+type Credit {
   """Credit's actor"""
   person: Person!
 
@@ -237,15 +234,6 @@ type UserReview implements Node {
 
 """The root mutation type"""
 type Mutation {
-  """Add a movie"""
-  movieCreate(input: movieCreateInput!): movieCreatePayload
-
-  """Delete a movie using its id"""
-  movieDelete(input: movieDeleteInput!): movieDeletePayload
-
-  """Update a movie using its id"""
-  movieUpdate(input: movieUpdateInput!): movieUpdatePayload
-
   """Creates a new user"""
   userCreate(input: userCreateInput!): userCreatePayload
 
@@ -260,38 +248,6 @@ type Mutation {
 
   """Add a review"""
   reviewCreate(input: reviewCreateInput!): reviewCreatePayload
-}
-
-type movieCreatePayload {
-  movie: Movie
-  error: String
-  clientMutationId: String
-}
-
-input movieCreateInput {
-  clientMutationId: String
-}
-
-type movieDeletePayload {
-  deletedCount: String
-  clientMutationId: String
-}
-
-input movieDeleteInput {
-  """Movie's id"""
-  id: ID!
-  clientMutationId: String
-}
-
-type movieUpdatePayload {
-  result: String
-  error: String
-  clientMutationId: String
-}
-
-input movieUpdateInput {
-  id: ID!
-  clientMutationId: String
 }
 
 type userCreatePayload {

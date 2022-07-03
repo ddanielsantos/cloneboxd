@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5dc4cecc28d746f19cb1216ea5db252c>>
+ * @generated SignedSource<<b7c9e4d57b1cc8dc2ab3c5e41e036bb0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type SearchMovieFromTMDB_Query$data = {
       readonly node: {
         readonly id: string;
         readonly title: string;
-        readonly posterPath: string;
+        readonly posterPath: string | null;
         readonly releaseDate: string;
       } | null;
     } | null> | null;

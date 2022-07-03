@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<18fb73124013434b5644aa7b78f53e6e>>
+ * @generated SignedSource<<62a0aa0b801691b613c81b97ee4a9d89>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,23 +9,23 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type SearchMovieByTitleQuery$variables = {
+export type SearchMovieQuery$variables = {
   title: string;
 };
-export type SearchMovieByTitleQuery$data = {
-  readonly searchMovieByTitle: {
+export type SearchMovieQuery$data = {
+  readonly searchMovieFromTMDB: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly id: string;
         readonly title: string;
-        readonly duration: string;
+        readonly releaseDate: string;
       } | null;
     } | null> | null;
   } | null;
 };
-export type SearchMovieByTitleQuery = {
-  variables: SearchMovieByTitleQuery$variables;
-  response: SearchMovieByTitleQuery$data;
+export type SearchMovieQuery = {
+  variables: SearchMovieQuery$variables;
+  response: SearchMovieQuery$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -41,11 +41,6 @@ v1 = [
     "alias": null,
     "args": [
       {
-        "kind": "Literal",
-        "name": "first",
-        "value": 5
-      },
-      {
         "kind": "Variable",
         "name": "title",
         "variableName": "title"
@@ -53,7 +48,7 @@ v1 = [
     ],
     "concreteType": "MovieConnection",
     "kind": "LinkedField",
-    "name": "searchMovieByTitle",
+    "name": "searchMovieFromTMDB",
     "plural": false,
     "selections": [
       {
@@ -90,7 +85,7 @@ v1 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "duration",
+                "name": "releaseDate",
                 "storageKey": null
               }
             ],
@@ -108,7 +103,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "SearchMovieByTitleQuery",
+    "name": "SearchMovieQuery",
     "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -117,20 +112,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "SearchMovieByTitleQuery",
+    "name": "SearchMovieQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "1099caf22425cd706ccbc12cfb3a31b9",
+    "cacheID": "7659ce7111f4531c2672ac40520a1847",
     "id": null,
     "metadata": {},
-    "name": "SearchMovieByTitleQuery",
+    "name": "SearchMovieQuery",
     "operationKind": "query",
-    "text": "query SearchMovieByTitleQuery(\n  $title: String!\n) {\n  searchMovieByTitle(title: $title, first: 5) {\n    edges {\n      node {\n        id\n        title\n        duration\n      }\n    }\n  }\n}\n"
+    "text": "query SearchMovieQuery(\n  $title: String!\n) {\n  searchMovieFromTMDB(title: $title) {\n    edges {\n      node {\n        id\n        title\n        releaseDate\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "982a37be2b6e4a82ed2ce87da3a473c6";
+(node as any).hash = "d186ad978cf12812a27fb340d9946e30";
 
 export default node;
