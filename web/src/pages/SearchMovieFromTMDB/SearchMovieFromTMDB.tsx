@@ -36,12 +36,15 @@ export const SearchMovieFromTMDB = (_: any): JSX.Element => {
   return (
     <Box
       minH={'100vh'}
+      as="main"
       h={'100%'}
       p={'1em'}
-      w='100%'
+      w={['100%', '100%', '48em']}
     >
       <Text
         mb={'1em'}
+        fontSize="3xl"
+        fontWeight="extrabold"
       >
         What movie are you looking for?
       </Text>
@@ -63,8 +66,7 @@ export const SearchMovieFromTMDB = (_: any): JSX.Element => {
       {
         queryRef &&
         <>
-
-          <Test queryRef={queryRef} />
+          <SearchResult queryRef={queryRef} />
         </>
       }
 
@@ -76,7 +78,7 @@ type Props = {
   queryRef: PreloadedQuery<SearchMovieFromTMDB_Query, Record<string, unknown>>
 }
 
-const Test = ({ queryRef }: Props): JSX.Element => {
+const SearchResult = ({ queryRef }: Props): JSX.Element => {
   const navigate = useNavigate()
   const { searchMovieFromTMDB } = usePreloadedQuery<SearchMovieFromTMDB_Query>(query, queryRef)
 
@@ -94,10 +96,11 @@ const Test = ({ queryRef }: Props): JSX.Element => {
   return (
     <Grid
       gap={'0.5em'}
-    // templateColumns={'repeat(auto-fit, minmax(200px, 1fr))'}
     >
       <Text
         my={'1em'}
+        fontSize="2xl"
+        fontWeight={"bold"}
       >
         Result:
       </Text>
