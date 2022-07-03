@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema, Document } from 'mongoose'
+import mongoose, { ObjectId, Schema } from 'mongoose'
 
 export type IReview = {
   user: ObjectId,
@@ -14,7 +14,7 @@ const schema = new Schema<IReview>({
     ref: 'user'
   },
   movie: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'movie'
   },
   text: {

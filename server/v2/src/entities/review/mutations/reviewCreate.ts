@@ -40,7 +40,7 @@ export const reviewCreate = mutationWithClientMutationId({
 
     const movieIdFromGlobal = fromGlobalId(review.movie).id
 
-    const { error: invalidMovieError } = await validateMovies([movieIdFromGlobal])
+    const { error: invalidMovieError } = await validateMovies(movieIdFromGlobal)
 
     if (invalidMovieError) {
       return {
@@ -54,13 +54,14 @@ export const reviewCreate = mutationWithClientMutationId({
       const document = new ReviewModel({
         ...review,
         user,
-        movie: new ObjectId(movieIdFromGlobal)
+        movie: movieIdFromGlobal
       }).save()
 
       return {
         review: document
       }
-    } catch {
+    } catch (e) {
+      console.log(e)
       return {
         error: 'Invalid review'
       }
