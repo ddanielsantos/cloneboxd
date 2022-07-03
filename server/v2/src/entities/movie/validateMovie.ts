@@ -1,12 +1,8 @@
-import { MovieModel } from './movieModel'
+import { searchMovieById } from '../../services/tmdb/api'
 
-export async function validateMovies(ids: string[]) {
+export async function validateMovies(id: string) {
   try {
-    await MovieModel.find({
-      _id: {
-        $in: ids
-      }
-    })
+    await searchMovieById(id)
 
     return {
       error: null

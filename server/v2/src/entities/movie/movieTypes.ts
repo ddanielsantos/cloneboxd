@@ -1,20 +1,16 @@
 import {
-  GraphQLID,
-  ThunkObjMap,
   GraphQLList,
   GraphQLFloat,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLInputFieldConfig
+  GraphQLObjectType
 } from 'graphql'
+import { creditType } from '../credit/creditType'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { globalIdField, connectionDefinitions } from 'graphql-relay'
-import { creditType } from '../credit/creditType'
+import { searchMovieById, searchMovieCredits } from '../../services/tmdb/api'
 
-// import { tmdbAPI } from '../../services/tmdb/api'
-// TODO: change json to TMDB endpoints
-
+// TODO: ageGroups & rating
 export const movieType = new GraphQLObjectType({
   name: 'Movie',
   description: 'Movie type',
@@ -29,20 +25,19 @@ export const movieType = new GraphQLObjectType({
     duration: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Movie's duration`,
-      // TODO: fix any inferation
       resolve: async movie => {
-        const { runtime: duration } = require('../../../temp/movie.json')
+        const { data } = await searchMovieById(movie.id)
 
-        return duration + ' min'
+        return data?.runtime + ' min'
       }
     },
     description: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Movie's description`,
       resolve: async movie => {
-        const { overview } = require('../../../temp/movie.json')
+        const { data } = await searchMovieById(movie.id)
 
-        return overview
+        return data?.overview
       }
     },
     releaseDate: {
@@ -59,15 +54,18 @@ export const movieType = new GraphQLObjectType({
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: `Movie's genres`,
       resolve: async movie => {
-        const { genres } = require('../../../temp/movie.json') as { genres: { name: string }[] }
-        const a = genres.map(genre => genre.name)
-        return a
+        const { data } = await searchMovieById(movie.id)
+        const genres = data?.genres.map(id => id.name)
+        return genres
       }
     },
     ageGroups: {
       type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
       description: `Movie's age group`,
-      resolve: movie => movie.ageGroup
+      resolve: movie => {
+        // movie.ageGroup
+        return ['E']
+      }
     },
     rating: {
       type: new GraphQLNonNull(GraphQLFloat),
@@ -81,17 +79,18 @@ export const movieType = new GraphQLObjectType({
       type: new GraphQLList(creditType),
       description: `Movie's cast`,
       resolve: async movie => {
-        const { cast } = require('../../../temp/credits.json') as { cast: any[] }
-
-        const actors = cast.reduce((acc, actor) => {
-          if (actor.known_for_department === 'Acting') {
-            acc.push({
-              ...actor,
-              role: actor.character
-            })
+        const { data } = await searchMovieCredits(movie.id)
+        const actors = data?.cast.map(actor => {
+          return {
+            role: actor.character,
+            person: {
+              id: actor.id,
+              name: actor.name,
+              nacionality: 'BRA',
+              dateOfBirth: '01/01/1970'
+            }
           }
-          return acc
-        }, [])
+        })
 
         return actors
       }
@@ -100,54 +99,24 @@ export const movieType = new GraphQLObjectType({
       type: new GraphQLList(creditType),
       description: `Movie's crew  `,
       resolve: async movie => {
-        const { crew } = require('../../../temp/credits.json') as { crew: any[] }
+        const { data } = await searchMovieCredits(movie.id)
+        const actors = data?.crew.map(actor => {
+          return {
+            role: actor.job,
+            person: {
+              id: actor.id,
+              name: actor.name,
+              nacionality: 'BRA',
+              dateOfBirth: '01/01/1970'
+            }
+          }
+        })
 
-        const directors = crew.map(director => ({
-          ...director,
-          role: director.known_for_department
-        }))
-
-        return directors
+        return actors
       }
     }
   })
 })
-
-// TODO remove this
-export const movieInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
-  title: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `Movie's title in its original language`
-  },
-  duration: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `Movie's duration`
-  },
-  releaseDate: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `Movie's global release date`
-  },
-  genres: {
-    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))),
-    description: `Movie's genres`
-  },
-  ageGroup: {
-    type: new GraphQLNonNull(GraphQLString),
-    description: `Movie's age group`
-  },
-  rating: {
-    type: new GraphQLNonNull(GraphQLFloat),
-    description: `Movie's rating according to users`
-  },
-  actors: {
-    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))),
-    description: `Movie's actors`
-  },
-  directors: {
-    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLID))),
-    description: `Movie's directors`
-  }
-}
 
 export const { connectionType: MovieConnection, edgeType: MovieEdge } = connectionDefinitions({
   nodeType: movieType
