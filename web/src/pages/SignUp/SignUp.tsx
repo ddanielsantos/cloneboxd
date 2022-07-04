@@ -19,7 +19,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider/TextDivider'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
-import { commitSignUpMutation } from './__generated__/commitSignUpMutation.graphql'
+import { signUpMutation as signUpMutationType } from './__generated__/signUpMutation.graphql'
 
 type FormData = {
   email: string,
@@ -37,7 +37,7 @@ const schema = yup.object({
 
 export const SignUp = () => {
   const toast = useToast()
-  const [commitSignUp, isSignUpLoading] = useMutation<commitSignUpMutation>(signUpMutation)
+  const [commitSignUp, isSignUpLoading] = useMutation<signUpMutationType>(signUpMutation)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema)
@@ -60,7 +60,7 @@ export const SignUp = () => {
           })
         }
 
-        if (data?.userCreate?.insertedId) {
+        if (data?.userCreate?.user) {
           toast({
             title: 'Sucess',
             description: 'User created',
