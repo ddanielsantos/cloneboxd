@@ -152,7 +152,7 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
                     fontWeight='thin'
                   >
                     {
-                      new Date(~~edge.node.releaseDate).getFullYear()
+                      new Date(edge.node.releaseDate).getFullYear()
                     }
                   </Text>
                 </Flex>
