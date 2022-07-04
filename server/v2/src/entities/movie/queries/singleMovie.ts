@@ -1,5 +1,6 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql'
 import { fromGlobalId } from 'graphql-relay'
+import { searchMovieById } from '../../../services/tmdb/api'
 import { MovieModel } from '../movieModel'
 import { movieType } from '../movieTypes'
 
@@ -13,9 +14,9 @@ export const singleMovie = {
   resolve: async (_: any, args: { id: string }) => {
     try {
       const { id } = fromGlobalId(args.id)
-      return await MovieModel.findOne({
-        _id: id
-      })
+      const { data } = await searchMovieById(id)
+
+      return data
     } catch {
       return null
     }
