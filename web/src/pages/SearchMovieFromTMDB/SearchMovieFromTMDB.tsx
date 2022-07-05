@@ -1,6 +1,6 @@
 import { graphql } from "relay-runtime"
-import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider } from '@chakra-ui/react'
-import { startTransition, useState } from "react"
+import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { startTransition, useState, Fragment, Suspense } from "react"
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from "react-relay"
 
 import type { SearchMovieFromTMDB_Query } from './__generated__/SearchMovieFromTMDB_Query.graphql'
@@ -50,10 +50,11 @@ export const SearchMovieFromTMDB = (_: any): JSX.Element => {
       </Text>
 
       <Flex
-        gap={'0.5em'}
+        gap="0.5em"
       >
         <Input
           placeholder='enter the movie name here'
+          type={'search'}
           onChange={e => setTitleToSearch(e.target.value)}
         />
         <Button
@@ -63,12 +64,11 @@ export const SearchMovieFromTMDB = (_: any): JSX.Element => {
         </Button>
       </Flex>
 
-      {
-        queryRef &&
-        <>
-          <SearchResult queryRef={queryRef} />
-        </>
-      }
+      <Suspense fallback={"testee"}>
+        {
+          queryRef && <SearchResult queryRef={queryRef} />
+        }
+      </Suspense>
 
     </Box>
   )
@@ -78,20 +78,26 @@ type Props = {
   queryRef: PreloadedQuery<SearchMovieFromTMDB_Query, Record<string, unknown>>
 }
 
+
 const SearchResult = ({ queryRef }: Props): JSX.Element => {
   const navigate = useNavigate()
   const { searchMovieFromTMDB } = usePreloadedQuery<SearchMovieFromTMDB_Query>(query, queryRef)
 
   if (searchMovieFromTMDB?.edges?.length === 0) {
     return (
-      <Box>
-        <Text>
+      <Box
+        // p={3}
+        mt="3em"
+      >
+
+        <Text
+          align={'center'}
+        >
           No movies found
         </Text>
       </Box>
     )
   }
-
 
   return (
     <Grid
@@ -111,9 +117,10 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
           }
 
           return (
-            <>
+            <Fragment
+              key={index}
+            >
               <GridItem
-                key={index}
                 display={'flex'}
                 borderRadius={'md'}
                 // bg={'gray.100'}
@@ -123,7 +130,9 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
                 cursor={"pointer"}
                 alignItems={'center'}
                 // TODO: in the movie details page, check if the movie id resolves to a movie
-                onClick={() => navigate(`/movie/${edge?.node?.id}`)}
+                onClick={() => {
+                  startTransition(() => navigate('/movie/' + edge.node?.id))
+                }}
                 _hover={{
                   bg: 'gray.100',
                   transitionDuration: '0.5s'
@@ -152,13 +161,13 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
                     fontWeight='thin'
                   >
                     {
-                      new Date(edge.node.releaseDate).getFullYear()
+                      edge.node.releaseDate && new Date(edge.node.releaseDate).getFullYear()
                     }
                   </Text>
                 </Flex>
               </GridItem>
               <Divider />
-            </>
+            </Fragment>
           )
         })
       }
