@@ -1,5 +1,5 @@
 import { graphql } from "relay-runtime"
-import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, Spinner } from '@chakra-ui/react'
 import { startTransition, useState, Fragment, Suspense } from "react"
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from "react-relay"
 
@@ -23,24 +23,9 @@ const query = graphql`
   }
 `
 
-export const SearchMovieFromTMDB = (_: any): JSX.Element => {
-  const [titleToSearch, setTitleToSearch] = useState('')
-  const [queryRef, loadQuery] = useQueryLoader<SearchMovieFromTMDB_Query>(query)
-
-  const search = (): void => {
-    startTransition(() => {
-      loadQuery({ title: titleToSearch })
-    })
-  }
-
+const SearchBar = ({ search, setTitleToSearch }: { search: () => void, setTitleToSearch: React.Dispatch<React.SetStateAction<string>> }): JSX.Element => {
   return (
-    <Box
-      minH={'100vh'}
-      as="main"
-      h={'100%'}
-      p={'1em'}
-      w={['100%', '100%', '48em']}
-    >
+    <>
       <Text
         mb={'1em'}
         fontSize="3xl"
@@ -63,11 +48,46 @@ export const SearchMovieFromTMDB = (_: any): JSX.Element => {
           search
         </Button>
       </Flex>
+    </>
+  )
+}
 
-      <Suspense fallback={"testee"}>
-        {
-          queryRef && <SearchResult queryRef={queryRef} />
-        }
+export const SearchMovieFromTMDB = (_: any): JSX.Element => {
+  const [titleToSearch, setTitleToSearch] = useState('')
+  const [queryRef, loadQuery] = useQueryLoader<SearchMovieFromTMDB_Query>(query)
+
+  const search = (): void => {
+    startTransition(() => {
+      loadQuery({ title: titleToSearch })
+    })
+  }
+
+  if (queryRef == null) {
+    return (
+      <Box
+        minH={'100vh'}
+        as="main"
+        h={'100%'}
+        p={'1em'}
+        w={['100%', '100%', '48em']}
+      >
+        <SearchBar search={search} setTitleToSearch={setTitleToSearch} />
+      </Box>
+    )
+  }
+
+  return (
+    <Box
+      minH={'100vh'}
+      as="main"
+      h={'100%'}
+      p={'1em'}
+      w={['100%', '100%', '48em']}
+    >
+      <SearchBar search={search} setTitleToSearch={setTitleToSearch} />
+
+      <Suspense fallback={<Spinner />}>
+        <SearchResult queryRef={queryRef} />
       </Suspense>
 
     </Box>
@@ -89,7 +109,6 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
         // p={3}
         mt="3em"
       >
-
         <Text
           align={'center'}
         >
