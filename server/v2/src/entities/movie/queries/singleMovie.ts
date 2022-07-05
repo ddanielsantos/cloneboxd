@@ -1,7 +1,6 @@
 import { GraphQLID, GraphQLNonNull } from 'graphql'
 import { fromGlobalId } from 'graphql-relay'
 import { searchMovieById } from '../../../services/tmdb/api'
-import { MovieModel } from '../movieModel'
 import { movieType } from '../movieTypes'
 
 export const singleMovie = {

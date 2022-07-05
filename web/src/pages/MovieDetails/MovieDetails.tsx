@@ -25,61 +25,8 @@ import { useParams } from 'react-router-dom'
 import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from 'react-icons/ai'
 import { Header } from '../../components/Header/Header'
 import { Footer } from '../../components/Footer/Footer'
-
-const cast = [
-  {
-    id: 1,
-    name: 'Brad Pitt',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 1'
-  },
-  {
-    id: 2,
-    name: 'Tom Hanks',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 2'
-  },
-  {
-    id: 3,
-    name: 'Brad Pitt',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 1'
-  },
-  {
-    id: 4,
-    name: 'Tom Hanks',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 2'
-  },
-  {
-    id: 5,
-    name: 'Brad Pitt',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 1'
-  },
-  {
-    id: 6,
-    name: 'Tom Hanks',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 2'
-  },
-  {
-    id: 7,
-    name: 'Brad Pitt',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 1'
-  },
-  {
-    id: 8,
-    name: 'Tom Hanks',
-    image: 'https://via.placeholder.com/100x100',
-    role: 'role 2'
-  }
-]
-
-const genres = [
-  'comedy', 'drama', 'action'
-]
+import { graphql, useLazyLoadQuery } from 'react-relay'
+import { MovieDetailsQuery } from './__generated__/MovieDetailsQuery.graphql'
 
 const recentReviews = [
   {
@@ -222,37 +169,34 @@ const recentReviews = [
   },
 ]
 
-const crew = [
-  {
-    id: 1,
-    name: 'Akira Kurosawa',
-    role: 'Diretor'
-  },
-  {
-    id: 2,
-    name: 'Akira Kurosawa',
-    role: 'Pagodeiro'
-  },
-  {
-    id: 3,
-    name: 'Akira Kurosawa',
-    role: 'Servente'
-  },
-  {
-    id: 4,
-    name: 'Akira Kurosawa',
-    role: 'Humorista'
-  },
-  {
-    id: 5,
-    name: 'Akira Kurosawa',
-    role: 'Faxineiro'
-  },
-]
-
 export const MovieDetails = () => {
   const { colorMode } = useColorMode()
   const { movieId } = useParams()
+
+  const data = useLazyLoadQuery<MovieDetailsQuery>(graphql`
+    query MovieDetailsQuery ($id: ID!) {
+      singleMovie(id: $id) {
+        title
+        releaseDate
+        rating
+        description
+        posterPath
+        cast {
+          person {
+            name
+          }
+          role
+        }
+        crew {
+          person {
+            name
+          }
+          role
+        }
+        genres
+      }
+    }
+  `, { id: movieId ?? '' })
 
   return (
     <Box
@@ -283,7 +227,7 @@ export const MovieDetails = () => {
             fontSize={'4xl'}
             fontWeight={'extrabold'}
           >
-            Film title here
+            {data.singleMovie?.title}
           </Text>
           <HStack
             spacing={1}
@@ -291,37 +235,45 @@ export const MovieDetails = () => {
           >
             <Text
               fontSize={'md'}
-            >2020</Text>
+            >
+              {
+                data.singleMovie?.releaseDate ? new Date(data.singleMovie?.releaseDate).getFullYear() : 'Sem ano'
+              }
+            </Text>
 
             <span>·</span>
 
             <Text
               fontSize={'md'}
-            >4.6 &#9733;</Text>
+            >{data.singleMovie?.rating} &#9733;</Text>
           </HStack>
 
         </GridItem>
 
-        <GridItem
-          colSpan={[4, 1]}
-          alignContent={'end'}
-          order={[2, 3]}
-          justifySelf={['center', 'start', 'center']}
-        >
-          <Image
-            width={'150px'}
-            height={'200px'}
-            objectFit='cover'
-            m={0}
-            borderRadius={'1em'}
-            borderWidth={3}
-            borderColor={colorMode === 'light' ? 'blackAlpha.600' : 'whiteAlpha.900'}
-            borderStyle={'solid'}
-            src={`https://via.placeholder.com/150x200?text=${movieId}`}
-            alt='TODO: alt'
-          />
 
-        </GridItem>
+        {
+          data.singleMovie?.posterPath && <GridItem
+            colSpan={[4, 1]}
+            alignContent={'end'}
+            order={[2, 3]}
+            justifySelf={['center', 'start', 'center']}
+          >
+            <Image
+              width={'150px'}
+              height={'200px'}
+              objectFit='cover'
+              m={0}
+              borderRadius={'1em'}
+              borderWidth={3}
+              borderColor={colorMode === 'light' ? 'blackAlpha.600' : 'whiteAlpha.900'}
+              borderStyle={'solid'}
+              src={`https://image.tmdb.org/t/p/w154${data.singleMovie.posterPath}`}
+              alt={`Poster of ${data.singleMovie?.title}`}
+            />
+
+          </GridItem>
+        }
+
 
         <GridItem
           colSpan={[4, 3]}
@@ -332,9 +284,7 @@ export const MovieDetails = () => {
             fontSize={'md'}
             fontWeight={'medium'}
           >
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis maxime veritatis recusandae? Maxime, ipsam voluptas id dolorem tempora quis delectus? Suscipit in quam quasi atque esse quae laudantium sapiente magnam!
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore temporibus sed, qui delectus laboriosam omnis nemo quis totam provident amet et sequi laborum, vel voluptate tempora atque voluptatem quibusdam reiciendis!
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, porro! Autem excepturi optio sunt in neque praesentium fugiat velit, error iste! Suscipit numquam, excepturi tempore optio voluptas autem nam voluptatibus.
+            {data.singleMovie?.description}
           </Text>
         </GridItem>
 
@@ -357,7 +307,7 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    cast.map((actor, index) => <Tooltip key={index} inside={actor.name} popup={actor.role} />)
+                    data.singleMovie?.cast?.map((actor, index) => <Tooltip key={index} inside={actor?.person.name || ''} popup={actor?.role || ''} />)
                   }
                 </Flex>
               </TabPanel>
@@ -369,7 +319,7 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    crew.map((person, index) => <Tooltip key={index} inside={person.name} popup={person.role} />)
+                    data.singleMovie?.crew?.map((crew, index) => <Tooltip key={index} inside={crew?.person.name || ''} popup={crew?.role || 'a+'} />)
                   }
                 </Flex>
               </TabPanel>
@@ -381,7 +331,7 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    genres.map((genre, index) => <Box key={index} padding={1} bg={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'} cursor={'pointer'} borderRadius={'md'} _hover={{ bg: colorMode === 'light' ? 'gray.400' : 'gray.500', transitionDuration: '0.5s', }} fontSize={'sm'} >{genre}</Box>)
+                    data.singleMovie?.genres.map((genre, index) => <Box key={index} padding={1} bg={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'} cursor={'pointer'} borderRadius={'md'} _hover={{ bg: colorMode === 'light' ? 'gray.400' : 'gray.500', transitionDuration: '0.5s', }} fontSize={'sm'} >{genre}</Box>)
                   }
                 </Flex>
               </TabPanel>
