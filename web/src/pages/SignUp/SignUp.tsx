@@ -15,11 +15,12 @@ import * as yup from 'yup'
 import { useMutation } from 'react-relay'
 import { useForm } from 'react-hook-form'
 import { signUpMutation } from './signUpMutation'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { TextDivider } from '../../components/TextDivider/TextDivider'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher/ThemeSwitcher'
 import { signUpMutation as signUpMutationType } from './__generated__/signUpMutation.graphql'
+import { useAuth } from '../../contexts/AuthContext'
 
 type FormData = {
   email: string,
@@ -37,6 +38,8 @@ const schema = yup.object({
 
 export const SignUp = () => {
   const toast = useToast()
+  const { signIn } = useAuth()
+  const navigate = useNavigate()
   const [commitSignUp, isSignUpLoading] = useMutation<signUpMutationType>(signUpMutation)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -60,12 +63,17 @@ export const SignUp = () => {
           })
         }
 
-        if (data?.userCreate?.user) {
+        if (data?.userCreate?.user && data?.userCreate?.token) {
           toast({
             title: 'Sucess',
             description: 'User created',
             status: 'success',
           })
+
+          signIn(data.userCreate.token)
+          localStorage.setItem('loggedUser', JSON.stringify({ ...data.userCreate }))
+
+          navigate('/')
         }
       }
     })

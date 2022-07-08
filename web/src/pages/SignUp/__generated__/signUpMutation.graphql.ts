@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4754b24e45385be9a3f33a79d34daa22>>
+ * @generated SignedSource<<31458d39414c61384c0423e41b3e202a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,7 +23,9 @@ export type signUpMutation$data = {
   readonly userCreate: {
     readonly user: {
       readonly id: string;
+      readonly fullName: string;
     } | null;
+    readonly token: string | null;
     readonly error: string | null;
   } | null;
 };
@@ -69,8 +71,22 @@ v1 = [
             "kind": "ScalarField",
             "name": "id",
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "fullName",
+            "storageKey": null
           }
         ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "token",
         "storageKey": null
       },
       {
@@ -102,16 +118,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "90ab367fff66d4fce06a75ec2226254c",
+    "cacheID": "d49ba9862c70300d64e34fee702a538b",
     "id": null,
     "metadata": {},
     "name": "signUpMutation",
     "operationKind": "mutation",
-    "text": "mutation signUpMutation(\n  $input: userCreateInput!\n) {\n  userCreate(input: $input) {\n    user {\n      id\n    }\n    error\n  }\n}\n"
+    "text": "mutation signUpMutation(\n  $input: userCreateInput!\n) {\n  userCreate(input: $input) {\n    user {\n      id\n      fullName\n    }\n    token\n    error\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ebb7f5959065e521e814f703035d4292";
+(node as any).hash = "4de237d9688aea1b101aaead66bc6741";
 
 export default node;

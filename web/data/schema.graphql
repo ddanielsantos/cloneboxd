@@ -252,6 +252,7 @@ type Mutation {
 
 type userCreatePayload {
   user: User
+  token: String
   error: String
   clientMutationId: String
 }

@@ -15,6 +15,10 @@ export const userCreate = mutationWithClientMutationId({
       type: userType,
       resolve: response => response.user
     },
+    token: {
+      type: GraphQLString,
+      resolve: response => response.token
+    },
     error: {
       type: GraphQLString,
       resolve: response => response.error
@@ -23,8 +27,7 @@ export const userCreate = mutationWithClientMutationId({
   mutateAndGetPayload: async ({ confirmPassword, ...payload }) => {
     if (payload.password !== confirmPassword) {
       return {
-        error: 'Passwords do not match',
-        insertedId: null
+        error: 'Passwords do not match'
       }
     }
 
@@ -32,8 +35,7 @@ export const userCreate = mutationWithClientMutationId({
 
     if (isEmailAlreadyUsed) {
       return {
-        error: 'Invalid credentials',
-        insertedId: null
+        error: 'Invalid credentials'
       }
     }
 
@@ -50,6 +52,6 @@ export const userCreate = mutationWithClientMutationId({
 
     await document.save()
 
-    return { user: document, error: null }
+    return { user: document, error: null, token: document.generateToken() }
   }
 })

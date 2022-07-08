@@ -5,7 +5,9 @@ export const signUpMutation = graphql`
     userCreate(input: $input) {
       user{
         id
+        fullName
       }
+      token
       error
     }
   }
