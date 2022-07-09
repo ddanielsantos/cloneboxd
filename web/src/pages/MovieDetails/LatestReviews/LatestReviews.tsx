@@ -3,8 +3,10 @@ import { graphql, useFragment } from "react-relay"
 
 import type { LatestReviews__review$key } from './__generated__/LatestReviews__review.graphql'
 
-export const LatestReviews = (props) => {
-  const data = useFragment<LatestReviews__review$key>(graphql`
+type Props = { data: LatestReviews__review$key }
+
+export const LatestReviews = ({ data }: Props) => {
+  const response = useFragment<LatestReviews__review$key>(graphql`
     fragment LatestReviews__review on Query {
       latest: reviewList(movie: $id first: 3) {
         edges {
@@ -21,9 +23,9 @@ export const LatestReviews = (props) => {
         }
       }
     }
-  `, props.data)
+  `, data)
 
-  const { latest } = data
+  const { latest } = response
 
   console.log(latest?.edges)
 
