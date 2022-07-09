@@ -1,0 +1,74 @@
+import { VStack, Box, Avatar, Link, Text } from "@chakra-ui/react"
+import { graphql, useFragment } from "react-relay"
+
+import type { LatestReviews__review$key } from './__generated__/LatestReviews__review.graphql'
+
+export const LatestReviews = (props) => {
+  const data = useFragment<LatestReviews__review$key>(graphql`
+    fragment LatestReviews__review on Query {
+      latest: reviewList(movie: $id first: 3) {
+        edges {
+          node {
+            rating
+            text
+            user{
+              fullName
+            }
+            movie {
+              title
+            }
+          }
+        }
+      }
+    }
+  `, props.data)
+
+  const { latest } = data
+
+  console.log(latest?.edges)
+
+  return (
+    <VStack gap={'0.5em'}
+      w="100%"
+    >
+      {
+        latest?.edges?.map((edge, ind) => {
+          return (
+            <Box
+              key={ind}
+              w={'100%'}
+              borderRadius={'md'}
+              p={'1em'}
+              _hover={{
+                bg: 'whiteAlpha.200',
+                transitionDuration: '0.5s',
+              }}
+              gap={'1em'}
+              display={'flex'}
+            >
+              <Avatar size="sm" />
+              <Box
+                fontSize={'sm'}
+                display='flex'
+                flexDirection={'column'}
+                justifyContent={'space-evenly'}
+                gap={'1em'}
+              >
+                <Text>
+                  a {edge?.node?.rating} &#x2605; review by
+                  <Link
+                    ml={1}
+                  >
+                    {edge?.node?.user.fullName}
+                  </Link>
+                </Text>
+                <Text textAlign={'justify'}>{edge?.node?.text}</Text>
+              </Box>
+            </Box>
+          )
+        })
+      }
+
+    </VStack>
+  )
+}
