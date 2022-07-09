@@ -54,6 +54,18 @@ type Query {
 
     """Returns the last n items from the list."""
     last: Int
+
+    """Sort reviews by this field"""
+    sort: String
+
+    """Use the sort field in this direction"""
+    direction: String
+
+    """Filter reviews by this rating"""
+    rating: Int
+
+    """Filter reviews by this movie"""
+    movie: ID
   ): UserReviewConnection
   singleReview(id: ID!): UserReview
 
