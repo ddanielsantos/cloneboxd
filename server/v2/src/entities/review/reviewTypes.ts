@@ -10,9 +10,9 @@ import {
 import { userType } from '../user/userTypes'
 import { movieType } from '../movie/movieTypes'
 import { UserModel } from '../user/userModel'
-import { MovieModel } from '../movie/movieModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
+import { searchMovieById } from '../../services/tmdb/api'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
@@ -34,10 +34,8 @@ export const reviewType = new GraphQLObjectType({
       type: new GraphQLNonNull(movieType),
       description: `The movie being reviewed`,
       resolve: async review => {
-        const movie = await MovieModel.findOne({
-          _id: review.movie
-        })
-        return movie
+        const { data } = await searchMovieById(review.movie)
+        return data
       }
     },
     text: {
