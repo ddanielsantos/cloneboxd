@@ -14,8 +14,7 @@ const schema = new Schema<IReview>({
     ref: 'user'
   },
   movie: {
-    type: String,
-    ref: 'movie'
+    type: String
   },
   text: {
     type: String

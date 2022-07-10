@@ -27,6 +27,7 @@ import { Header } from '../../components/Header/Header'
 import { Footer } from '../../components/Footer/Footer'
 import { graphql, useLazyLoadQuery } from 'react-relay'
 import { MovieDetailsQuery } from './__generated__/MovieDetailsQuery.graphql'
+import { LatestReviews } from './LatestReviews/LatestReviews'
 
 const recentReviews = [
   {
@@ -195,8 +196,12 @@ export const MovieDetails = () => {
         }
         genres
       }
+
+      ...LatestReviews__review
     }
   `, { id: movieId ?? '' })
+
+  // console.log(data.)
 
   return (
     <Box
@@ -426,71 +431,7 @@ export const MovieDetails = () => {
 
           <Divider my={'1em'} />
 
-          <VStack gap={'0.5em'}
-            w="100%"
-          >
-            {
-              recentReviews.map((review, index) => {
-                return (
-                  <Box
-                    key={index}
-                    w={'100%'}
-                    borderRadius={'md'}
-                    p={'1em'}
-                    _hover={{
-                      bg: 'whiteAlpha.200',
-                      transitionDuration: '0.5s',
-                    }}
-                    gap={'1em'}
-                    display={'flex'}
-                  >
-                    <Avatar size="sm" />
-                    <Box
-                      fontSize={'sm'}
-                      display='flex'
-                      flexDirection={'column'}
-                      justifyContent={'space-evenly'}
-                      gap={'1em'}
-                    >
-                      <Text>
-                        a {review.rating} &#x2605; review by
-                        <Link
-                          ml={1}
-                        >
-                          {review.user.name}
-                        </Link>
-                      </Text>
-                      <Text textAlign={'justify'}>
-                        {review.content}
-                      </Text>
-
-                      <Flex alignItems={'center'} gap={3}>
-
-                        <Flex alignItems={'center'} gap={1}>
-                          <Text whiteSpace={'nowrap'}>
-                            {review.likes?.length || 0}
-                          </Text>
-                          {/* TODO: check if the user liked, instead of using the number of likes */}
-                          <IconButton size={'xs'} aria-label='like review' variant='ghost' p={0} icon={review.likes?.length ? <AiFillHeart size={18} /> : <AiOutlineHeart size={18} />} />
-
-                        </Flex>
-
-                        <Flex alignItems={'center'} gap={1}>
-                          <Text>
-                            {review.comments?.length || 0}
-                          </Text>
-                          <IconButton size={'xs'} aria-label='comment on review' variant='ghost' icon={<AiOutlineComment size={18} />} />
-                        </Flex>
-
-                      </Flex>
-
-                    </Box>
-
-                  </Box>
-                )
-              })
-            }
-          </VStack>
+          <LatestReviews data={data} />
 
           <Button
             mr={'auto'}

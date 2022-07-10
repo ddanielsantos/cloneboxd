@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<25a50d1f34159218f8a4967fc6cee79a>>
+ * @generated SignedSource<<9677f56f5634a9cc082c60fad6ac4f78>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type MovieDetailsQuery$variables = {
   id: string;
 };
@@ -33,6 +34,7 @@ export type MovieDetailsQuery$data = {
     } | null> | null;
     readonly genres: ReadonlyArray<string | null>;
   } | null;
+  readonly " $fragmentSpreads": FragmentRefs<"LatestReviews__review">;
 };
 export type MovieDetailsQuery = {
   variables: MovieDetailsQuery$variables;
@@ -191,6 +193,11 @@ return {
           (v10/*: any*/)
         ],
         "storageKey": null
+      },
+      {
+        "args": null,
+        "kind": "FragmentSpread",
+        "name": "LatestReviews__review"
       }
     ],
     "type": "Query",
@@ -239,20 +246,105 @@ return {
           (v11/*: any*/)
         ],
         "storageKey": null
+      },
+      {
+        "alias": "latest",
+        "args": [
+          {
+            "kind": "Literal",
+            "name": "first",
+            "value": 3
+          },
+          {
+            "kind": "Variable",
+            "name": "movie",
+            "variableName": "id"
+          }
+        ],
+        "concreteType": "UserReviewConnection",
+        "kind": "LinkedField",
+        "name": "reviewList",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "UserReviewEdge",
+            "kind": "LinkedField",
+            "name": "edges",
+            "plural": true,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "UserReview",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v4/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "text",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "user",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "fullName",
+                        "storageKey": null
+                      },
+                      (v11/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Movie",
+                    "kind": "LinkedField",
+                    "name": "movie",
+                    "plural": false,
+                    "selections": [
+                      (v2/*: any*/),
+                      (v11/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v11/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "dcc51cec7b71dd4abec541f18547fdc6",
+    "cacheID": "eb3a1f9b34d42e5d6bcfce802438164c",
     "id": null,
     "metadata": {},
     "name": "MovieDetailsQuery",
     "operationKind": "query",
-    "text": "query MovieDetailsQuery(\n  $id: ID!\n) {\n  singleMovie(id: $id) {\n    title\n    releaseDate\n    rating\n    description\n    posterPath\n    cast {\n      person {\n        name\n        id\n      }\n      role\n    }\n    crew {\n      person {\n        name\n        id\n      }\n      role\n    }\n    genres\n    id\n  }\n}\n"
+    "text": "query MovieDetailsQuery(\n  $id: ID!\n) {\n  singleMovie(id: $id) {\n    title\n    releaseDate\n    rating\n    description\n    posterPath\n    cast {\n      person {\n        name\n        id\n      }\n      role\n    }\n    crew {\n      person {\n        name\n        id\n      }\n      role\n    }\n    genres\n    id\n  }\n  ...LatestReviews__review\n}\n\nfragment LatestReviews__review on Query {\n  latest: reviewList(movie: $id, first: 3) {\n    edges {\n      node {\n        rating\n        text\n        user {\n          fullName\n          id\n        }\n        movie {\n          title\n          id\n        }\n        id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5abc509f23f338e206e001851bb2cc55";
+(node as any).hash = "7bace02dc9f23f0e89b4d35ca22c29dd";
 
 export default node;
