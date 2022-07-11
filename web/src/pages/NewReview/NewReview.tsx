@@ -47,7 +47,7 @@ const schema = yup.object({
 
 })
 
-export const Review = () => {
+export const NewReview = () => {
   const navigate = useNavigate()
   const [commitReviewCreation, isReviewCommitLoading] = useMutation<createReviewMutationType>(createReviewMutation)
   const toast = useToast()

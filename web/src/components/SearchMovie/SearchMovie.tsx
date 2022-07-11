@@ -13,7 +13,7 @@ import { useFormContext } from "react-hook-form"
 import { SearchList } from "../SearchList/SearchList"
 import { useTimedSearch } from "../../hooks/useTimedSearch"
 
-import type { FormData } from "../../pages/Review/Review"
+import type { FormData } from "../../pages/NewReview/NewReview"
 import type { SearchMovieQuery as SearchMovieQueryType } from "./__generated__/SearchMovieQuery.graphql"
 
 export const SearchMovieQuery = graphql`

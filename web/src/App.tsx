@@ -1,5 +1,5 @@
 import { Center } from '@chakra-ui/react'
-import { Routes } from './routes/authRoute'
+import { Routes } from './routes/Routes'
 import { Providers } from './Providers'
 import ErrorBoundaryRetry from './ErrorBoundary'
 
