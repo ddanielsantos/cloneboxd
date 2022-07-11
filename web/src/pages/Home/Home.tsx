@@ -33,7 +33,7 @@ export const Home = () => {
           >
             <Button
               onClick={() => {
-                navigate('/review')
+                navigate('/review/new')
               }}
             >
               log watched movie
