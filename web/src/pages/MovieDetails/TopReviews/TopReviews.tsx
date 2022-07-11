@@ -2,14 +2,15 @@ import { VStack, Text } from "@chakra-ui/react"
 import { graphql, useFragment } from "react-relay"
 import { Review } from "../../../components/Review/Review"
 
-import type { LatestReviews__review$key } from './__generated__/LatestReviews__review.graphql'
+import type { TopReviews__review$key } from './__generated__/TopReviews__review.graphql'
 
-type Props = { data: LatestReviews__review$key }
+type Props = { data: TopReviews__review$key }
 
-export const LatestReviews = ({ data }: Props) => {
-  const response = useFragment<LatestReviews__review$key>(graphql`
-    fragment LatestReviews__review on Query {
-      latest: reviewList(movie: $id first: 3) {
+// TODO: [web - movie details] - top reviews should be based on the number of likes
+export const TopReviews = ({ data }: Props) => {
+  const response = useFragment<TopReviews__review$key>(graphql`
+    fragment TopReviews__review on Query {
+      topReviews: reviewList(movie: $id first: 3 sort: "rating") {
         edges {
           node {
             rating
@@ -26,9 +27,9 @@ export const LatestReviews = ({ data }: Props) => {
     }
   `, data)
 
-  const { latest } = response
+  const { topReviews } = response
 
-  if (latest?.edges?.length === 0) {
+  if (topReviews?.edges?.length === 0) {
     return (
       <Text
         py={'2em'}
@@ -44,7 +45,7 @@ export const LatestReviews = ({ data }: Props) => {
       w="100%"
     >
       {
-        latest?.edges?.map((edge, ind) => {
+        topReviews?.edges?.map((edge, ind) => {
           return (
             <Review
               key={ind}
