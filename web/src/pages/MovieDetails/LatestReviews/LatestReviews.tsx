@@ -27,7 +27,16 @@ export const LatestReviews = ({ data }: Props) => {
 
   const { latest } = response
 
-  console.log(latest?.edges)
+  if (latest?.edges?.length === 0) {
+    return (
+      <Text
+        py={'2em'}
+        textAlign='center'
+      >
+        no reviews
+      </Text>
+    )
+  }
 
   return (
     <VStack gap={'0.5em'}
