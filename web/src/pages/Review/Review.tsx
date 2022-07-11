@@ -1,4 +1,4 @@
-import { Box, Text, Button, Avatar, Flex, Link, Grid, GridItem } from '@chakra-ui/react'
+import { Box, Text, Avatar, Flex, Link, Grid, GridItem } from '@chakra-ui/react'
 import { startTransition } from 'react'
 import { useLazyLoadQuery } from 'react-relay'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -42,16 +42,12 @@ export const Review = () => {
     >
       <Header />
       <Grid
-        // templateColumns='repeat(4, 1fr)'
-        // border='1px solid blue'
-        // m={'1em'}
         p="1em"
         w={['100%', '100%', '48em']}
         gap={5}
         as='main'
       >
         <GridItem
-          // border='1px solid red'
           display={'flex'}
           flexDirection='column'
           alignItems={'start'}
@@ -72,18 +68,14 @@ export const Review = () => {
           </Text>
         </GridItem>
 
-        <GridItem
-          border='1px solid red'
-        >
+        <GridItem>
           <Flex
             alignItems={'center'}
-            // border='1px solid red'
             gap='0.5em'
           >
             <Avatar size={'sm'} />
             <Flex
               gap='0.25em'
-            // 
             >
               <Text>
                 a {singleReview?.rating} &#9733; review by
@@ -95,9 +87,7 @@ export const Review = () => {
           </Flex>
         </GridItem>
 
-        <GridItem
-          border='1px solid red'
-        >
+        <GridItem>
           <Text
             fontStyle={'italic'}
             fontSize='sm'
