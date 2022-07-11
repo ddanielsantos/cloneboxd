@@ -232,7 +232,7 @@ export const MovieDetails = () => {
           display={['block']}
         >
           <Text
-            fontSize={'4xl'}
+            fontSize={'3xl'}
             fontWeight={'extrabold'}
           >
             {data.singleMovie?.title}

@@ -1,12 +1,13 @@
 import { Home } from '../pages/Home/Home'
 import { Login } from '../pages/Login/Login'
 import { AuthRequired } from './AuthRequired'
-import { Review } from '../pages/Review/Review'
 import { SignUp } from '../pages/SignUp/SignUp'
+import { Review } from '../pages/Review/Review'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
+import { NewReview } from '../pages/NewReview/NewReview'
 import { Routes as RRoutes, Route } from 'react-router-dom'
-import { SearchMovieFromTMDB } from '../pages/SearchMovieFromTMDB/SearchMovieFromTMDB'
 import { MovieDetails } from '../pages/MovieDetails/MovieDetails'
+import { SearchMovieFromTMDB } from '../pages/SearchMovieFromTMDB/SearchMovieFromTMDB'
 
 export const Routes = () => {
   return (
@@ -20,13 +21,23 @@ export const Routes = () => {
         }
       />
       <Route
-        path="/review"
-        element={
-          <AuthRequired>
+        path="review"
+      >
+        <Route
+          path={'new'}
+          element={
+            <AuthRequired>
+              <NewReview />
+            </AuthRequired>
+          }
+        />
+        <Route
+          path={':id'}
+          element={
             <Review />
-          </AuthRequired>
-        }
-      />
+          }
+        />
+      </Route>
       <Route
         path="/search-movie"
         element={
