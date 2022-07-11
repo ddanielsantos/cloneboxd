@@ -1,14 +1,16 @@
 import {
   Flex,
   Text,
-  Circle,
+  Button,
   useDisclosure,
   useColorMode,
   Avatar,
 } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 import { HeaderDrawer } from '../HeaderDrawer/HeaderDrawer'
 
 export const Header = () => {
+  const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { colorMode } = useColorMode()
 
@@ -25,12 +27,17 @@ export const Header = () => {
         w={['100%', '100%', '48em']}
         justifyContent={"space-between"}
       >
-        <Text
-          fontSize={'3xl'}
-          fontWeight={'bold'}
+        <Button
+          variant={'unstyled'}
+          onClick={() => navigate('/')}
         >
-          Cloneboxd
-        </Text>
+          <Text
+            fontSize={'3xl'}
+            fontWeight={'bold'}
+          >
+            Cloneboxd
+          </Text>
+        </Button>
 
         <Avatar
           as='button'
