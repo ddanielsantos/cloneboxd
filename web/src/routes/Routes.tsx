@@ -1,13 +1,13 @@
 import { Home } from '../pages/Home/Home'
 import { Login } from '../pages/Login/Login'
 import { AuthRequired } from './AuthRequired'
-import { NewReview } from '../pages/NewReview/NewReview'
 import { SignUp } from '../pages/SignUp/SignUp'
+import { Review } from '../pages/Review/Review'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
+import { NewReview } from '../pages/NewReview/NewReview'
 import { Routes as RRoutes, Route } from 'react-router-dom'
-import { SearchMovieFromTMDB } from '../pages/SearchMovieFromTMDB/SearchMovieFromTMDB'
 import { MovieDetails } from '../pages/MovieDetails/MovieDetails'
-import { Box } from '@chakra-ui/react'
+import { SearchMovieFromTMDB } from '../pages/SearchMovieFromTMDB/SearchMovieFromTMDB'
 
 export const Routes = () => {
   return (
@@ -24,8 +24,7 @@ export const Routes = () => {
         path="review"
       >
         <Route
-          // path={'new'}
-          index={true}
+          path={'new'}
           element={
             <AuthRequired>
               <NewReview />
@@ -35,9 +34,7 @@ export const Routes = () => {
         <Route
           path={':id'}
           element={
-            <Box>
-              ola porr
-            </Box>
+            <Review />
           }
         />
       </Route>
