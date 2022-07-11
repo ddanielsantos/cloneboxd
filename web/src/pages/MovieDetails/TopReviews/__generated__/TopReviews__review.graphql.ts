@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<88a777f08dcc0a9af57cb4954195042b>>
+ * @generated SignedSource<<6a66a8b758d6ebce8b45792234b56555>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,7 @@ export type TopReviews__review$data = {
   readonly topReviews: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly id: string;
         readonly rating: number | null;
         readonly text: string | null;
         readonly user: {
@@ -87,6 +88,13 @@ const node: ReaderFragment = {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
+                  "name": "id",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
                   "name": "rating",
                   "storageKey": null
                 },
@@ -147,6 +155,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "022b95e21631bdb015ecd1e377d4b903";
+(node as any).hash = "50bfe816f4abbcc93ab20faaf5b799bc";
 
 export default node;

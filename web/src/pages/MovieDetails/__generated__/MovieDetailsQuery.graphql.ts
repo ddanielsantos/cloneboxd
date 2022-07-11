@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0c8edb4acf77000ff655e5611ec5efa2>>
+ * @generated SignedSource<<917b1423492b917f3ee6f57033054751>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -177,6 +177,7 @@ v15 = [
         "name": "node",
         "plural": false,
         "selections": [
+          (v11/*: any*/),
           (v4/*: any*/),
           {
             "alias": null,
@@ -216,8 +217,7 @@ v15 = [
               (v11/*: any*/)
             ],
             "storageKey": null
-          },
-          (v11/*: any*/)
+          }
         ],
         "storageKey": null
       }
@@ -361,12 +361,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e37d13c85ba41abb0c8d299924e88801",
+    "cacheID": "93e6ea586feb941efa7461cf935eaf30",
     "id": null,
     "metadata": {},
     "name": "MovieDetailsQuery",
     "operationKind": "query",
-    "text": "query MovieDetailsQuery(\n  $id: ID!\n) {\n  singleMovie(id: $id) {\n    title\n    releaseDate\n    rating\n    description\n    posterPath\n    cast {\n      person {\n        name\n        id\n      }\n      role\n    }\n    crew {\n      person {\n        name\n        id\n      }\n      role\n    }\n    genres\n    id\n  }\n  ...LatestReviews__review\n  ...TopReviews__review\n}\n\nfragment LatestReviews__review on Query {\n  latest: reviewList(movie: $id, first: 3) {\n    edges {\n      node {\n        rating\n        text\n        user {\n          fullName\n          id\n        }\n        movie {\n          title\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment TopReviews__review on Query {\n  topReviews: reviewList(movie: $id, first: 3, sort: \"rating\") {\n    edges {\n      node {\n        rating\n        text\n        user {\n          fullName\n          id\n        }\n        movie {\n          title\n          id\n        }\n        id\n      }\n    }\n  }\n}\n"
+    "text": "query MovieDetailsQuery(\n  $id: ID!\n) {\n  singleMovie(id: $id) {\n    title\n    releaseDate\n    rating\n    description\n    posterPath\n    cast {\n      person {\n        name\n        id\n      }\n      role\n    }\n    crew {\n      person {\n        name\n        id\n      }\n      role\n    }\n    genres\n    id\n  }\n  ...LatestReviews__review\n  ...TopReviews__review\n}\n\nfragment LatestReviews__review on Query {\n  latest: reviewList(movie: $id, first: 3) {\n    edges {\n      node {\n        id\n        rating\n        text\n        user {\n          fullName\n          id\n        }\n        movie {\n          title\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment TopReviews__review on Query {\n  topReviews: reviewList(movie: $id, first: 3, sort: \"rating\") {\n    edges {\n      node {\n        id\n        rating\n        text\n        user {\n          fullName\n          id\n        }\n        movie {\n          title\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

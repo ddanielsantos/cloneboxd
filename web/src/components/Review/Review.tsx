@@ -1,7 +1,10 @@
 import { Box, Avatar, Text, Link } from '@chakra-ui/react'
+import { startTransition } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { NullableProps } from '../../types/Nullable'
 
 type Props = NullableProps<{
+  id: string
   rating: number
   user: {
     fullName: string
@@ -10,13 +13,17 @@ type Props = NullableProps<{
 }>
 
 export const Review = (props: Props) => {
+  const navigate = useNavigate()
   return (
     <Box
       w={'100%'}
       borderRadius={'md'}
       p={'1em'}
+      onClick={() => {
+        startTransition(() => navigate(`/review/${props.id}`))
+      }}
       _hover={{
-        bg: 'whiteAlpha.200',
+        bg: 'gray.200',
         transitionDuration: '0.5s',
       }}
       gap={'1em'}

@@ -12,6 +12,7 @@ export const LatestReviews = ({ data }: Props) => {
       latest: reviewList(movie: $id first: 3) {
         edges {
           node {
+            id
             rating
             text
             user{
@@ -44,10 +45,11 @@ export const LatestReviews = ({ data }: Props) => {
       w="100%"
     >
       {
-        latest?.edges?.map((edge, ind) => {
+        latest?.edges?.map(edge => {
           return (
             <Review
-              key={ind}
+              key={edge?.node?.id}
+              id={edge?.node?.id}
               rating={edge?.node?.rating}
               text={edge?.node?.text}
               user={edge?.node?.user}
