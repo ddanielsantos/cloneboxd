@@ -1,7 +1,6 @@
 import { fromGlobalId, nodeDefinitions } from 'graphql-relay'
 import { UserModel } from '../entities/user/userModel'
 import { MovieModel } from '../entities/movie/movieModel'
-import { CrewModel } from '../entities/crew/crewModel'
 import { ReviewModel } from '../entities/review/reviewModel'
 
 const { nodeInterface, nodeField } = nodeDefinitions(
@@ -20,7 +19,6 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     const modelLookup: ModelLookup = {
       User: UserModel,
       Movie: MovieModel,
-      Crew: CrewModel,
       UserReview: ReviewModel
     }
 
