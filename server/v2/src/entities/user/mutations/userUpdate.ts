@@ -52,12 +52,13 @@ export const userUpdate = mutationWithClientMutationId({
     }
 
     const salt = genSaltSync()
+    const hashedPassword = hashSync(user.password, salt)
 
     try {
       const result = await UserModel.findByIdAndUpdate(fromGlobalId(id).id, {
         ...user,
-        password: hashSync(user.password, salt)
-      })
+        password: hashedPassword
+      }, { new: true })
 
       if (result === null) {
         return {
