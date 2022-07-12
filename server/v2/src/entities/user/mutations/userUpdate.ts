@@ -3,9 +3,11 @@ import {
   GraphQLString,
   GraphQLNonNull
 } from 'graphql'
-import { userInputType } from '../userTypes'
 import { UserModel } from '../userModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
+import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { userType } from '../userTypes'
+import { hashSync, genSaltSync } from 'bcrypt'
 
 export const userUpdate = mutationWithClientMutationId({
   name: 'userUpdate',
@@ -14,25 +16,60 @@ export const userUpdate = mutationWithClientMutationId({
     id: {
       type: new GraphQLNonNull(GraphQLID)
     },
-    ...userInputType
+    fullName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `User's full name`
+    },
+    password: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `User's password`
+    }
   },
   outputFields: {
-    result: {
-      type: GraphQLString,
-      resolve: response => response.result
+    user: {
+      type: userType,
+      resolve: response => response.user
     },
     error: {
       type: GraphQLString,
       resolve: response => response.error
     }
   },
-  mutateAndGetPayload: async ({ id, ...user }) => {
-    const result = await UserModel.updateOne({
-      _id: fromGlobalId(id).id
-    }, {
-      $set: user
-    })
+  mutateAndGetPayload: async ({ id, ...user }, ctx) => {
+    const { error, payload } = getHeadersPayload(ctx)
 
-    return result
+    if (error || payload === null) {
+      return {
+        error: 'Unauthorized',
+        result: null
+      }
+    }
+
+    if (payload.id !== fromGlobalId(id).id) {
+      return {
+        error: 'Unauthorized'
+      }
+    }
+
+    const salt = genSaltSync()
+
+    try {
+      const result = await UserModel.findByIdAndUpdate(fromGlobalId(id).id, {
+        ...user,
+        password: hashSync(user.password, salt)
+      })
+
+      if (result === null) {
+        return {
+          error: 'User not found'
+        }
+      }
+
+      return { user: result }
+    } catch (error: any) {
+      return {
+        error: error.message
+      }
+    }
   }
 })
