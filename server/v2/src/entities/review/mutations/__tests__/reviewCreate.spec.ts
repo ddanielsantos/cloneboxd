@@ -3,16 +3,14 @@ import { toGlobalId } from 'graphql-relay'
 import { schema } from '../../../../schemas/schema'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
-import { createMovie } from '../../../movie/fixture/createMovie'
 
 describe('ReviewCreateMutation', () => {
   it('should create a review if the user is logged', async () => {
-    const movie = await createMovie()
     const user = await createUser({
       admin: true
     })
 
-    const movieGlobalId = toGlobalId('Movie', movie._id.toString())
+    const movieGlobalId = toGlobalId('Movie', '11220')
 
     const { token } = loginUser(user)
 
@@ -59,9 +57,7 @@ describe('ReviewCreateMutation', () => {
   })
 
   it('should throw an error if the user is not logged', async () => {
-    const movie = await createMovie()
-
-    const movieGlobalId = toGlobalId('Movie', movie._id.toString())
+    const movieGlobalId = toGlobalId('Movie', '11220')
 
     const createReviewMutation = `
       mutation a {
