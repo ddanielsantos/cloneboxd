@@ -60,8 +60,7 @@ export const reviewCreate = mutationWithClientMutationId({
       return {
         review: document
       }
-    } catch (e) {
-      console.log(e)
+    } catch {
       return {
         error: 'Invalid review'
       }
