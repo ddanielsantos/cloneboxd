@@ -2,7 +2,7 @@ import mongoose, { ObjectId, Schema } from 'mongoose'
 
 export type IReview = {
   user: ObjectId,
-  movie: ObjectId,
+  movie: string,
   text: string,
   rating: number,
   watchedAt: Date

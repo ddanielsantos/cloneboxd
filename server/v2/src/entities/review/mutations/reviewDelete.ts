@@ -3,13 +3,13 @@ import {
   GraphQLString,
   GraphQLNonNull
 } from 'graphql'
-import { UserModel } from '../userModel'
+import { ReviewModel } from '../reviewModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 
-export const userDelete = mutationWithClientMutationId({
-  name: 'userDelete',
-  description: 'Delete a user using its id',
+export const reviewDelete = mutationWithClientMutationId({
+  name: 'reviewDelete',
+  description: 'Delete a review using its id',
   inputFields: {
     id: {
       type: new GraphQLNonNull(GraphQLID)
@@ -30,20 +30,27 @@ export const userDelete = mutationWithClientMutationId({
 
     if (error || payload === null) {
       return {
-        error: 'Unauthorized',
-        review: null
+        error: 'Unauthorized'
       }
     }
 
-    if (payload.id !== fromGlobalId(id).id) {
+    const reviewToDelete = await ReviewModel.findById(fromGlobalId(id).id)
+
+    if (!reviewToDelete) {
+      return {
+        error: 'Review not found'
+      }
+    }
+
+    if (payload.id !== reviewToDelete.user.toString()) {
       return {
         error: 'Unauthorized'
       }
     }
 
     try {
-      const response = await UserModel.deleteOne({
-        _id: fromGlobalId(id).id
+      const response = await ReviewModel.deleteOne({
+        _id: reviewToDelete.id
       })
 
       return response
