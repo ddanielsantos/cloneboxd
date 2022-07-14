@@ -15,6 +15,7 @@ export async function createUser(options: Options) {
   const document = new UserModel({
     fullName: 'chad admin',
     email: 'tester@mail.com',
+    username: 'chad',
     isAdmin: options.admin,
     password: '123456'
   })

@@ -19,6 +19,11 @@ export const userType = new GraphQLObjectType({
       description: `User's full name`,
       resolve: user => user.fullName
     },
+    username: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: `User's username`,
+      resolve: user => user.username
+    },
     email: {
       type: new GraphQLNonNull(GraphQLString),
       description: `User's email`,
@@ -35,6 +40,10 @@ export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   email: {
     type: new GraphQLNonNull(GraphQLString),
     description: `User's email`
+  },
+  username: {
+    type: new GraphQLNonNull(GraphQLString),
+    description: `User's username`
   },
   password: {
     type: new GraphQLNonNull(GraphQLString),

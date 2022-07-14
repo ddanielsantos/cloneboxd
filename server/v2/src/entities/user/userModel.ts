@@ -9,6 +9,7 @@ export type IUser = {
   _id: mongoose.Types.ObjectId
   fullName: string
   email: string
+  username: string
   password: string
   isAdmin: boolean,
   validatePassword: (plainPassword: string) => boolean,
@@ -23,6 +24,11 @@ const schema = new Schema<IUser>({
   email: {
     type: String,
     required: true
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true
   },
   password: {
     type: String,
