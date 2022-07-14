@@ -6,7 +6,7 @@ type Options = {
 }
 
 export async function createUser(options: Options) {
-  const user = await UserModel.findOne({ email: 'tester@mail.com', isAdmin: options.admin })
+  const user = await UserModel.findOne({ username: 'chad' })
 
   if (user) return user
 
@@ -15,6 +15,7 @@ export async function createUser(options: Options) {
   const document = new UserModel({
     fullName: 'chad admin',
     email: 'tester@mail.com',
+    username: 'chad',
     isAdmin: options.admin,
     password: '123456'
   })

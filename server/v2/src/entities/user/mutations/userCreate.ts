@@ -48,10 +48,15 @@ export const userCreate = mutationWithClientMutationId({
       isAdmin: false
     })
 
-    await document.validate()
+    try {
+      await document.validate()
+      await document.save()
 
-    await document.save()
-
-    return { user: document, error: null, token: document.generateToken() }
+      return { user: document, token: document.generateToken() }
+    } catch (error: any) {
+      return {
+        error: error.message
+      }
+    }
   }
 })
