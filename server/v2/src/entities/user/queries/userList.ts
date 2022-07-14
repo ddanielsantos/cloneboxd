@@ -1,13 +1,37 @@
-import { GraphQLFieldConfig } from 'graphql'
+import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLString } from 'graphql'
 import { UserConnection } from '../userTypes'
 import { UserModel } from '../userModel'
 import { connectionArgs, connectionFromArray } from 'graphql-relay'
 
-export const userList: GraphQLFieldConfig<any, any, any> = {
+type Args = GraphQLFieldConfigArgumentMap & {
+  username?: string
+  email?: string
+}
+
+export const userList: GraphQLFieldConfig<any, any, Args> = {
   type: UserConnection,
-  args: connectionArgs,
+  args: {
+    ...connectionArgs,
+    username: {
+      type: GraphQLString,
+      description: 'Filter users by this username'
+    },
+    email: {
+      type: GraphQLString,
+      description: 'Filter users by this email'
+    }
+  },
   resolve: async (_, args) => {
-    const users = await UserModel.find({})
-    return connectionFromArray(users, args)
+    const { username, email, ...connectionArgs } = args
+
+    const filter = {
+      ...(username && { username }),
+      ...(email && { email })
+    }
+
+    const users = await UserModel.aggregate([
+      { $match: filter }
+    ])
+    return connectionFromArray(users, connectionArgs)
   }
 }
