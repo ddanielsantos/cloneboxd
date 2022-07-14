@@ -10,7 +10,7 @@ type Args = GraphQLFieldConfigArgumentMap & {
   movie?: string
 }
 
-export const reviewList: GraphQLFieldConfig<any, any, any> = {
+export const reviewList: GraphQLFieldConfig<any, any, Args> = {
   type: ReviewConnection,
   args: {
     ...connectionArgs,
@@ -31,7 +31,7 @@ export const reviewList: GraphQLFieldConfig<any, any, any> = {
       description: 'Filter reviews by this movie'
     }
   },
-  resolve: async (_, args: Args) => {
+  resolve: async (_, args) => {
     const { sort, rating, direction, movie, ...connnectionArgs } = args
 
     const movieId = movie && fromGlobalId(movie).id
