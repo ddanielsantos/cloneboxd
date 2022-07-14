@@ -28,6 +28,20 @@ type Query {
     last: Int
     title: String!
   ): MovieConnection
+  crewList(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+  ): PersonConnection
+  singleCrewMember(id: ID!): Person
   me: User
   userList(
     """Returns the items in the list that come after the specified cursor."""
@@ -41,7 +55,14 @@ type Query {
 
     """Returns the last n items from the list."""
     last: Int
+
+    """Filter users by this username"""
+    username: String
+
+    """Filter users by this email"""
+    email: String
   ): UserConnection
+  singleUser(id: ID!): User
   reviewList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -175,6 +196,24 @@ type Person implements Node {
   dateOfBirth: String!
 }
 
+"""A connection to a list of items."""
+type PersonConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [PersonEdge]
+}
+
+"""An edge in a connection."""
+type PersonEdge {
+  """The item at the end of the edge"""
+  node: Person
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 """User type"""
 type User implements Node {
   """The ID of an object"""
@@ -182,6 +221,9 @@ type User implements Node {
 
   """User's full name"""
   fullName: String!
+
+  """User's username"""
+  username: String!
 
   """User's email"""
   email: String!
@@ -260,6 +302,12 @@ type Mutation {
 
   """Add a review"""
   reviewCreate(input: reviewCreateInput!): reviewCreatePayload
+
+  """Update a review using its id"""
+  reviewUpdate(input: reviewUpdateInput!): reviewUpdatePayload
+
+  """Delete a review using its id"""
+  reviewDelete(input: reviewDeleteInput!): reviewDeletePayload
 }
 
 type userCreatePayload {
@@ -276,6 +324,9 @@ input userCreateInput {
   """User's email"""
   email: String!
 
+  """User's username"""
+  username: String!
+
   """User's password"""
   password: String!
 
@@ -285,7 +336,7 @@ input userCreateInput {
 }
 
 type userUpdatePayload {
-  result: String
+  user: User
   error: String
   clientMutationId: String
 }
@@ -296,19 +347,14 @@ input userUpdateInput {
   """User's full name"""
   fullName: String!
 
-  """User's email"""
-  email: String!
-
   """User's password"""
   password: String!
-
-  """User's confirm password"""
-  confirmPassword: String!
   clientMutationId: String
 }
 
 type userDeletePayload {
   deletedCount: String
+  error: String
   clientMutationId: String
 }
 
@@ -348,5 +394,36 @@ input reviewCreateInput {
 
   """When the user watched the movie"""
   watchedAt: String
+  clientMutationId: String
+}
+
+type reviewUpdatePayload {
+  review: UserReview
+  error: String
+  clientMutationId: String
+}
+
+input reviewUpdateInput {
+  id: ID!
+
+  """User review's text"""
+  text: String
+
+  """User review's rating"""
+  rating: Float
+
+  """When the user watched the movie"""
+  watchedAt: String
+  clientMutationId: String
+}
+
+type reviewDeletePayload {
+  deletedCount: String
+  error: String
+  clientMutationId: String
+}
+
+input reviewDeleteInput {
+  id: ID!
   clientMutationId: String
 }
