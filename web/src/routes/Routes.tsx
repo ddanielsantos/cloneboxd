@@ -25,7 +25,7 @@ export const Routes = () => {
         path={'profile'}
       >
         <Route
-          path={':id'}
+          path={':username'}
           element={
             <Profile />
           }
