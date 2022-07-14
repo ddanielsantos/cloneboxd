@@ -23,7 +23,8 @@ const schema = new Schema<IUser>({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   username: {
     type: String,
