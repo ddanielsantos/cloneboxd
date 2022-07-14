@@ -3,6 +3,7 @@ import { Login } from '../pages/Login/Login'
 import { AuthRequired } from './AuthRequired'
 import { SignUp } from '../pages/SignUp/SignUp'
 import { Review } from '../pages/Review/Review'
+import { Profile } from '../pages/Profile/Profile'
 import { NoMatch } from '../pages/NoMatch/NoMatch'
 import { NewReview } from '../pages/NewReview/NewReview'
 import { Routes as RRoutes, Route } from 'react-router-dom'
@@ -20,6 +21,16 @@ export const Routes = () => {
           </AuthRequired>
         }
       />
+      <Route
+        path={'profile'}
+      >
+        <Route
+          path={':id'}
+          element={
+            <Profile />
+          }
+        />
+      </Route>
       <Route
         path="review"
       >
