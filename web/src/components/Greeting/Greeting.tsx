@@ -1,29 +1,26 @@
-import { useEffect, useState } from 'react'
-import { Subtitle } from '../Subtitle/Subtitle'
 import { Text } from '@chakra-ui/react'
-import { loginMutation$data } from '../../pages/Login/__generated__/loginMutation.graphql'
+import { graphql, useFragment } from 'react-relay'
 
-export function Greeting() {
-  const [user, setUser] = useState<loginMutation$data['loginUser'] | null>(null)
+import type { Greeting__user$key } from './__generated__/Greeting__user.graphql'
 
-  useEffect(() => {
-    let isMounted = true
+type Props = {
+  data: Greeting__user$key
+}
 
-    if (isMounted) {
-      const data = localStorage.getItem('loggedUser') || ''
-      if (data !== '') setUser(JSON.parse(data))
+export function Greeting(props: Props) {
+  const data = useFragment(graphql`
+    fragment Greeting__user on Query {
+      me {
+        fullName
+      }
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
+  `, props.data)
 
   return (
     <>
-      <Subtitle
-        content={`welcome, ${user?.user?.fullName}`}
-      />
+      <Text>
+        welcome, {data.me?.fullName}
+      </Text>
       <Text>
         saw any movies lately? register it right now
       </Text>
