@@ -72,7 +72,6 @@ export const Login = () => {
 
         if (loginUser?.token) {
           signIn(loginUser.token)
-          localStorage.setItem('loggedUser', JSON.stringify(loginUser))
         }
 
         navigate('/')

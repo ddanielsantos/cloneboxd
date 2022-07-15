@@ -1,4 +1,5 @@
 import {
+  Text,
   Input,
   HStack,
   Button,
@@ -14,7 +15,6 @@ import * as yup from "yup"
 import { useMutation } from "react-relay"
 import { useNavigate } from "react-router-dom"
 import { Main } from "../../components/Main/Main"
-import { Subtitle } from "../../components/Subtitle/Subtitle"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { FormProvider, useForm } from 'react-hook-form'
 import { Header } from "../../components/Header/Header"
@@ -142,7 +142,9 @@ export const NewReview = () => {
             }}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <Subtitle content="log watched movie:" />
+            <Text>
+              log watched movie:
+            </Text>
 
             <SearchMovie />
 

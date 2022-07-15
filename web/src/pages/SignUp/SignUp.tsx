@@ -73,7 +73,6 @@ export const SignUp = () => {
           })
 
           signIn(data.userCreate.token)
-          localStorage.setItem('loggedUser', JSON.stringify({ ...data.userCreate }))
 
           navigate('/')
         }
