@@ -87,6 +87,9 @@ type Query {
 
     """Filter reviews by this movie"""
     movie: ID
+
+    """Filter reviews by this username"""
+    username: String
   ): UserReviewConnection
   singleReview(id: ID!): UserReview
 
