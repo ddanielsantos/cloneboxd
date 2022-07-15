@@ -26,6 +26,7 @@ type FormData = {
   email: string,
   password: string,
   confirmPassword: string,
+  username: string,
   fullName: string
 }
 
@@ -33,6 +34,7 @@ const schema = yup.object({
   email: yup.string().email('The supplied email is invalid').required('Email is required'),
   password: yup.string().min(6, 'The password must be at least 6 characters long').required('Password is required'),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'The passwords didn\'t match').required('Confirm password is required'),
+  username: yup.string().required('A username is required'),
   fullName: yup.string().required('Your full name is required')
 })
 
@@ -105,7 +107,7 @@ export const SignUp = () => {
         <FormControl
           isInvalid={!!errors.fullName}
         >
-          <FormLabel mt={'0.5em'} htmlFor='email'>Your name</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='fullName'>Your name</FormLabel>
           <Input
             placeholder="ex.: John Doe"
             id="fullName"
@@ -116,6 +118,25 @@ export const SignUp = () => {
             errors.fullName && (
               <FormErrorMessage>
                 {errors.fullName.message}
+              </FormErrorMessage>
+            )
+          }
+        </FormControl>
+
+        <FormControl
+          isInvalid={!!errors.username}
+        >
+          <FormLabel mt={'0.5em'} htmlFor='username'>Your name</FormLabel>
+          <Input
+            placeholder="ex.: John Doe"
+            id="username"
+            {...register('username')}
+          />
+
+          {
+            errors.username && (
+              <FormErrorMessage>
+                {errors.username.message}
               </FormErrorMessage>
             )
           }
@@ -163,7 +184,7 @@ export const SignUp = () => {
         <FormControl
           isInvalid={!!errors.confirmPassword}
         >
-          <FormLabel mt={'0.5em'} htmlFor='password'>Confirm your password</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='confirmPassword'>Confirm your password</FormLabel>
           <Input placeholder="confirm your password"
             type='password'
             min={6}
