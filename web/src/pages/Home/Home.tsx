@@ -8,9 +8,18 @@ import { useNavigate } from "react-router-dom"
 import { Main } from "../../components/Main/Main"
 import { Header } from "../../components/Header/Header"
 import { Greeting } from "../../components/Greeting/Greeting"
+import { graphql, useLazyLoadQuery } from "react-relay"
+
+import type { HomeQuery } from './__generated__/HomeQuery.graphql'
 
 export const Home = () => {
   const navigate = useNavigate()
+
+  const data = useLazyLoadQuery<HomeQuery>(graphql`
+    query HomeQuery {
+      ...Greeting__user
+    }
+  `, {})
 
   return (
     <VStack
@@ -26,7 +35,7 @@ export const Home = () => {
           gap={'1em'}
           direction={'column'}
         >
-          <Greeting />
+          <Greeting data={data} />
           <HStack
             w={'100%'}
             justifyContent={'flex-end'}
