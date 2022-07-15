@@ -13,7 +13,7 @@ export const me = {
     }
 
     return await UserModel.findOne({
-      _id: payload.id
+      _id: payload._id
     })
   }
 }
