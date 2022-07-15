@@ -1,4 +1,4 @@
-import { Box, Text, Avatar, Flex, Link, Grid, GridItem } from '@chakra-ui/react'
+import { Box, Text, Avatar, Flex, Link, Grid, GridItem, Button } from '@chakra-ui/react'
 import { startTransition } from 'react'
 import { useLazyLoadQuery } from 'react-relay'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -29,6 +29,29 @@ export const Review = () => {
         }
       }
     `, { id: id || '' })
+
+  if (!singleReview) {
+    return (
+      <Box
+        display={'flex'}
+        flexDirection='column'
+        gap='0.5em'
+        alignItems={'center'}
+      >
+        <Text>
+          Sorry, this review doesn't exist
+        </Text>
+
+        <Button
+          onClick={() => {
+            navigate('/')
+          }}
+        >
+          Return to home page
+        </Button>
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -99,7 +122,6 @@ export const Review = () => {
           </Text>
         </GridItem>
       </Grid>
-
     </Box>
   )
 }

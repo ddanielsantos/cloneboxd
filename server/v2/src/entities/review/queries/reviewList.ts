@@ -2,12 +2,21 @@ import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLID, GraphQLIn
 import { ReviewConnection } from '../reviewTypes'
 import { ReviewModel } from '../reviewModel'
 import { connectionArgs, connectionFromArray, fromGlobalId } from 'graphql-relay'
+import { UserModel } from '../../user/userModel'
+import { Types } from 'mongoose'
+
+const usernameToObjectID = async (username: string): Promise<Types.ObjectId | undefined> => {
+  const user = await UserModel.findOne({ username })
+
+  return user?._id
+}
 
 type Args = GraphQLFieldConfigArgumentMap & {
   sort?: string
   rating?: number
   direction?: -1 | 1,
   movie?: string
+  username?: string
 }
 
 export const reviewList: GraphQLFieldConfig<any, any, Args> = {
@@ -29,14 +38,20 @@ export const reviewList: GraphQLFieldConfig<any, any, Args> = {
     movie: {
       type: GraphQLID,
       description: 'Filter reviews by this movie'
+    },
+    username: {
+      type: GraphQLString,
+      description: 'Filter reviews by this username'
     }
   },
   resolve: async (_, args) => {
-    const { sort, rating, direction, movie, ...connnectionArgs } = args
+    const { sort, rating, direction, movie, username, ...connnectionArgs } = args
 
     const movieId = movie && fromGlobalId(movie).id
+    const userId = username && await usernameToObjectID(username)
 
     const filter = {
+      ...(userId && { user: userId }),
       ...(movieId && { movie: movieId }),
       ...(rating && { rating })
     }

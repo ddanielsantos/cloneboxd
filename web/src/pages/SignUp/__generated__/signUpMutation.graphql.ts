@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<31458d39414c61384c0423e41b3e202a>>
+ * @generated SignedSource<<7f1a46e7032d89b7d109bcda8b02756d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,7 @@ import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type userCreateInput = {
   fullName: string;
   email: string;
+  username: string;
   password: string;
   confirmPassword: string;
   clientMutationId?: string | null;
