@@ -302,6 +302,7 @@ type Mutation {
 
   """Login a user"""
   loginUser(input: loginUserInput!): loginUserPayload
+  userLogout: userLogoutPayload
 
   """Add a review"""
   reviewCreate(input: reviewCreateInput!): reviewCreatePayload
@@ -367,16 +368,31 @@ input userDeleteInput {
 }
 
 type loginUserPayload {
-  token: String
+  token: Token
   user: User
   error: String
   clientMutationId: String
+}
+
+"""The access and the refresh token neccessary to authenticate"""
+type Token {
+  accessToken: String
+  refreshToken: RefreshToken
+}
+
+type RefreshToken {
+  expiresIn: String
+  refreshToken: String
 }
 
 input loginUserInput {
   email: String!
   password: String!
   clientMutationId: String
+}
+
+type userLogoutPayload {
+  error: String
 }
 
 type reviewCreatePayload {

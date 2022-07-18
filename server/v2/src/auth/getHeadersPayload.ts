@@ -2,7 +2,7 @@ import Koa from 'koa'
 import * as jwt from 'jsonwebtoken'
 import { getEnvironmentVariables } from '../config/env'
 
-const jwtSecret = getEnvironmentVariables().JWT_SECRET || ''
+const jwtSecret = getEnvironmentVariables().ACCESS_TOKEN_SECRET || ''
 
 type KoaHeader = Koa.Context['header']
 

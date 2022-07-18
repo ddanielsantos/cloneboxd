@@ -1,7 +1,9 @@
-import { UserModel } from '../userModel'
 import { userType } from '../userTypes'
+import { UserModel } from '../userModel'
 import { GraphQLNonNull, GraphQLString } from 'graphql'
+import { tokenType } from '../../token/tokenType'
 import { mutationWithClientMutationId } from 'graphql-relay'
+import { Token } from '../../token/TokenModel'
 
 type LoginInput = {
   email: string,
@@ -39,16 +41,29 @@ export const loginUser = mutationWithClientMutationId({
       }
     }
 
-    const token = user.generateToken()
+    const accessToken = Token.generateAccessToken(user.id)
 
-    return {
-      token,
-      user
+    try {
+      const refreshToken = await Token.generateRefreshToken(user.id)
+
+      const token = {
+        accessToken,
+        refreshToken
+      }
+
+      return {
+        token,
+        user
+      }
+    } catch (e: unknown) {
+      return {
+        error: (e as Error).message
+      }
     }
   },
   outputFields: {
     token: {
-      type: GraphQLString,
+      type: tokenType,
       resolve: response => response.token
     },
     user: {
