@@ -44,8 +44,11 @@ export const loginUser = mutationWithClientMutationId({
     const accessToken = Token.generateAccessToken(user.id)
 
     try {
+      const refreshToken = await Token.generateRefreshToken(user.id)
+
       const token = {
-        accessToken
+        accessToken,
+        refreshToken
       }
 
       return {
