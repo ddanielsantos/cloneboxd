@@ -14,7 +14,7 @@ interface TokenModel extends Model<IToken> {
   generateRefreshToken: (user: string) => Promise<IToken>
   generateAccessToken: (user: string) => string
   refresh: (refreshToken: string) => Promise<AccessToken>
-  // revoke: (user: string) => Promise<void>
+  revoke: (user: string) => Promise<void>
 }
 
 const schema = new Schema<IToken, TokenModel>({
@@ -99,6 +99,10 @@ schema.static('refresh', async function (refreshToken: string): Promise<AccessTo
   }
 
   return this.generateAccessToken(token.user.toString())
+})
+
+schema.static('revoke', async function (user: string) {
+  await this.deleteMany({ user })
 })
 
 export const Token = mongoose.model<IToken, TokenModel>('token', schema)
