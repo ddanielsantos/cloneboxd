@@ -1,26 +1,26 @@
-import { createContext, useState, useContext } from "react";
-import { getToken, saveToken, removeToken } from "../helpers/localStorage";
+import { createContext, useState, useContext, useEffect } from "react";
+import { getToken, saveToken, removeToken, Token } from "../helpers/localStorage";
 
 type AuthContextProps = {
-  token: string,
-  signIn: (token: string) => void,
+  token: Token | undefined,
+  signIn: (token: Token) => void,
   signOut: () => void
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string>(() => {
-    return getToken() || ''
+  const [token, setToken] = useState<Token | undefined>(() => {
+    return getToken()
   })
 
-  const signIn = (token: string) => {
+  const signIn = (token: Token) => {
     setToken(token)
     saveToken(token)
   }
 
   const signOut = () => {
-    setToken('')
+    setToken(undefined)
     removeToken()
   }
 

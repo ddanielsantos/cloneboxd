@@ -1,6 +1,14 @@
-export function saveToken(token: string) {
+export type Token = {
+  accessToken: string
+  refreshToken: {
+    refreshToken: string
+    expiresIn: number
+  }
+}
+
+export function saveToken(token: Token) {
   try {
-    localStorage.setItem('token', token)
+    sessionStorage.setItem('@cloneboxd:token', JSON.stringify(token))
     return {
       error: null
     }
@@ -11,10 +19,14 @@ export function saveToken(token: string) {
   }
 }
 
-export function getToken() {
-  return localStorage.getItem('token')
+export function getToken(): Token | undefined {
+  const data = sessionStorage.getItem('@cloneboxd:token')
+
+  if (data) {
+    return JSON.parse(data)
+  }
 }
 
 export function removeToken() {
-  localStorage.removeItem('token')
+  sessionStorage.removeItem('@cloneboxd:token')
 }
