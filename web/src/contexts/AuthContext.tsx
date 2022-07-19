@@ -7,11 +7,7 @@ type AuthContextProps = {
   signOut: () => void
 }
 
-export const AuthContext = createContext<AuthContextProps>({
-  token: '',
-  signIn: (token: string) => { },
-  signOut: () => { }
-})
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string>(() => {
@@ -36,5 +32,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 }
 
 export const useAuth = () => {
-  return useContext(AuthContext)
+  const context = useContext(AuthContext)
+
+  if (context === undefined) {
+    throw new Error("useAuth must be within AuthProvider")
+  }
+
+  return context
 }
