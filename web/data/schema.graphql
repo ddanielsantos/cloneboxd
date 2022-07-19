@@ -304,6 +304,9 @@ type Mutation {
   loginUser(input: loginUserInput!): loginUserPayload
   userLogout: userLogoutPayload
 
+  """From a gien refresh token, generate a new access token"""
+  userRefreshToken(input: userRefreshTokenInput!): userRefreshTokenPayload
+
   """Add a review"""
   reviewCreate(input: reviewCreateInput!): reviewCreatePayload
 
@@ -393,6 +396,17 @@ input loginUserInput {
 
 type userLogoutPayload {
   error: String
+}
+
+type userRefreshTokenPayload {
+  accessToken: String!
+  error: String
+  clientMutationId: String
+}
+
+input userRefreshTokenInput {
+  refreshToken: String!
+  clientMutationId: String
 }
 
 type reviewCreatePayload {
