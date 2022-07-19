@@ -3,6 +3,8 @@ import { UserModel } from '../userModel'
 import { genSaltSync, hashSync } from 'bcrypt'
 import { userInputType, userType } from '../userTypes'
 import { mutationWithClientMutationId } from 'graphql-relay'
+import { Token } from '../../token/TokenModel'
+import { tokenType } from '../../token/tokenType'
 
 export const userCreate = mutationWithClientMutationId({
   name: 'userCreate',
@@ -16,7 +18,7 @@ export const userCreate = mutationWithClientMutationId({
       resolve: response => response.user
     },
     token: {
-      type: GraphQLString,
+      type: tokenType,
       resolve: response => response.token
     },
     error: {
@@ -52,7 +54,12 @@ export const userCreate = mutationWithClientMutationId({
       await document.validate()
       await document.save()
 
-      return { user: document, token: document.generateToken() }
+      const token = {
+        accessToken: Token.generateAccessToken(document.id),
+        refreshToken: await Token.generateRefreshToken(document.id)
+      }
+
+      return { user: document, token }
     } catch (error: any) {
       return {
         error: error.message
