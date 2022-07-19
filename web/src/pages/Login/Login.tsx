@@ -70,8 +70,8 @@ export const Login = () => {
           return
         }
 
-        if (loginUser?.token) {
-          signIn(loginUser.token)
+        if (loginUser?.token?.accessToken) {
+          signIn(loginUser.token.accessToken)
         }
 
         navigate('/')

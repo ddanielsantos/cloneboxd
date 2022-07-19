@@ -65,14 +65,14 @@ export const SignUp = () => {
           })
         }
 
-        if (data?.userCreate?.user && data?.userCreate?.token) {
+        if (data?.userCreate?.user && data?.userCreate?.token?.accessToken) {
           toast({
             title: 'Sucess',
             description: 'User created',
             status: 'success',
           })
 
-          signIn(data.userCreate.token)
+          signIn(data.userCreate.token.accessToken)
 
           navigate('/')
         }
@@ -125,9 +125,9 @@ export const SignUp = () => {
         <FormControl
           isInvalid={!!errors.username}
         >
-          <FormLabel mt={'0.5em'} htmlFor='username'>Your name</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='username'>Your username</FormLabel>
           <Input
-            placeholder="ex.: John Doe"
+            placeholder="ex.: johndoe"
             id="username"
             {...register('username')}
           />

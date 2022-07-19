@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "prebuild": "yarn relay",
     "relay": "relay-compiler",
     "relay:watch": "relay-compiler -w",
     "preview": "vite preview"
