@@ -316,9 +316,20 @@ type Mutation {
 
 type userCreatePayload {
   user: User
-  token: String
+  token: Token
   error: String
   clientMutationId: String
+}
+
+"""The access and the refresh token neccessary to authenticate"""
+type Token {
+  accessToken: String
+  refreshToken: RefreshToken
+}
+
+type RefreshToken {
+  expiresIn: String
+  refreshToken: String
 }
 
 input userCreateInput {
@@ -372,17 +383,6 @@ type loginUserPayload {
   user: User
   error: String
   clientMutationId: String
-}
-
-"""The access and the refresh token neccessary to authenticate"""
-type Token {
-  accessToken: String
-  refreshToken: RefreshToken
-}
-
-type RefreshToken {
-  expiresIn: String
-  refreshToken: String
 }
 
 input loginUserInput {

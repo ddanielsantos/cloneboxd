@@ -7,7 +7,13 @@ export const signUpMutation = graphql`
         id
         fullName
       }
-      token
+      token {
+        accessToken
+        refreshToken {
+          refreshToken
+          expiresIn
+        }
+      }
       error
     }
   }
