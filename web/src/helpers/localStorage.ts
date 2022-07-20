@@ -1,9 +1,10 @@
 export type Token = {
-  accessToken: string
+  accessToken: string | null
   refreshToken: {
-    refreshToken: string
-    expiresIn: number
-  }
+    refreshToken: string | null
+    // TODO: maybe add a alert message to login again idk
+    expiresIn: string | null
+  } | null
 }
 
 export function saveToken(token: Token) {
@@ -19,11 +20,13 @@ export function saveToken(token: Token) {
   }
 }
 
-export function getToken(): Token | undefined {
+export function getToken(): string | undefined {
   const data = sessionStorage.getItem('@cloneboxd:token')
 
   if (data) {
-    return JSON.parse(data)
+    const token: Token = JSON.parse(data)
+
+    return token.accessToken!
   }
 }
 
