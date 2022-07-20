@@ -40,12 +40,10 @@ export const Login = () => {
   const [commitLogin, isLoginLoading] = useMutation<loginMutationType>(loginMutation)
 
   useEffect(() => {
-    const isLoggedIn = token !== '' ? true : false
-
-    if (isLoggedIn) {
+    if (token) {
       navigate('/')
     }
-  }, [])
+  }, [token])
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: yupResolver(schema)
@@ -70,8 +68,8 @@ export const Login = () => {
           return
         }
 
-        if (loginUser?.token?.accessToken) {
-          signIn(loginUser.token.accessToken)
+        if (loginUser?.token) {
+          signIn(loginUser?.token)
         }
 
         navigate('/')
