@@ -1,5 +1,8 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { getToken, saveToken, removeToken, Token } from "../helpers/localStorage";
+import { saveToken, removeToken, Token } from "../helpers/localStorage";
+import { graphql, useMutation } from 'react-relay'
+
+import type { AuthContextMutation } from './__generated__/AuthContextMutation.graphql'
 
 type AuthContextProps = {
   token: Token | undefined,
@@ -10,9 +13,16 @@ type AuthContextProps = {
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<Token | undefined>(() => {
-    return getToken()
-  })
+  const [token, setToken] = useState<Token | undefined>(undefined)
+
+  const [commitRefresh] = useMutation<AuthContextMutation>(graphql`
+    mutation AuthContextMutation($input: userRefreshTokenInput!) {
+      userRefreshToken(input: $input){
+        accessToken
+        error
+      }
+    }
+  `)
 
   const signIn = (token: Token) => {
     setToken(token)
@@ -23,6 +33,47 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(undefined)
     removeToken()
   }
+
+  const everyTenMinutes = (callback: () => void): NodeJS.Timer => {
+
+    /* change --------------------------------------| 
+                                                    V this to 0.1 to test manually (yes) */
+    const TEN_MINUTES_IN_MILLISECONDS = 1000 * 60 * 10
+
+    return setInterval(callback, TEN_MINUTES_IN_MILLISECONDS)
+  }
+
+  const { refreshToken } = token || {}
+
+  useEffect(() => {
+    if (!refreshToken?.refreshToken) {
+      return
+    }
+
+    const id = everyTenMinutes(
+      () => commitRefresh({
+        variables: {
+          input: {
+            refreshToken: refreshToken?.refreshToken!
+          }
+        }, onCompleted: ({ userRefreshToken }, error) => {
+          if (error) {
+            signOut()
+            return
+          }
+
+          if (userRefreshToken?.accessToken && token) {
+            signIn({
+              ...token,
+              accessToken: userRefreshToken.accessToken
+            })
+          }
+        },
+      })
+    )
+
+    return () => clearInterval(id)
+  }, [token?.refreshToken])
 
   return (
     <AuthContext.Provider value={{ token, signIn, signOut }}>
