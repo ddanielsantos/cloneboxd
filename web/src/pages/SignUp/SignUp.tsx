@@ -65,14 +65,14 @@ export const SignUp = () => {
           })
         }
 
-        if (data?.userCreate?.user && data?.userCreate?.token?.accessToken) {
+        if (data?.userCreate?.user && data?.userCreate?.token) {
           toast({
             title: 'Sucess',
             description: 'User created',
             status: 'success',
           })
 
-          signIn(data.userCreate.token.accessToken)
+          signIn(data.userCreate.token)
 
           navigate('/')
         }
