@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signOut = () => {
     setToken(undefined)
     removeToken()
+    navigate('/login')
   }
 
   const everyTenMinutes = (callback: () => void): NodeJS.Timer => {
