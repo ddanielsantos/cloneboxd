@@ -1,7 +1,7 @@
 export type Token = {
   accessToken: string | null
   refreshToken: {
-    refreshToken: string | null
+    value: string | null
     // TODO: maybe add a alert message to login again idk
     expiresIn: string | null
   } | null

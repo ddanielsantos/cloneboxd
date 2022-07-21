@@ -10,7 +10,7 @@ export const signUpMutation = graphql`
       token {
         accessToken
         refreshToken {
-          refreshToken
+          value
           expiresIn
         }
       }

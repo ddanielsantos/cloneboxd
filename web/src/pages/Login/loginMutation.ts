@@ -6,7 +6,7 @@ export const loginMutation = graphql`
       token {
         accessToken
         refreshToken {
-          refreshToken
+          value
           expiresIn
         }
       }

@@ -5,7 +5,7 @@ import { getEnvironmentVariables } from '../../config/env'
 export interface IToken {
   user: Schema.Types.ObjectId
   expiresIn: Date
-  refreshToken: string
+  value: string
 }
 
 type AccessToken = string
@@ -23,7 +23,7 @@ const schema = new Schema<IToken, TokenModel>({
     ref: 'user',
     required: true
   },
-  refreshToken: {
+  value: {
     type: String,
     unique: true
   },
@@ -67,7 +67,7 @@ schema.static('generateRefreshToken', async function (user: string) {
   return await this.findOneAndReplace({ user }, {
     user,
     expiresIn,
-    refreshToken: token
+    value: token
   }, { new: true, upsert: true })
     .select('-user -_id')
 })
