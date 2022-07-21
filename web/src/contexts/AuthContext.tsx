@@ -1,11 +1,12 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { saveToken, removeToken, Token } from "../helpers/localStorage";
 import { graphql, useMutation } from 'react-relay'
+import { useNavigate } from 'react-router-dom'
 
 import type { AuthContextMutation } from './__generated__/AuthContextMutation.graphql'
 
 type AuthContextProps = {
-  token: Token | undefined,
+  token?: Token,
   signIn: (token: Token) => void,
   signOut: () => void
 }
@@ -14,6 +15,7 @@ export const AuthContext = createContext<AuthContextProps | undefined>(undefined
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<Token | undefined>(undefined)
+  const navigate = useNavigate()
 
   const [commitRefresh] = useMutation<AuthContextMutation>(graphql`
     mutation AuthContextMutation($input: userRefreshTokenInput!) {
@@ -35,9 +37,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const everyTenMinutes = (callback: () => void): NodeJS.Timer => {
-
-    /* change --------------------------------------| 
-                                                    V this to 0.1 to test manually (yes) */
     const TEN_MINUTES_IN_MILLISECONDS = 1000 * 60 * 10
 
     return setInterval(callback, TEN_MINUTES_IN_MILLISECONDS)
@@ -46,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { refreshToken } = token || {}
 
   useEffect(() => {
-    if (!refreshToken?.refreshToken) {
+    if (!refreshToken?.value) {
       return
     }
 
@@ -54,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       () => commitRefresh({
         variables: {
           input: {
-            refreshToken: refreshToken?.refreshToken!
+            refreshToken: refreshToken?.value!
           }
         }, onCompleted: ({ userRefreshToken }, error) => {
           if (error) {
@@ -85,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext)
 
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useAuth must be within AuthProvider")
   }
 
