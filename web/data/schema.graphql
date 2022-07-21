@@ -304,7 +304,7 @@ type Mutation {
   loginUser(input: loginUserInput!): loginUserPayload
   userLogout: userLogoutPayload
 
-  """From a gien refresh token, generate a new access token"""
+  """From a given refresh token, generate a new access token"""
   userRefreshToken(input: userRefreshTokenInput!): userRefreshTokenPayload
 
   """Add a review"""
@@ -324,15 +324,19 @@ type userCreatePayload {
   clientMutationId: String
 }
 
-"""The access and the refresh token neccessary to authenticate"""
+"""The access and the refresh token"""
 type Token {
+  """The access token, needed to authenticate"""
   accessToken: String
   refreshToken: RefreshToken
 }
 
 type RefreshToken {
+  """"""
   expiresIn: String
-  refreshToken: String
+
+  """The refresh token, used to generate a new access token"""
+  value: String
 }
 
 input userCreateInput {
@@ -399,8 +403,8 @@ type userLogoutPayload {
 }
 
 type userRefreshTokenPayload {
-  accessToken: String!
   error: String
+  accessToken: String
   clientMutationId: String
 }
 

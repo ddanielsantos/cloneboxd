@@ -6,6 +6,7 @@ import {
 import { ReviewModel } from '../reviewModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { errorField } from '../../../graphql/errorField'
 
 export const reviewDelete = mutationWithClientMutationId({
   name: 'reviewDelete',
@@ -20,10 +21,7 @@ export const reviewDelete = mutationWithClientMutationId({
       type: GraphQLString,
       resolve: response => response.deletedCount
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   },
   mutateAndGetPayload: async ({ id }, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
@@ -54,8 +52,8 @@ export const reviewDelete = mutationWithClientMutationId({
       })
 
       return response
-    } catch (error: any) {
-      return { error: error.message }
+    } catch (error: unknown) {
+      return { error: (error as Error).message }
     }
   }
 })

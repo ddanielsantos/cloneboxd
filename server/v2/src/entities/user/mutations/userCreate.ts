@@ -5,6 +5,7 @@ import { userInputType, userType } from '../userTypes'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { Token } from '../../token/TokenModel'
 import { tokenType } from '../../token/tokenType'
+import { errorField } from '../../../graphql/errorField'
 
 export const userCreate = mutationWithClientMutationId({
   name: 'userCreate',
@@ -21,10 +22,7 @@ export const userCreate = mutationWithClientMutationId({
       type: tokenType,
       resolve: response => response.token
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   },
   mutateAndGetPayload: async ({ confirmPassword, ...payload }) => {
     if (payload.password !== confirmPassword) {
@@ -60,9 +58,9 @@ export const userCreate = mutationWithClientMutationId({
       }
 
       return { user: document, token }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
-        error: error.message
+        error: (error as Error).message
       }
     }
   }

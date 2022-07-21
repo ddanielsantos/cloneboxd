@@ -1,14 +1,13 @@
 import { GraphQLFieldConfig, GraphQLObjectType, GraphQLString } from 'graphql'
 import { Token } from '../../token/TokenModel'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { errorField } from '../../../graphql/errorField'
 
 export const userLogout: GraphQLFieldConfig<any, any, any> = {
   type: new GraphQLObjectType({
     name: 'userLogoutPayload',
     fields: {
-      error: {
-        type: GraphQLString
-      }
+      ...errorField
     }
   }),
   resolve: async (_parent, _args, ctx) => {
@@ -26,9 +25,9 @@ export const userLogout: GraphQLFieldConfig<any, any, any> = {
       return {
         error: null
       }
-    } catch (e: unknown) {
+    } catch (error: unknown) {
       return {
-        error: (e as Error).message
+        error: (error as Error).message
       }
     }
   }

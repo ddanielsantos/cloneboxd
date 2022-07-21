@@ -3,12 +3,12 @@ import {
   mutationWithClientMutationId
 } from 'graphql-relay'
 import { ObjectId } from 'mongodb'
-import { GraphQLString } from 'graphql'
 import { IReview, ReviewModel } from '../reviewModel'
 import { validateMovies } from '../../movie/validateMovie'
 import { reviewInputType, reviewType } from '../reviewTypes'
 import { BetaMongoose2GQLInput } from '../../../types/types'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { errorField } from '../../../graphql/errorField'
 
 type Review = BetaMongoose2GQLInput<IReview>
 
@@ -23,10 +23,7 @@ export const reviewCreate = mutationWithClientMutationId({
       type: reviewType,
       resolve: response => response.review
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   },
   mutateAndGetPayload: async ({ ...review }: Review, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
