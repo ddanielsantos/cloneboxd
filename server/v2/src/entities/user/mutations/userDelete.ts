@@ -6,6 +6,7 @@ import {
 import { UserModel } from '../userModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
+import { errorField } from '../../../graphql/errorField'
 
 export const userDelete = mutationWithClientMutationId({
   name: 'userDelete',
@@ -20,10 +21,7 @@ export const userDelete = mutationWithClientMutationId({
       type: GraphQLString,
       resolve: response => response.deletedCount
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   },
   mutateAndGetPayload: async ({ id }, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
@@ -47,8 +45,8 @@ export const userDelete = mutationWithClientMutationId({
       })
 
       return response
-    } catch (error: any) {
-      return { error: error.message }
+    } catch (error: unknown) {
+      return { error: (error as Error).message }
     }
   }
 })

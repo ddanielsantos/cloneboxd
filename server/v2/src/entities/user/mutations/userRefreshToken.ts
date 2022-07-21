@@ -1,6 +1,7 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { Token } from '../../token/TokenModel'
+import { errorField } from '../../../graphql/errorField'
 
 type RefreshInput = {
   refreshToken: string
@@ -8,7 +9,7 @@ type RefreshInput = {
 
 export const userRefreshToken = mutationWithClientMutationId({
   name: 'userRefreshToken',
-  description: 'From a gien refresh token, generate a new access token',
+  description: 'From a given refresh token, generate a new access token',
   inputFields: {
     refreshToken: {
       type: new GraphQLNonNull(GraphQLString)
@@ -30,13 +31,10 @@ export const userRefreshToken = mutationWithClientMutationId({
     }
   },
   outputFields: {
+    ...errorField,
     accessToken: {
-      type: new GraphQLNonNull(GraphQLString),
-      resolve: response => response.accessToken
-    },
-    error: {
       type: GraphQLString,
-      resolve: response => response.error
+      resolve: response => response.accessToken
     }
   }
 })

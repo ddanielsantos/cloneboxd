@@ -8,6 +8,7 @@ import { ReviewModel } from '../reviewModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { reviewType } from '../reviewTypes'
+import { errorField } from '../../../graphql/errorField'
 
 export const reviewUpdate = mutationWithClientMutationId({
   name: 'reviewUpdate',
@@ -34,10 +35,7 @@ export const reviewUpdate = mutationWithClientMutationId({
       type: reviewType,
       resolve: response => response.review
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   },
   mutateAndGetPayload: async ({ ...review }, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
@@ -72,9 +70,9 @@ export const reviewUpdate = mutationWithClientMutationId({
       return {
         review: result
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
-        error: error.message
+        error: (error as Error).message
       }
     }
   }

@@ -4,6 +4,7 @@ import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { tokenType } from '../../token/tokenType'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { Token } from '../../token/TokenModel'
+import { errorField } from '../../../graphql/errorField'
 
 type LoginInput = {
   email: string,
@@ -55,9 +56,9 @@ export const loginUser = mutationWithClientMutationId({
         token,
         user
       }
-    } catch (e: unknown) {
+    } catch (error: unknown) {
       return {
-        error: (e as Error).message
+        error: (error as Error).message
       }
     }
   },
@@ -70,9 +71,6 @@ export const loginUser = mutationWithClientMutationId({
       type: userType,
       resolve: response => response.user
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   }
 })

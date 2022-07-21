@@ -8,6 +8,7 @@ import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { userType } from '../userTypes'
 import { hashSync, genSaltSync } from 'bcrypt'
+import { errorField } from '../../../graphql/errorField'
 
 export const userUpdate = mutationWithClientMutationId({
   name: 'userUpdate',
@@ -30,10 +31,7 @@ export const userUpdate = mutationWithClientMutationId({
       type: userType,
       resolve: response => response.user
     },
-    error: {
-      type: GraphQLString,
-      resolve: response => response.error
-    }
+    ...errorField
   },
   mutateAndGetPayload: async ({ id, ...user }, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
@@ -67,9 +65,9 @@ export const userUpdate = mutationWithClientMutationId({
       }
 
       return { user: result }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
-        error: error.message
+        error: (error as Error).message
       }
     }
   }
