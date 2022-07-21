@@ -1,0 +1,20 @@
+{
+  "name": "cloneboxd",
+  "version": "1.0.0",
+  "description": "An open-source alternative to Letterboxd",
+  "repository": "https://github.com/ddanielsantos/cloneboxd.git",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:all": "concurrently -kill-others-on-fail  \"yarn dev:server\" \"yarn dev:web\"",
+    "dev:server": "yarn workspace server dev",
+    "dev:web": "yarn workspace web dev"
+  },
+  "author": "Daniel Santos <contatodanieljob@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "concurrently": "^7.3.0"
+  }
+}
