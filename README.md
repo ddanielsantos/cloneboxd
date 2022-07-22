@@ -5,36 +5,32 @@
 
 </p>
 
-<p align="center">
-  <a>
-  https://cloneboxd.vercel.app/
-  </a>
-</p>
-
 ### What is Cloneboxd?
 
-Cloneboxd it's a web application based on Letterboxd, you can expect the same functionalities and some more if I stop procastinating. This project was my first Rest API and at the start of 2022 I tought that would be a good idea to ressurrect it and implement what I'm studying at the moment.
+Cloneboxd it's a web application based on [Letterboxd](https://letterboxd.com), it uses primarly JavaScript both on the frontend and backend, the data about movies and persons come from the [The Movie Database API](https://developers.themoviedb.org/3), other data are stored on [MongoDB Atlas](https://www.mongodb.com/). You can find more about the stack [here](#stack)
 
-### Want to contribute?
+### Demo
 
-- Create a fork
-- Create a branch named ``your-feature-here``
-- Open a pull request
+![a GIF showing some pages of the application](./demo.gif)
 
-### Stack:
+### Stack
 
 #### Frontend
 
-- React
-- Vite
-- Relay
-- Chakra UI
-- Yup
+- [React](https://reactjs.org/) to compose the UI
+- [Relay](https://relay.dev/) to communicate with the GraphQL server and manage the data fetching declaratively
+- [React Router](https://reactrouter.com/docs/en/v6) to manage the routes
+- [Chakra UI](https://chakra-ui.com/) to help with the styling and accessibility
+- [Vite](https://vitejs.dev/) to improve bundling and development
 
 #### Backend
 
-- NodeJS
-- Koa
-- GraphQL
-- MongoDB
-- Mongoose
+- [NodeJS](https://nodejs.org/en/) to run the server
+- [Koa](https://koajs.com/) to manage HTTP requests and responses
+- [GraphQL](https://graphql.org/) to manage the data communication with the frontend declaratively
+- [MongoDB](https://www.mongodb.com/) to store the data in a scalable way using NoSQL
+- [Mongoose](https://mongoosejs.com/) to help data modeling and querying in MongoDB
+
+### Want to contribute?
+
+Cloneboxd is open to contributions, if you want to help with the development of the application, please open an issue or pull request.
