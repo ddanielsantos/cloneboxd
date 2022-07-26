@@ -18,6 +18,7 @@ export const TopReviews = ({ data }: Props) => {
             text
             user{
               fullName
+              username
             }
             movie {
               title
