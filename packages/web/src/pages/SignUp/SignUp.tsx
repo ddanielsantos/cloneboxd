@@ -69,7 +69,7 @@ export const SignUp = () => {
           toast({
             title: 'Sucess',
             description: 'User created',
-            status: 'success',
+            status: 'success'
           })
 
           signIn(data.userCreate.token)

@@ -7,7 +7,7 @@ export type Token = {
   } | null
 }
 
-export function saveToken(token: Token) {
+export function saveToken (token: Token) {
   try {
     localStorage.setItem('@cloneboxd:token', JSON.stringify(token))
     return {
@@ -15,12 +15,12 @@ export function saveToken(token: Token) {
     }
   } catch {
     return {
-      error: 'Could not save token',
+      error: 'Could not save token'
     }
   }
 }
 
-export function getToken(): string | undefined {
+export function getToken (): string | undefined {
   const data = localStorage.getItem('@cloneboxd:token')
 
   if (data) {
@@ -30,6 +30,6 @@ export function getToken(): string | undefined {
   }
 }
 
-export function removeToken() {
+export function removeToken () {
   localStorage.removeItem('@cloneboxd:token')
 }

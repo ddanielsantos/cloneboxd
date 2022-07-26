@@ -1,10 +1,10 @@
-import { graphql } from "relay-runtime"
+import { graphql } from 'relay-runtime'
 import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, Spinner } from '@chakra-ui/react'
-import { startTransition, useState, Fragment, Suspense } from "react"
-import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from "react-relay"
+import { startTransition, useState, Fragment, Suspense, Dispatch, SetStateAction } from 'react'
+import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay'
 
 import type { SearchMovieFromTMDB_Query } from './__generated__/SearchMovieFromTMDB_Query.graphql'
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 
 const IMAGE_URL_PREFIX = 'https://image.tmdb.org/t/p/w92'
 
@@ -23,7 +23,7 @@ const query = graphql`
   }
 `
 
-const SearchBar = ({ search, setTitleToSearch }: { search: () => void, setTitleToSearch: React.Dispatch<React.SetStateAction<string>> }): JSX.Element => {
+const SearchBar = ({ search, setTitleToSearch }: { search: () => void, setTitleToSearch: Dispatch<SetStateAction<string>> }): JSX.Element => {
   return (
     <>
       <Text
@@ -98,7 +98,6 @@ type Props = {
   queryRef: PreloadedQuery<SearchMovieFromTMDB_Query, Record<string, unknown>>
 }
 
-
 const SearchResult = ({ queryRef }: Props): JSX.Element => {
   const navigate = useNavigate()
   const { searchMovieFromTMDB } = usePreloadedQuery<SearchMovieFromTMDB_Query>(query, queryRef)
@@ -125,7 +124,7 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
       <Text
         my={'1em'}
         fontSize="2xl"
-        fontWeight={"bold"}
+        fontWeight={'bold'}
       >
         Result:
       </Text>
@@ -146,7 +145,7 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
                 // border={"1px solid red"}
                 p={'1em'}
                 gap={'0.5em'}
-                cursor={"pointer"}
+                cursor={'pointer'}
                 alignItems={'center'}
                 // TODO: in the movie details page, check if the movie id resolves to a movie
                 onClick={() => {

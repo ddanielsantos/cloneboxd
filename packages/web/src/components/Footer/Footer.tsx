@@ -1,4 +1,4 @@
-import { Flex, Link, Text, useColorMode } from "@chakra-ui/react"
+import { Flex, Link, Text, useColorMode } from '@chakra-ui/react'
 
 export const Footer = () => {
   const { colorMode } = useColorMode()
@@ -6,7 +6,7 @@ export const Footer = () => {
   return (
     <Flex
       as={'footer'}
-      p={"1em"}
+      p={'1em'}
       w='100%'
       bg={colorMode === 'light' ? 'blackAlpha.100' : 'whiteAlpha.100'}
       justifyContent={'center'}

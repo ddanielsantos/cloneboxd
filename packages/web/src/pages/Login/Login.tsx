@@ -166,7 +166,7 @@ export const Login = () => {
         <Text
           textAlign={'center'}
         >
-          Don't have an account? {' '}
+          Don&apos;t have an account? {' '}
           <Link
             flex={1}
             as={RouterLink}

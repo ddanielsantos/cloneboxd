@@ -7,7 +7,7 @@ type Props = {
   data: Greeting__user$key
 }
 
-export function Greeting(props: Props) {
+export function Greeting (props: Props) {
   const data = useFragment(graphql`
     fragment Greeting__user on Query {
       me {

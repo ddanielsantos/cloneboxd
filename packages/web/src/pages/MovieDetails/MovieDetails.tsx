@@ -4,7 +4,6 @@ import {
   Box,
   Flex,
   Grid,
-  Link,
   Tabs,
   Image,
   HStack,
@@ -17,159 +16,16 @@ import {
   AvatarGroup,
   VStack,
   Button,
-  Divider,
-  IconButton,
+  Divider
 } from '@chakra-ui/react'
 import { Tooltip } from '../../components/Tooltip/Tooltip'
 import { useParams } from 'react-router-dom'
-import { AiFillHeart, AiOutlineComment, AiOutlineHeart } from 'react-icons/ai'
 import { Header } from '../../components/Header/Header'
 import { Footer } from '../../components/Footer/Footer'
 import { graphql, useLazyLoadQuery } from 'react-relay'
 import { MovieDetailsQuery } from './__generated__/MovieDetailsQuery.graphql'
 import { LatestReviews } from './LatestReviews/LatestReviews'
 import { TopReviews } from './TopReviews/TopReviews'
-
-const recentReviews = [
-  {
-    id: 1,
-    user: {
-      name: 'John Doe',
-      image: 'https://via.placeholder.com/100x100'
-    },
-    rating: 2.5,
-    content: 'Mid',
-    date: '2020-01-01',
-    likes: [
-      {
-        id: 1,
-        user: {
-          name: 'John Doe'
-        }
-      }, {
-        id: 2,
-        user: {
-          name: 'Some friend'
-        }
-      }
-    ],
-    comments: [
-      {
-        id: 1,
-        user: {
-          name: 'Some friend'
-        },
-        content: 'You are right',
-      }
-    ]
-  },
-  {
-    id: 2,
-    user: {
-      name: 'John Doe',
-      image: 'https://via.placeholder.com/100x100'
-    },
-    rating: 5,
-    content: 'Dope',
-    date: '2020-01-01',
-    likes: [
-      {
-        id: 1,
-        user: {
-          name: 'John Doe'
-        }
-      }, {
-        id: 2,
-        user: {
-          name: 'Some friend'
-        }
-      }
-    ],
-    comments: [
-      {
-        id: 1,
-        user: {
-          name: 'Some friend'
-        },
-        content: 'You are right',
-      }
-    ]
-  },
-  {
-    id: 3,
-    user: {
-      name: 'John Doe',
-      image: 'https://via.placeholder.com/100x100'
-    },
-    rating: 5,
-    content: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti reprehenderit, laborum, delectus ab saepe quam magni voluptates, quod eaque iusto suscipit qui ea tempore accusamus cumque aliquam nam neque labore?',
-    date: '2020-01-01',
-    likes: [
-      {
-        id: 1,
-        user: {
-          name: 'John Doe'
-        }
-      }, {
-        id: 2,
-        user: {
-          name: 'Some friend'
-        }
-      }
-    ],
-    comments: [
-      {
-        id: 1,
-        user: {
-          name: 'Some friend'
-        },
-        content: 'You are right',
-      }
-    ]
-  },
-  {
-    id: 4,
-    user: {
-      name: 'John Doe',
-      image: 'https://via.placeholder.com/100x100'
-    },
-    rating: 5,
-    content: 'Cool',
-    date: '2020-01-01',
-    comments: [
-      {
-        id: 1,
-        user: {
-          name: 'Some friend'
-        },
-        content: 'You are right',
-      }
-    ]
-  },
-  {
-    id: 5,
-    user: {
-      name: 'John Doe',
-      image: 'https://via.placeholder.com/100x100'
-    },
-    rating: 5,
-    content: 'Cool',
-    date: '2020-01-01',
-    likes: [
-      {
-        id: 1,
-        user: {
-          name: 'John Doe'
-        }
-      }, {
-        id: 2,
-        user: {
-          name: 'Some friend'
-        }
-      }
-    ]
-  },
-]
 
 export const MovieDetails = () => {
   const { colorMode } = useColorMode()
@@ -258,7 +114,6 @@ export const MovieDetails = () => {
 
         </GridItem>
 
-
         {
           data.singleMovie?.posterPath && <GridItem
             colSpan={[4, 1]}
@@ -281,7 +136,6 @@ export const MovieDetails = () => {
 
           </GridItem>
         }
-
 
         <GridItem
           colSpan={[4, 3]}
@@ -339,7 +193,7 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    data.singleMovie?.genres.map((genre, index) => <Box key={index} padding={1} bg={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'} cursor={'pointer'} borderRadius={'md'} _hover={{ bg: colorMode === 'light' ? 'gray.400' : 'gray.500', transitionDuration: '0.5s', }} fontSize={'sm'} >{genre}</Box>)
+                    data.singleMovie?.genres.map((genre, index) => <Box key={index} padding={1} bg={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'} cursor={'pointer'} borderRadius={'md'} _hover={{ bg: colorMode === 'light' ? 'gray.400' : 'gray.500', transitionDuration: '0.5s' }} fontSize={'sm'} >{genre}</Box>)
                   }
                 </Flex>
               </TabPanel>
@@ -455,7 +309,6 @@ export const MovieDetails = () => {
           </Text>
 
           <Divider my={'1em'} />
-
 
           <TopReviews data={data} />
 

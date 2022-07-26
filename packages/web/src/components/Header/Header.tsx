@@ -4,7 +4,7 @@ import {
   Button,
   useDisclosure,
   useColorMode,
-  Avatar,
+  Avatar
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { HeaderDrawer } from '../HeaderDrawer/HeaderDrawer'
@@ -17,7 +17,7 @@ export const Header = () => {
   return (
     <Flex
       as="header"
-      p={"1em"}
+      p={'1em'}
       w='100%'
       bg={colorMode === 'light' ? 'blackAlpha.100' : 'whiteAlpha.100'}
       justifyContent={'center'}
@@ -25,7 +25,7 @@ export const Header = () => {
       <Flex
         alignItems={'center'}
         w={['100%', '100%', '48em']}
-        justifyContent={"space-between"}
+        justifyContent={'space-between'}
       >
         <Button
           variant={'unstyled'}

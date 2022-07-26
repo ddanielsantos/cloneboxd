@@ -1,5 +1,4 @@
 import { Box, useColorMode, Text, Tooltip as TT } from '@chakra-ui/react'
-import React from 'react'
 
 export const Tooltip = ({ inside, popup }: { inside: string, popup: string }) => {
   const { colorMode } = useColorMode()
@@ -12,7 +11,7 @@ export const Tooltip = ({ inside, popup }: { inside: string, popup: string }) =>
       borderRadius={'md'}
       _hover={{
         bg: colorMode === 'light' ? 'gray.400' : 'gray.500',
-        transitionDuration: '0.5s',
+        transitionDuration: '0.5s'
 
       }}
     >

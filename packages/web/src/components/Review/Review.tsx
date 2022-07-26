@@ -24,7 +24,7 @@ export const Review = (props: Props) => {
       }}
       _hover={{
         bg: 'gray.200',
-        transitionDuration: '0.5s',
+        transitionDuration: '0.5s'
       }}
       gap={'1em'}
       display={'flex'}

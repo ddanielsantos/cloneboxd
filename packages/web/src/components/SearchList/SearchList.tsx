@@ -6,7 +6,7 @@ type Props = {
   queryReference: any
 }
 
-export const SearchList = ({ queryReference, query, }: Props) => {
+export const SearchList = ({ queryReference, query }: Props) => {
   const data = usePreloadedQuery<SearchMovieQuery>(query, queryReference)
 
   const { searchMovieFromTMDB } = data

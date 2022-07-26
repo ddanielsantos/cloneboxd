@@ -1,6 +1,6 @@
-import { getToken } from "../helpers/localStorage";
+import { getToken } from '../helpers/localStorage'
 
-async function fetchGraphQL(text: string, variables: {}) {
+async function fetchGraphQL (text: string, variables: {}) {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/'
 
   const authorization = `Bearer ${getToken()}`
@@ -13,11 +13,11 @@ async function fetchGraphQL(text: string, variables: {}) {
     },
     body: JSON.stringify({
       query: text,
-      variables,
-    }),
-  });
+      variables
+    })
+  })
 
-  return await response.json();
+  return await response.json()
 }
 
-export default fetchGraphQL;
+export default fetchGraphQL

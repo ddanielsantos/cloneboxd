@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import theme from './theme'
 import '@fontsource/inter/800.css'
 import '@fontsource/inter/700.css'
@@ -10,7 +11,7 @@ import RelayEnvironment from './relay/environment'
 import { AuthProvider } from './contexts/AuthContext'
 import { RelayEnvironmentProvider } from 'react-relay/hooks'
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers ({ children }: { children: ReactNode }) {
   return (
     <RelayEnvironmentProvider environment={RelayEnvironment}>
       <BrowserRouter>

@@ -1,8 +1,8 @@
-// I picked this code from ↓ and adapted it 
+// I picked this code from ↓ and adapted it
 // https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/error_boundaries/
 
-import { Button, Center, Text } from "@chakra-ui/react";
-import { Component, ErrorInfo, ReactNode } from "react";
+import { Button, Center, Text } from '@chakra-ui/react'
+import { Component, ErrorInfo, ReactNode } from 'react'
 
 interface Props {
   children: ReactNode;
@@ -19,18 +19,18 @@ interface State {
 class ErrorBoundaryRetry extends Component<Props, State> {
   public state: State = {
     hasError: false,
-    error: null,
-  };
-
-  public static getDerivedStateFromError(_: Error): State {
-    return { hasError: true, error: { message: _.message, source: _.cause } };
+    error: null
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+  public static getDerivedStateFromError (_: Error): State {
+    return { hasError: true, error: { message: _.message, source: _.cause } }
   }
 
-  public render() {
+  public componentDidCatch (error: Error, errorInfo: ErrorInfo) {
+    console.error('Uncaught error:', error, errorInfo)
+  }
+
+  public render () {
     if (this.state.hasError) {
       return (
         <Center>
@@ -43,8 +43,8 @@ class ErrorBoundaryRetry extends Component<Props, State> {
       )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
-export default ErrorBoundaryRetry;
+export default ErrorBoundaryRetry

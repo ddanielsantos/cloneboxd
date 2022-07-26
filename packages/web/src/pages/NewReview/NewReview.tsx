@@ -10,17 +10,17 @@ import {
   FormControl,
   useNumberInput,
   FormErrorMessage
-} from "@chakra-ui/react"
-import * as yup from "yup"
-import { useMutation } from "react-relay"
-import { useNavigate } from "react-router-dom"
-import { Main } from "../../components/Main/Main"
-import { yupResolver } from "@hookform/resolvers/yup"
+} from '@chakra-ui/react'
+import * as yup from 'yup'
+import { useMutation } from 'react-relay'
+import { useNavigate } from 'react-router-dom'
+import { Main } from '../../components/Main/Main'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { FormProvider, useForm } from 'react-hook-form'
-import { Header } from "../../components/Header/Header"
-import { createReviewMutation } from "./createReviewMutation"
-import { SearchMovie } from "../../components/SearchMovie/SearchMovie"
-import { createReviewMutation as createReviewMutationType } from "./__generated__/createReviewMutation.graphql"
+import { Header } from '../../components/Header/Header'
+import { createReviewMutation } from './createReviewMutation'
+import { SearchMovie } from '../../components/SearchMovie/SearchMovie'
+import { createReviewMutation as createReviewMutationType } from './__generated__/createReviewMutation.graphql'
 
 export type FormData = {
   movie: string
@@ -40,7 +40,7 @@ const schema = yup.object({
     message: 'The rating must be a multiple of 0.5',
     exclusive: false,
     params: {
-      min: 0,
+      min: 0
     }
   }).min(0, 'The minimum is 0').max(5, 'The maximum is 5').typeError('The rating must be a number'),
   watchedAt: yup.date().typeError('The watched date must be valid').max(new Date(), 'The date cannot be in the future')
@@ -62,7 +62,7 @@ export const NewReview = () => {
     step: 0.5,
     min: 0.0,
     max: 5,
-    defaultValue: 0.0,
+    defaultValue: 0.0
   })
 
   const incrementRatingButton = getIncrementButtonProps()
@@ -88,7 +88,6 @@ export const NewReview = () => {
             status: 'error',
             duration: 2500
           })
-
         }
 
         if (reviewCreate?.review?.id) {
@@ -101,8 +100,6 @@ export const NewReview = () => {
 
           reset()
         }
-
-        return
       },
       onError: (_) => {
         toast({
@@ -138,7 +135,7 @@ export const NewReview = () => {
               margin: 0,
               gap: '1em',
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'column'
             }}
             onSubmit={handleSubmit(onSubmit)}
           >

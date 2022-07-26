@@ -8,11 +8,11 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton
-} from "@chakra-ui/react"
-import { Fragment } from "react"
-import { useNavigate } from "react-router-dom"
-import { useAuth } from "../../contexts/AuthContext"
-import { ThemeSwitcher } from "../ThemeSwitcher/ThemeSwitcher"
+} from '@chakra-ui/react'
+import { Fragment } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
+import { ThemeSwitcher } from '../ThemeSwitcher/ThemeSwitcher'
 
 type Props = {
   isOpen: boolean

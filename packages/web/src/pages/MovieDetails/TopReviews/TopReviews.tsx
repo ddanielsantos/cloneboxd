@@ -1,6 +1,6 @@
-import { VStack, Text } from "@chakra-ui/react"
-import { graphql, useFragment } from "react-relay"
-import { Review } from "../../../components/Review/Review"
+import { VStack, Text } from '@chakra-ui/react'
+import { graphql, useFragment } from 'react-relay'
+import { Review } from '../../../components/Review/Review'
 
 import type { TopReviews__review$key } from './__generated__/TopReviews__review.graphql'
 

@@ -1,9 +1,9 @@
-import { Flex, Text, Divider } from '@chakra-ui/react';
+import { Flex, Text, Divider } from '@chakra-ui/react'
 
 type Props = {
   text: string;
 };
-export function TextDivider({ text }: Props) {
+export function TextDivider ({ text }: Props) {
   return (
     <Flex
       alignItems={'center'}
@@ -18,5 +18,5 @@ export function TextDivider({ text }: Props) {
       <Divider />
 
     </Flex>
-  );
+  )
 }
