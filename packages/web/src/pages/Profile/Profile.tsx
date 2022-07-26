@@ -68,7 +68,7 @@ export const Profile = () => {
         alignItems={'center'}
       >
         <Text>
-          Sorry, this user doesn't exist
+          Sorry, this user doesn&apos;t exist
         </Text>
 
         <Button
@@ -161,7 +161,7 @@ export const Profile = () => {
                           borderRadius='md'
                           _hover={{
                             bg: colorMode === 'light' ? 'gray.200' : 'whiteAlpha.200',
-                            transitionDuration: '0.5s',
+                            transitionDuration: '0.5s'
                           }}
                         >
                           <Image
@@ -200,7 +200,7 @@ export const Profile = () => {
                   w='100%'
                   _hover={{
                     bg: 'gray.200',
-                    transitionDuration: '0.5s',
+                    transitionDuration: '0.5s'
                   }}
                 >
                   <Text>

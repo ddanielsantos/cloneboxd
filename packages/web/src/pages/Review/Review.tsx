@@ -39,7 +39,7 @@ export const Review = () => {
         alignItems={'center'}
       >
         <Text>
-          Sorry, this review doesn't exist
+          Sorry, this review doesn&apos;t exist
         </Text>
 
         <Button

@@ -4,17 +4,17 @@ import {
   FormLabel,
   FormControl,
   FormErrorMessage,
-  Spinner,
-} from "@chakra-ui/react"
-import { graphql } from "relay-runtime"
-import { Suspense, useState } from "react"
-import { useQueryLoader } from "react-relay"
-import { useFormContext } from "react-hook-form"
-import { SearchList } from "../SearchList/SearchList"
-import { useTimedSearch } from "../../hooks/useTimedSearch"
+  Spinner
+} from '@chakra-ui/react'
+import { graphql } from 'relay-runtime'
+import { Suspense, useState } from 'react'
+import { useQueryLoader } from 'react-relay'
+import { useFormContext } from 'react-hook-form'
+import { SearchList } from '../SearchList/SearchList'
+import { useTimedSearch } from '../../hooks/useTimedSearch'
 
-import type { FormData } from "../../pages/NewReview/NewReview"
-import type { SearchMovieQuery as SearchMovieQueryType } from "./__generated__/SearchMovieQuery.graphql"
+import type { FormData } from '../../pages/NewReview/NewReview'
+import type { SearchMovieQuery as SearchMovieQueryType } from './__generated__/SearchMovieQuery.graphql'
 
 export const SearchMovieQuery = graphql`
   query SearchMovieQuery($title: String!) {
@@ -73,7 +73,7 @@ export const SearchMovie = () => {
             id="movie"
             placeholder="select a movie"
             _placeholder={{
-              color: 'gray.500',
+              color: 'gray.500'
             }}
             {...register('movie')}
           >

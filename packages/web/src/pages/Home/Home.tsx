@@ -3,12 +3,12 @@ import {
   VStack,
   HStack,
   Button
-} from "@chakra-ui/react"
-import { useNavigate } from "react-router-dom"
-import { Main } from "../../components/Main/Main"
-import { Header } from "../../components/Header/Header"
-import { Greeting } from "../../components/Greeting/Greeting"
-import { graphql, useLazyLoadQuery } from "react-relay"
+} from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
+import { Main } from '../../components/Main/Main'
+import { Header } from '../../components/Header/Header'
+import { Greeting } from '../../components/Greeting/Greeting'
+import { graphql, useLazyLoadQuery } from 'react-relay'
 
 import type { HomeQuery } from './__generated__/HomeQuery.graphql'
 

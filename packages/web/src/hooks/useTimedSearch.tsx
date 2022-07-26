@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
 type Options = {
   titleToSearch: string,
@@ -6,14 +6,13 @@ type Options = {
   searchFunction: ({ title }: { title: string }) => void
 }
 
-export function useTimedSearch({ titleToSearch, searchFunction, delay }: Options) {
+export function useTimedSearch ({ titleToSearch, searchFunction, delay }: Options) {
   useEffect(() => {
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (titleToSearch) {
         searchFunction({ title: titleToSearch })
       }
     }, delay)
-
 
     return () => {
       clearTimeout(timer)

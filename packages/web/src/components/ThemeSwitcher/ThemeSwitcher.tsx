@@ -1,5 +1,5 @@
-import { Button, useColorMode } from "@chakra-ui/react"
-import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi"
+import { Button, useColorMode } from '@chakra-ui/react'
+import { HiOutlineMoon, HiOutlineSun } from 'react-icons/hi'
 
 export const ThemeSwitcher = () => {
   const { colorMode, setColorMode } = useColorMode()

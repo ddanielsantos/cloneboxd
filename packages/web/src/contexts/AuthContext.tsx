@@ -1,5 +1,5 @@
-import { createContext, useState, useContext, useEffect } from "react";
-import { saveToken, removeToken, Token } from "../helpers/localStorage";
+import { createContext, useState, useContext, useEffect, ReactNode } from 'react'
+import { saveToken, removeToken, Token } from '../helpers/localStorage'
 import { graphql, useMutation } from 'react-relay'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ type AuthContextProps = {
 
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<Token | undefined>(undefined)
   const navigate = useNavigate()
 
@@ -56,7 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           input: {
             refreshToken: refreshToken?.value!
           }
-        }, onCompleted: ({ userRefreshToken }, error) => {
+        },
+        onCompleted: ({ userRefreshToken }, error) => {
           if (error) {
             signOut()
             return
@@ -68,7 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               accessToken: userRefreshToken.accessToken
             })
           }
-        },
+        }
       })
     )
 
@@ -86,7 +87,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext)
 
   if (!context) {
-    throw new Error("useAuth must be within AuthProvider")
+    throw new Error('useAuth must be within AuthProvider')
   }
 
   return context

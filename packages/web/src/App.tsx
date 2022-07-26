@@ -3,7 +3,7 @@ import { Routes } from './routes/Routes'
 import { Providers } from './Providers'
 import ErrorBoundaryRetry from './ErrorBoundary'
 
-function App() {
+function App () {
   return (
     <Center h={'100vh'}>
       <Routes />
@@ -11,7 +11,7 @@ function App() {
   )
 }
 
-function AppRoot() {
+function AppRoot () {
   return (
     <Providers>
       <ErrorBoundaryRetry>

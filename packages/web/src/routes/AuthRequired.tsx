@@ -1,5 +1,5 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 export const AuthRequired = ({ children }: { children: JSX.Element }) => {
   const { token } = useAuth()

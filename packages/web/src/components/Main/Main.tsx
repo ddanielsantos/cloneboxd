@@ -1,5 +1,5 @@
-import { VStack } from '@chakra-ui/react'
 import React from 'react'
+import { VStack } from '@chakra-ui/react'
 
 type Props = {
   children: React.ReactNode
@@ -13,7 +13,7 @@ export const Main = ({ children }: Props) => {
       alignSelf={'center'}
       borderRadius={'10px'}
       alignItems={'flex-start'}
-      w={["100%", "100%", "48em"]}
+      w={['100%', '100%', '48em']}
     >
       {children}
     </VStack>
