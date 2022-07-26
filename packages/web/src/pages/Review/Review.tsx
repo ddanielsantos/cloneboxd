@@ -23,7 +23,9 @@ export const Review = () => {
           watchedAt
           rating
           user {
+            id
             fullName
+            username
           }
           text
         }
@@ -76,7 +78,7 @@ export const Review = () => {
           alignItems={'start'}
           gap='0.3em'
         >
-          <Text
+          <Link
             onClick={() => {
               startTransition(() => navigate(`/movie/${singleReview?.movie.id}`))
             }}
@@ -84,8 +86,7 @@ export const Review = () => {
             fontWeight={'extrabold'}
           >
             {singleReview?.movie.title}
-          </Text>
-
+            </Link>
           <Text>
             {singleReview?.movie.releaseDate.slice(0, 4)}
           </Text>
@@ -103,7 +104,11 @@ export const Review = () => {
               <Text>
                 a {singleReview?.rating} &#9733; review by
               </Text>
-              <Link>
+              <Link
+                onClick={() => {
+                  startTransition(() => navigate(`/profile/${singleReview?.user.username}`))
+                }}
+              >
                 {singleReview?.user.fullName}
               </Link>
             </Flex>

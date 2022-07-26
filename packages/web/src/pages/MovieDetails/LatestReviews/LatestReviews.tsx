@@ -17,6 +17,7 @@ export const LatestReviews = ({ data }: Props) => {
             text
             user{
               fullName
+              username
             }
             movie {
               title
