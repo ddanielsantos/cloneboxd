@@ -8,6 +8,7 @@ type Props = NullableProps<{
   rating: number
   user: {
     fullName: string
+    username: string
   }
   text: string
 }>
@@ -41,6 +42,10 @@ export const Review = (props: Props) => {
           a {props?.rating} &#x2605; review by
           <Link
             ml={1}
+            onClick={(event) => {
+              event.stopPropagation()
+              startTransition(() => navigate(`/profile/${props?.user?.username}`))
+            }}
           >
             {props?.user?.fullName}
           </Link>
