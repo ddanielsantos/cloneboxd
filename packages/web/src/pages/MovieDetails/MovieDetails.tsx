@@ -12,8 +12,6 @@ import {
   TabPanel,
   TabPanels,
   useColorMode,
-  Avatar,
-  AvatarGroup,
   VStack,
   Button,
   Divider
@@ -26,6 +24,7 @@ import { graphql, useLazyLoadQuery } from 'react-relay'
 import { MovieDetailsQuery } from './__generated__/MovieDetailsQuery.graphql'
 import { LatestReviews } from './LatestReviews/LatestReviews'
 import { TopReviews } from './TopReviews/TopReviews'
+import { Bar, BarChart, XAxis } from 'recharts'
 
 export const MovieDetails = () => {
   const { colorMode } = useColorMode()
@@ -54,13 +53,47 @@ export const MovieDetails = () => {
         genres
       }
 
+      movieSummary(id: $id) {
+        totalWatches
+        uniqueWatches
+        reviewsPerRating {
+          rating
+          count
+        }
+      }
+
       ...LatestReviews__review
 
       ...TopReviews__review
     }
   `, { id: movieId ?? '' })
 
-  // console.log(data.)
+  function getAverageRating(): number | string {
+    if (
+      !data.movieSummary?.totalWatches ||
+      !data?.movieSummary?.reviewsPerRating
+    ) {
+      return 'No reviews'
+    }
+
+    const ratingSum = data.movieSummary.reviewsPerRating.reduce((acc, curr) => {
+      const { count, rating } = curr || {}
+
+      if (count && rating) {
+        return (count * rating) + acc
+      }
+
+      return acc
+    }, 0) || 0
+
+    return (ratingSum / data.movieSummary.totalWatches).toFixed(2)
+  }
+
+  const averageRating = getAverageRating()
+  const { reviewsPerRating } = data.movieSummary || {}
+
+  // creates a mutable copy
+  const chartData = reviewsPerRating?.map(v => v)
 
   return (
     <Box
@@ -76,7 +109,6 @@ export const MovieDetails = () => {
 
       <Grid
         templateColumns='repeat(4, 1fr)'
-        // m={'1em'}
         p="1em"
         w={['100%', '100%', '48em']}
         gap={5}
@@ -101,7 +133,7 @@ export const MovieDetails = () => {
               fontSize={'md'}
             >
               {
-                data.singleMovie?.releaseDate ? new Date(data.singleMovie?.releaseDate).getFullYear() : 'Sem ano'
+                data.singleMovie?.releaseDate ? new Date(data.singleMovie?.releaseDate).getFullYear() : 'No year'
               }
             </Text>
 
@@ -109,7 +141,7 @@ export const MovieDetails = () => {
 
             <Text
               fontSize={'md'}
-            >{data.singleMovie?.rating} &#9733;</Text>
+            >{averageRating} &#9733;</Text>
           </HStack>
 
         </GridItem>
@@ -119,7 +151,7 @@ export const MovieDetails = () => {
             colSpan={[4, 1]}
             alignContent={'end'}
             order={[2, 3]}
-            justifySelf={['center', 'start', 'center']}
+            justifySelf={'center'}
           >
             <Image
               width={'150px'}
@@ -202,52 +234,35 @@ export const MovieDetails = () => {
         </GridItem>
 
         <GridItem
-          colStart={[null, 4]}
-          order={5}
-        >
-          <Text
-            fontWeight={'bold'}
-          >
-            Seen by:
-          </Text>
-
-          <AvatarGroup max={5} size={'sm'}
-            spacing={0.5}
-          >
-
-            {
-              Array(10).fill(0).map((_, index) => {
-                return (
-                  <Avatar
-                    key={index}
-                    size={'sm'}
-                  // src={`https://via.placeholder.com/100x100?text=${index}`}
-                  />
-                )
-              })
-            }
-
-          </AvatarGroup>
-
-        </GridItem>
-
-        <GridItem
-          order={6}
-          colSpan={[4, 3]}
-        >
-          <Text
-            fontWeight={'bold'}
-          >
-            Stats: 🚧 add cool charts here
-          </Text>
-        </GridItem>
-
-        <GridItem
-          order={7}
           colSpan={[4, 1]}
+          order={5}
+          display='flex'
+          w='100%'
+          flexDir={'column'}
+          gap='1em'
         >
-          {/* TODO: change these buttons to a call to login, if unlogged */}
-          <VStack>
+          <Box>
+            <Text>
+              Watched by: {data.movieSummary?.uniqueWatches}
+            </Text>
+
+            <Text>
+              Rating distribution:
+            </Text>
+
+            <BarChart
+              data={chartData}
+              width={200}
+              height={120}
+            >
+              <XAxis dataKey="rating" />
+              <Bar dataKey={'count'}
+              />
+            </BarChart>
+          </Box>
+
+          <VStack
+          >
             <Button
               fontSize={'sm'}
               w={'100%'}
@@ -273,11 +288,10 @@ export const MovieDetails = () => {
               Add to other list
             </Button>
           </VStack>
-
         </GridItem>
 
         <GridItem
-          order={8} colSpan={4}
+          order={6} colSpan={4}
           as='section'
         >
           <Text
@@ -299,7 +313,7 @@ export const MovieDetails = () => {
         </GridItem>
 
         <GridItem
-          order={9} colSpan={[4]}
+          order={7} colSpan={[4]}
           as='section'
         >
           <Text
