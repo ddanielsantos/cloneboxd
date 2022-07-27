@@ -21,11 +21,11 @@ const schema = new Schema<IToken, TokenModel>({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'user',
-    required: true
+    required: true,
+    unique: true
   },
   value: {
-    type: String,
-    unique: true
+    type: String
   },
   expiresIn: {
     type: Date,
