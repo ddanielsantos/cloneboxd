@@ -28,6 +28,7 @@ type Query {
     last: Int
     title: String!
   ): MovieConnection
+  movieSummary(id: ID!): MovieSummary
   crewList(
     """Returns the items in the list that come after the specified cursor."""
     after: String
@@ -197,6 +198,18 @@ type Person implements Node {
 
   """Person's date of birth"""
   dateOfBirth: String!
+}
+
+type MovieSummary {
+  error: String
+  totalWatches: Int
+  reviewsPerRating: [ReviewsPerRating]
+  uniqueWatches: Int
+}
+
+type ReviewsPerRating {
+  rating: Float
+  count: Int
 }
 
 """A connection to a list of items."""

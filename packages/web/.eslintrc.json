@@ -30,6 +30,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "space-before-function-paren": "off",
     "react/react-in-jsx-scope": "off",
     "camelcase": "off"
   }

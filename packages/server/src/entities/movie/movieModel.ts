@@ -46,7 +46,7 @@ const schema = new Schema<IMovie>({
     }
   ],
   submitedBy: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'user'
   }
 })
