@@ -6,7 +6,7 @@ import { schema } from '../schemas/schema'
 async function execute() {
   const schemaInSchemaLanguage = printSchema(schema)
 
-  writeFileSync('../../web/data/schema.graphql', schemaInSchemaLanguage)
+  writeFileSync('../web/data/schema.graphql', schemaInSchemaLanguage)
 }
 
 execute()
