@@ -5,7 +5,8 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLInputFieldConfig
+  GraphQLInputFieldConfig,
+  GraphQLList
 } from 'graphql'
 import { userType } from '../user/userTypes'
 import { movieType } from '../movie/movieTypes'
@@ -13,6 +14,7 @@ import { UserModel } from '../user/userModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { searchMovieById } from '../../services/tmdb/api'
+import { commentType } from '../comment/commentTypes'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
@@ -52,6 +54,11 @@ export const reviewType = new GraphQLObjectType({
       type: GraphQLString,
       description: `When the user watched the movie`,
       resolve: review => review.watchedAt
+    },
+    comments: {
+      type: new GraphQLList(commentType),
+      description: `Users comments on the review`,
+      resolve: review => review.comments
     }
   })
 })
