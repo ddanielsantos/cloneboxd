@@ -1,12 +1,26 @@
 import mongoose, { ObjectId, Schema } from 'mongoose'
+import { IComment } from '../comment/commentModel'
 
-export type IReview = {
+export interface IReview {
   user: ObjectId,
   movie: string,
   text: string,
   rating: number,
-  watchedAt: Date
+  watchedAt: Date,
+  comments: IComment[],
 }
+
+const commentSchema = new Schema<IComment>({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  }
+})
 
 const schema = new Schema<IReview>({
   user: {
@@ -26,7 +40,8 @@ const schema = new Schema<IReview>({
   },
   watchedAt: {
     type: Date
-  }
+  },
+  comments: [commentSchema]
 })
 
 export const ReviewModel = mongoose.model<IReview>('review', schema)
