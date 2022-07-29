@@ -1,10 +1,21 @@
-import { Box, Text, Avatar, Flex, Link, Grid, GridItem, Button } from '@chakra-ui/react'
+import { Box, Text, Avatar, Flex, Link, Grid, GridItem, Button, Divider } from '@chakra-ui/react'
+import { GoComment } from "react-icons/go";
 import { startTransition } from 'react'
 import { useLazyLoadQuery } from 'react-relay'
 import { useNavigate, useParams } from 'react-router-dom'
 import { graphql } from 'relay-runtime'
 import { Header } from '../../components/Header/Header'
 import { ReviewQuery } from './__generated__/ReviewQuery.graphql'
+
+const NoComments = () => {
+  return (
+    <Box>
+      <Text>
+        There're no comments on this review
+      </Text>
+    </Box>
+  )
+}
 
 export const Review = () => {
   const navigate = useNavigate()
@@ -26,6 +37,14 @@ export const Review = () => {
             id
             fullName
             username
+          }
+          comments {
+            user {
+              id
+              username
+              fullName
+            }
+            content
           }
           text
         }
@@ -86,7 +105,7 @@ export const Review = () => {
             fontWeight={'extrabold'}
           >
             {singleReview?.movie.title}
-            </Link>
+          </Link>
           <Text>
             {singleReview?.movie.releaseDate.slice(0, 4)}
           </Text>
@@ -125,6 +144,57 @@ export const Review = () => {
           <Text>
             {singleReview?.text}
           </Text>
+        </GridItem>
+
+
+        <GridItem>
+          <Flex
+            alignItems={'center'}
+            gap='0.5em'
+          >
+            <Text>
+              {singleReview.comments?.length}
+            </Text>
+            <GoComment size={18} />
+          </Flex>
+          <Divider mt={2} />
+        </GridItem>
+
+        <GridItem>
+          <Flex
+            direction={'column'}
+          >
+            {!singleReview?.comments?.length
+              ? <NoComments />
+              : singleReview?.comments?.map((e, i) => {
+                return (
+                  <Box
+                    borderRadius={'md'}
+                    p={'1em'}
+                    _hover={{
+                      bg: 'gray.200',
+                      transitionDuration: '0.5s'
+                    }}
+                    key={i}
+                  >
+                    <Link
+                      onClick={() => {
+                        // TODO: fix user's comment
+                        startTransition(() => navigate(`/profile/${singleReview?.user.username}`))
+                      }}
+                    >
+                      {/* TODO: fix user's comment */}
+                      Cleber
+                    </Link>
+
+                    <Text>
+                      {e?.content}
+                    </Text>
+                  </Box>
+                )
+              })
+            }
+          </Flex>
         </GridItem>
       </Grid>
     </Box>
