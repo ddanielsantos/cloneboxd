@@ -1,27 +1,36 @@
 import { Box, Avatar, Text, Link } from '@chakra-ui/react'
 import { startTransition } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { NullableProps } from '../../types/Nullable'
+import { graphql, useFragment } from 'react-relay'
 
-type Props = NullableProps<{
-  id: string
-  rating: number
-  user: {
-    fullName: string
-    username: string
-  }
-  text: string
-}>
+import type { ReviewCard__review$key } from './__generated__/ReviewCard__review.graphql'
 
-export const Review = (props: Props) => {
+type Props = {
+  data: ReviewCard__review$key
+}
+
+export const ReviewCard = ({ data }: Props) => {
   const navigate = useNavigate()
+
+  const response = useFragment(graphql`
+    fragment ReviewCard__review on UserReview {
+      id
+      user {
+        username
+        fullName
+      }
+      rating
+      text
+    }
+  `, data)
+
   return (
     <Box
       w={'100%'}
       borderRadius={'md'}
       p={'1em'}
       onClick={() => {
-        startTransition(() => navigate(`/review/${props.id}`))
+        startTransition(() => navigate(`/review/${response.id}`))
       }}
       _hover={{
         bg: 'gray.200',
@@ -39,18 +48,18 @@ export const Review = (props: Props) => {
         gap={'1em'}
       >
         <Text>
-          a {props?.rating} &#x2605; review by
+          a {response.rating} &#x2605; review by
           <Link
             ml={1}
             onClick={(event) => {
               event.stopPropagation()
-              startTransition(() => navigate(`/profile/${props?.user?.username}`))
+              startTransition(() => navigate(`/profile/${response.user.username}`))
             }}
           >
-            {props?.user?.fullName}
+            {response.user.fullName}
           </Link>
         </Text>
-        <Text textAlign={'justify'}>{props?.text}</Text>
+        <Text textAlign={'justify'}>{response.text}</Text>
       </Box>
     </Box>
   )
