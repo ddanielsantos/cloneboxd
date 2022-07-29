@@ -26,7 +26,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.1.1",
     "mongodb": "^4.4.1",
-    "mongoose": "^6.3.4"
+    "mongoose": "^6.5.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.2",
