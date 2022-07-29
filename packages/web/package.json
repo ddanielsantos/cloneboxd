@@ -23,10 +23,10 @@
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.30.0",
     "react-icons": "^4.3.1",
-    "react-relay": "^13.2.0",
+    "react-relay": "^14.1.0",
     "react-router-dom": "6",
     "recharts": "^2.1.13",
-    "relay-runtime": "^13.2.0",
+    "relay-runtime": "^14.1.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1",
     "graphql": "^16.4.0",
-    "relay-compiler": "^13.2.0",
+    "relay-compiler": "^14.1.0",
     "relay-config": "^12.0.1",
     "typescript": "^4.5.4",
     "vite": "^2.9.8",
