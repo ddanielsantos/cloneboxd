@@ -300,6 +300,14 @@ type UserReview implements Node {
 
   """When the user watched the movie"""
   watchedAt: String
+
+  """Users comments on the review"""
+  comments: [Comment]
+}
+
+type Comment {
+  user: User
+  content: String
 }
 
 """The root mutation type"""
@@ -319,6 +327,9 @@ type Mutation {
 
   """From a given refresh token, generate a new access token"""
   userRefreshToken(input: userRefreshTokenInput!): userRefreshTokenPayload
+
+  """Add a comment"""
+  commentCreate(input: commentCreateInput!): commentCreatePayload
 
   """Add a review"""
   reviewCreate(input: reviewCreateInput!): reviewCreatePayload
@@ -423,6 +434,21 @@ type userRefreshTokenPayload {
 
 input userRefreshTokenInput {
   refreshToken: String!
+  clientMutationId: String
+}
+
+type commentCreatePayload {
+  comment: Comment
+  error: String
+  clientMutationId: String
+}
+
+input commentCreateInput {
+  """The id of the review to comment on"""
+  review: ID!
+
+  """The content of the comment"""
+  content: String!
   clientMutationId: String
 }
 
