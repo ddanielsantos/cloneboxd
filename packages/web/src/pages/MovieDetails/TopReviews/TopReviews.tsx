@@ -1,6 +1,6 @@
 import { VStack, Text } from '@chakra-ui/react'
 import { graphql, useFragment } from 'react-relay'
-import { Review } from '../../../components/Review/Review'
+import { ReviewCard } from '../../../components/Review/ReviewCard'
 
 import type { TopReviews__review$key } from './__generated__/TopReviews__review.graphql'
 
@@ -14,14 +14,11 @@ export const TopReviews = ({ data }: Props) => {
         edges {
           node {
             id
-            rating
-            text
-            user{
-              fullName
-              username
-            }
-            movie {
-              title
+            ...ReviewCard__review
+            comments {
+              user {
+                id
+              }
             }
           }
         }
@@ -31,7 +28,7 @@ export const TopReviews = ({ data }: Props) => {
 
   const { topReviews } = response
 
-  if (topReviews?.edges?.length === 0) {
+  if (!topReviews?.edges?.length) {
     return (
       <Text
         py={'2em'}
@@ -47,14 +44,13 @@ export const TopReviews = ({ data }: Props) => {
       w="100%"
     >
       {
-        topReviews?.edges?.map(edge => {
+        topReviews.edges.map(edge => {
+          if (!edge?.node) return
+
           return (
-            <Review
+            <ReviewCard
               key={edge?.node?.id}
-              id={edge?.node?.id}
-              rating={edge?.node?.rating}
-              text={edge?.node?.text}
-              user={edge?.node?.user}
+              data={edge?.node}
             />
           )
         })
