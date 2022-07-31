@@ -16,8 +16,12 @@ export const TopReviews = ({ data }: Props) => {
             id
             ...ReviewCard__review
             comments {
-              user {
-                id
+              edges {
+                node {
+                  user {
+                    id
+                  }
+                }
               }
             }
           }
@@ -45,7 +49,7 @@ export const TopReviews = ({ data }: Props) => {
     >
       {
         topReviews.edges.map(edge => {
-          if (!edge?.node) return
+          if (!edge?.node) return null
 
           return (
             <ReviewCard

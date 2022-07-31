@@ -1,5 +1,6 @@
 import { userType } from '../user/userTypes'
 import { GraphQLObjectType, GraphQLString } from 'graphql'
+import { connectionDefinitions } from 'graphql-relay'
 
 export const commentType = new GraphQLObjectType({
   name: 'Comment',
@@ -13,4 +14,8 @@ export const commentType = new GraphQLObjectType({
       resolve: comment => comment.content
     }
   }
+})
+
+export const { connectionType: CommentConnection, edgeType: CommentEdge } = connectionDefinitions({
+  nodeType: commentType
 })

@@ -5,16 +5,15 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLInputFieldConfig,
-  GraphQLList
+  GraphQLInputFieldConfig
 } from 'graphql'
 import { userType } from '../user/userTypes'
 import { movieType } from '../movie/movieTypes'
 import { UserModel } from '../user/userModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
-import { connectionDefinitions, globalIdField } from 'graphql-relay'
+import { connectionDefinitions, globalIdField, connectionFromArray, connectionArgs } from 'graphql-relay'
 import { searchMovieById } from '../../services/tmdb/api'
-import { commentType } from '../comment/commentTypes'
+import { CommentConnection } from '../comment/commentTypes'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
@@ -56,9 +55,14 @@ export const reviewType = new GraphQLObjectType({
       resolve: review => review.watchedAt
     },
     comments: {
-      type: new GraphQLList(commentType),
+      type: CommentConnection,
+      args: {
+        ...connectionArgs
+      },
       description: `Users comments on the review`,
-      resolve: review => review.comments
+      resolve: (review, args) => {
+        return connectionFromArray(review.comments, args)
+      }
     }
   })
 })

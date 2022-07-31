@@ -40,12 +40,16 @@ export const Review = () => {
             username
           }
           comments {
-            user {
-              id
-              username
-              fullName
+            edges {
+              node {
+                user {
+                  id
+                  username
+                  fullName
+                }
+                content
+              }
             }
-            content
           }
           text
         }
@@ -153,7 +157,7 @@ export const Review = () => {
             gap='0.5em'
           >
             <Text>
-              {singleReview.comments?.length}
+              {singleReview.comments?.edges?.length}
             </Text>
             <GoComment size={18} />
           </Flex>
@@ -170,9 +174,9 @@ export const Review = () => {
           <Flex
             direction={'column'}
           >
-            {!singleReview?.comments?.length
+            {!singleReview?.comments?.edges?.length
               ? <NoComments />
-              : singleReview?.comments?.map((comment, i) => {
+              : singleReview?.comments?.edges?.map((comment, i) => {
                 return (
                   <Box
                     borderRadius={'md'}
@@ -194,7 +198,7 @@ export const Review = () => {
                     </Link>
 
                     <Text>
-                      {comment?.content}
+                      {comment?.node?.content}
                     </Text>
                   </Box>
                 )
