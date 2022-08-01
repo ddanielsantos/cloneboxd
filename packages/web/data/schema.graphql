@@ -468,7 +468,7 @@ input userRefreshTokenInput {
 }
 
 type commentCreatePayload {
-  comment: Comment
+  comment: CommentEdge
   error: String
   clientMutationId: String
 }
