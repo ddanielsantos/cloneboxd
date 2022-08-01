@@ -86,6 +86,6 @@ export const reviewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
   }
 }
 
-export const { connectionType: ReviewConnection, edgeType: MovieEdge } = connectionDefinitions({
+export const { connectionType: ReviewConnection, edgeType: ReviewEdge } = connectionDefinitions({
   nodeType: reviewType
 })
