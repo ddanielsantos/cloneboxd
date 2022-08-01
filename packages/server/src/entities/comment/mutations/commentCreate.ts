@@ -3,7 +3,7 @@ import {
   mutationWithClientMutationId
 } from 'graphql-relay'
 import { Types } from 'mongoose'
-import { commentType } from '../commentTypes'
+import { CommentEdge } from '../commentTypes'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql'
@@ -29,7 +29,7 @@ export const commentCreate = mutationWithClientMutationId({
   },
   outputFields: {
     comment: {
-      type: commentType,
+      type: CommentEdge,
       resolve: response => response.comment
     },
     ...errorField
@@ -58,8 +58,12 @@ export const commentCreate = mutationWithClientMutationId({
         }
       }, { new: true })
 
+      if (!result) throw new Error('review not found')
+
       return {
-        comment: result?.comments.at(-1)
+        comment: {
+          node: result.comments.at(-1)
+        }
       }
     } catch (error: unknown) {
       return {
