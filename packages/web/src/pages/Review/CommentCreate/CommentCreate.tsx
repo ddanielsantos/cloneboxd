@@ -1,6 +1,6 @@
 import { InputGroup, Input, Button, useToast, FormControl } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useMutation } from 'react-relay'
+import { useMutation, ConnectionHandler } from 'react-relay'
 import { graphql } from 'relay-runtime'
 
 import type { CommentCreateMutation } from './__generated__/CommentCreateMutation.graphql'
@@ -44,6 +44,27 @@ export const CommentCreate = (props: Props) => {
           content: comment,
           review: props.review
         }
+      },
+      updater: (store) => {
+        const newEdge = store.getRootField('commentCreate').getLinkedRecord('comment')
+
+        if (!newEdge) return
+
+        const review = store.get(props.review)
+
+        if (!review) {
+          console.error('no review')
+          return
+        }
+
+        const connection = ConnectionHandler.getConnection(review, 'Review_comments')
+
+        if (!connection) {
+          console.error('no connection')
+          return
+        }
+
+        ConnectionHandler.insertEdgeBefore(connection, newEdge)
       },
       onCompleted: ({ commentCreate }) => {
         if (commentCreate?.error) {
