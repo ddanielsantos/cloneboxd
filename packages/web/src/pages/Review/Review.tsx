@@ -39,7 +39,7 @@ export const Review = () => {
             fullName
             username
           }
-          comments {
+          comments(first: 10) @connection(key: "Review_comments"){
             edges {
               node {
                 user {
