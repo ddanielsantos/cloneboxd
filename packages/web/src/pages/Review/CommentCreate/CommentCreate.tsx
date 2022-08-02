@@ -44,9 +44,9 @@ export const CommentCreate = (props: Props) => {
         }
       },
       updater: (store) => {
-        const newEdge = store.getRootField('commentCreate').getLinkedRecord('comment')
+        const node = store.getRootField('commentCreate').getLinkedRecord('comment')
 
-        if (!newEdge) return
+        if (!node) return
 
         const review = store.get(props.review)
 
@@ -62,7 +62,9 @@ export const CommentCreate = (props: Props) => {
           return
         }
 
-        ConnectionHandler.insertEdgeBefore(connection, newEdge)
+        const edge = ConnectionHandler.createEdge(store, review, node, 'CommentEdge')
+
+        ConnectionHandler.insertEdgeAfter(connection, edge)
       },
       onCompleted: ({ commentCreate }) => {
         if (commentCreate?.error) {
