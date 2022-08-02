@@ -1,4 +1,3 @@
-import { GraphQLString } from 'graphql'
 import { UserModel } from '../userModel'
 import { genSaltSync, hashSync } from 'bcrypt'
 import { userInputType, userType } from '../userTypes'
@@ -49,7 +48,6 @@ export const userCreate = mutationWithClientMutationId({
     })
 
     try {
-      await document.validate()
       await document.save()
 
       const token = {

@@ -17,4 +17,4 @@ const schema = new Schema<IComment>({
   }
 })
 
-export const Comments = mongoose.model<IComment>('comment', schema)
+export const CommentModel = mongoose.model<IComment>('comment', schema)
