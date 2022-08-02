@@ -10,18 +10,6 @@ export interface IReview {
   comments: IComment[],
 }
 
-const commentSchema = new Schema<IComment>({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  }
-})
-
 const schema = new Schema<IReview>({
   user: {
     type: Schema.Types.ObjectId,
@@ -41,7 +29,10 @@ const schema = new Schema<IReview>({
   watchedAt: {
     type: Date
   },
-  comments: [commentSchema]
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'comment'
+  }]
 })
 
 export const ReviewModel = mongoose.model<IReview>('review', schema)
