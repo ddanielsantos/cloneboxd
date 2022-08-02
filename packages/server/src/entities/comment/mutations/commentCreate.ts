@@ -7,6 +7,7 @@ import { commentType } from '../commentTypes'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql'
+import { CommentModel } from '../commentModel'
 import { ReviewModel } from '../../review/reviewModel'
 
 type Comment = {
@@ -36,30 +37,36 @@ export const commentCreate = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async ({ ...comment }: Comment, ctx) => {
     const { error, payload } = getHeadersPayload(ctx)
-
     if (error || !payload) {
       return {
         error: 'Unauthorized',
         comment: null
       }
     }
+    const { id } = fromGlobalId(comment.review)
 
-    const { id: _id } = fromGlobalId(comment.review)
+    const review = await ReviewModel.findById(id)
+
+    if (!review) {
+      return {
+        error: 'No review found'
+      }
+    }
 
     const user = new Types.ObjectId(payload.id)
+    const document = new CommentModel({
+      content: comment.content,
+      user
+    })
 
     try {
-      const result = await ReviewModel.findOneAndUpdate({ _id }, {
-        $push: {
-          comments: {
-            content: comment.content,
-            user
-          }
-        }
-      }, { new: true })
+      await document.save()
+
+      review.comments.push(document._id)
+      review.save()
 
       return {
-        comment: result?.comments.at(-1)
+        comment: document
       }
     } catch (error: unknown) {
       return {
