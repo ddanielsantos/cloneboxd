@@ -18,11 +18,9 @@ export const CommentCreate = (props: Props) => {
     mutation CommentCreateMutation($input: commentCreateInput!) {
       commentCreate(input: $input) {
         comment {
-          node {
-            content
-            user {
-              id
-            }            
+          content
+          user {
+            id
           }
         }
         error
