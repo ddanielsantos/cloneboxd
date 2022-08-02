@@ -14,6 +14,7 @@ import { nodeInterface } from '../../graphql/nodeInterface'
 import { connectionDefinitions, globalIdField, connectionFromArray, connectionArgs } from 'graphql-relay'
 import { searchMovieById } from '../../services/tmdb/api'
 import { CommentConnection } from '../comment/commentTypes'
+import { CommentModel } from '../comment/commentModel'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
@@ -60,8 +61,9 @@ export const reviewType = new GraphQLObjectType({
         ...connectionArgs
       },
       description: `Users comments on the review`,
-      resolve: (review, args) => {
-        return connectionFromArray(review.comments, args)
+      resolve: async (review, args) => {
+        const comments = await CommentModel.find({ _id: { $in: review.comments } })
+        return connectionFromArray(comments, args)
       }
     }
   })
