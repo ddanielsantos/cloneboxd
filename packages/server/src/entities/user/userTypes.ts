@@ -7,6 +7,8 @@ import {
 } from 'graphql'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { nodeInterface } from '../../graphql/nodeInterface'
+import { entityRegister } from '../../graphql/entityHelpers'
+import { UserModel } from './userModel'
 
 export const userType = new GraphQLObjectType({
   name: 'User',
@@ -57,4 +59,9 @@ export const userInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
 
 export const { connectionType: UserConnection, edgeType: UserEdge } = connectionDefinitions({
   nodeType: userType
+})
+
+entityRegister({
+  type: userType,
+  nodeResolver: async (id) => await UserModel.findById(id)
 })

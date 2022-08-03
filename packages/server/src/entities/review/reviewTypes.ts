@@ -11,10 +11,12 @@ import { userType } from '../user/userTypes'
 import { movieType } from '../movie/movieTypes'
 import { UserModel } from '../user/userModel'
 import { nodeInterface } from '../../graphql/nodeInterface'
+import { entityRegister } from '../../graphql/entityHelpers'
 import { connectionDefinitions, globalIdField, connectionFromArray, connectionArgs } from 'graphql-relay'
 import { searchMovieById } from '../../services/tmdb/api'
 import { CommentConnection } from '../comment/commentTypes'
 import { CommentModel } from '../comment/commentModel'
+import { ReviewModel } from './reviewModel'
 
 export const reviewType = new GraphQLObjectType({
   name: 'UserReview',
@@ -90,4 +92,9 @@ export const reviewInputType: ThunkObjMap<GraphQLInputFieldConfig> = {
 
 export const { connectionType: ReviewConnection, edgeType: ReviewEdge } = connectionDefinitions({
   nodeType: reviewType
+})
+
+entityRegister({
+  type: reviewType,
+  nodeResolver: async (id) => await ReviewModel.findById(id)
 })
