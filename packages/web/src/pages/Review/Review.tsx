@@ -7,16 +7,7 @@ import { graphql } from 'relay-runtime'
 import { Header } from '../../components/Header/Header'
 import { ReviewQuery } from './__generated__/ReviewQuery.graphql'
 import { CommentCreate } from './CommentCreate/CommentCreate'
-
-const NoComments = () => {
-  return (
-    <Box>
-      <Text>
-        There&apos;re no comments on this review
-      </Text>
-    </Box>
-  )
-}
+import { CommentList } from './CommentList/CommentList'
 
 export const Review = () => {
   const navigate = useNavigate()
@@ -39,18 +30,7 @@ export const Review = () => {
             fullName
             username
           }
-          comments(first: 10) @connection(key: "Review_comments"){
-            edges {
-              node {
-                user {
-                  id
-                  username
-                  fullName
-                }
-                content
-              }
-            }
-          }
+          ...CommentList_review
           text
         }
       }
@@ -156,9 +136,7 @@ export const Review = () => {
             alignItems={'center'}
             gap='0.5em'
           >
-            <Text>
-              {singleReview.comments?.edges?.length}
-            </Text>
+            20
             <GoComment size={18} />
           </Flex>
           <Divider mt={2} />
@@ -170,41 +148,12 @@ export const Review = () => {
           />
         </GridItem>
 
-        <GridItem>
-          <Flex
-            direction={'column'}
-          >
-            {!singleReview?.comments?.edges?.length
-              ? <NoComments />
-              : singleReview?.comments?.edges?.map((comment, i) => {
-                return (
-                  <Box
-                    borderRadius={'md'}
-                    p={'1em'}
-                    _hover={{
-                      bg: 'gray.200',
-                      transitionDuration: '0.5s'
-                    }}
-                    key={i}
-                  >
-                    <Link
-                      onClick={() => {
-                        // TODO: fix user's comment
-                        startTransition(() => navigate(`/profile/${singleReview?.user.username}`))
-                      }}
-                    >
-                      {/* TODO: fix user's comment */}
-                      Cleber
-                    </Link>
-
-                    <Text>
-                      {comment?.node?.content}
-                    </Text>
-                  </Box>
-                )
-              })
-            }
-          </Flex>
+        <GridItem
+          display={'flex'}
+          gap='1em'
+          flexDir='column'
+        >
+          <CommentList fragmentRef={singleReview} />
         </GridItem>
       </Grid>
     </Box>
