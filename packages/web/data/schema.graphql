@@ -99,6 +99,12 @@ type Query {
     """The ID of an object"""
     id: ID!
   ): Node
+
+  """Fetches objects given their IDs"""
+  nodes(
+    """The IDs of objects"""
+    ids: [ID!]!
+  ): [Node]!
 }
 
 """A connection to a list of items."""
@@ -335,7 +341,9 @@ type CommentEdge {
   cursor: String!
 }
 
-type Comment {
+type Comment implements Node {
+  """The ID of an object"""
+  id: ID!
   user: User
   content: String
 }

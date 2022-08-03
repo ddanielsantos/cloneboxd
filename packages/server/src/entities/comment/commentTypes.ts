@@ -1,7 +1,9 @@
 import { userType } from '../user/userTypes'
+import { nodeInterface } from '../../graphql/nodeInterface'
 import { GraphQLObjectType, GraphQLString } from 'graphql'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
-import { nodeInterface } from '../../graphql/nodeInterface'
+import { entityRegister } from '../../graphql/entityHelpers'
+import { CommentModel } from './commentModel'
 
 export const commentType = new GraphQLObjectType({
   name: 'Comment',
@@ -21,4 +23,9 @@ export const commentType = new GraphQLObjectType({
 
 export const { connectionType: CommentConnection, edgeType: CommentEdge } = connectionDefinitions({
   nodeType: commentType
+})
+
+entityRegister({
+  type: commentType,
+  nodeResolver: async (id) => await CommentModel.findById(id)
 })
