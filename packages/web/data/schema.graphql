@@ -321,6 +321,7 @@ type UserReview implements Node {
     """Returns the last n items from the list."""
     last: Int
   ): CommentConnection
+  totalComments: Int
 }
 
 """A connection to a list of items."""

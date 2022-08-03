@@ -1,4 +1,5 @@
-import { Box, Avatar, Text, Link } from '@chakra-ui/react'
+import { Box, Avatar, Text, Link, Flex } from '@chakra-ui/react'
+import { GoComment } from 'react-icons/go'
 import { startTransition } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { graphql, useFragment } from 'react-relay'
@@ -19,6 +20,7 @@ export const ReviewCard = ({ data }: Props) => {
         username
         fullName
       }
+      totalComments
       rating
       text
     }
@@ -60,6 +62,13 @@ export const ReviewCard = ({ data }: Props) => {
           </Link>
         </Text>
         <Text textAlign={'justify'}>{response.text}</Text>
+        <Flex
+          alignItems={'center'}
+          gap='0.5em'
+        >
+          <Text>{response.totalComments}</Text>
+          <GoComment size={18} />
+        </Flex>
       </Box>
     </Box>
   )

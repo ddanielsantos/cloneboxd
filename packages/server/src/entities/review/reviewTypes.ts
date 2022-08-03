@@ -1,5 +1,6 @@
 import {
   GraphQLID,
+  GraphQLInt,
   ThunkObjMap,
   GraphQLFloat,
   GraphQLString,
@@ -67,6 +68,10 @@ export const reviewType = new GraphQLObjectType({
         const comments = await CommentModel.find({ _id: { $in: review.comments } })
         return connectionFromArray(comments, args)
       }
+    },
+    totalComments: {
+      type: GraphQLInt,
+      resolve: review => review.comments.length
     }
   })
 })
