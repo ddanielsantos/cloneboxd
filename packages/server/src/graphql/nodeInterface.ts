@@ -1,43 +1,24 @@
 import { fromGlobalId, nodeDefinitions } from 'graphql-relay'
-import { UserModel } from '../entities/user/userModel'
-import { MovieModel } from '../entities/movie/movieModel'
-import { ReviewModel } from '../entities/review/reviewModel'
 
-const { nodeInterface, nodeField } = nodeDefinitions(
-  (globalId) => {
-    // https://github.com/graphql/graphql-relay-js/blob/main/src/__tests__/starWarsSchema.ts
+import { resolveNode, resolveType } from './entityHelpers'
 
-    // TODO: understand this abstraction
-    // https://github.com/entria/entria-fullstack/blob/master/packages/server/src/interface/NodeInterface.ts
+const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
+  async globalId => {
     const { id, type } = fromGlobalId(globalId)
 
-    type ModelLookup = {
-      [key: string]: any
-    }
+    const node = await resolveNode(type, id)
 
-    // TODO: refactor this
-    const modelLookup: ModelLookup = {
-      User: UserModel,
-      Movie: MovieModel,
-      UserReview: ReviewModel
-    }
+    if (!node) console.log('[unmatched node] -', type, id)
 
-    return modelLookup[type].findOne(id) || undefined
+    return node || null
   },
-  (obj) => {
-    // TODO: refactor this
-    if (obj.nacionality) {
-      return 'Crew'
-    }
-    if (obj.fullName) {
-      return 'User'
-    }
-    if (obj.user && obj.movie) {
-      return 'UserReview'
-    }
+  async obj => {
+    const type = await resolveType(obj)
 
-    return 'Movie'
+    if (!type) console.log('[unmatched type] - ', obj)
+
+    return type
   }
 )
 
-export { nodeField, nodeInterface }
+export { nodeField, nodeInterface, nodesField }
