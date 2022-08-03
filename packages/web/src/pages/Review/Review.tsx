@@ -25,6 +25,7 @@ export const Review = () => {
           }
           watchedAt
           rating
+          totalComments
           user {
             id
             fullName
@@ -136,7 +137,9 @@ export const Review = () => {
             alignItems={'center'}
             gap='0.5em'
           >
-            20
+            <Text>
+              {singleReview.totalComments}
+            </Text>
             <GoComment size={18} />
           </Flex>
           <Divider mt={2} />
