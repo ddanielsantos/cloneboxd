@@ -66,9 +66,7 @@ export const CommentList = (props: Props) => {
                       startTransition(() => navigate(`/profile/${comment?.node?.user?.username}`))
                     }}
                   >
-                    {
-                      comment?.node?.user?.fullName || 'Cléber'
-                    }
+                    {comment?.node?.user?.fullName}
                   </Link>
                   <Text>
                     {comment?.node?.content}
