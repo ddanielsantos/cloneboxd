@@ -4,6 +4,7 @@ import { GraphQLObjectType, GraphQLString } from 'graphql'
 import { connectionDefinitions, globalIdField } from 'graphql-relay'
 import { entityRegister } from '../../graphql/entityHelpers'
 import { CommentModel } from './commentModel'
+import { UserModel } from '../user/userModel'
 
 export const commentType = new GraphQLObjectType({
   name: 'Comment',
@@ -12,7 +13,10 @@ export const commentType = new GraphQLObjectType({
     id: globalIdField('Comment', comment => comment._id),
     user: {
       type: userType,
-      resolve: comment => comment.user
+      resolve: async comment => {
+        const user = await UserModel.findById(comment.user)
+        return user
+      }
     },
     content: {
       type: GraphQLString,
