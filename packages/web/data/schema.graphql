@@ -370,6 +370,9 @@ type Mutation {
   """Add a comment"""
   commentCreate(input: commentCreateInput!): commentCreatePayload
 
+  """Update a comment using its id"""
+  commentUpdate(input: commentUpdateInput!): commentUpdatePayload
+
   """Add a review"""
   reviewCreate(input: reviewCreateInput!): reviewCreatePayload
 
@@ -485,6 +488,20 @@ type commentCreatePayload {
 input commentCreateInput {
   """The id of the review to comment on"""
   review: ID!
+
+  """The content of the comment"""
+  content: String!
+  clientMutationId: String
+}
+
+type commentUpdatePayload {
+  comment: Comment
+  error: String
+  clientMutationId: String
+}
+
+input commentUpdateInput {
+  id: ID!
 
   """The content of the comment"""
   content: String!
