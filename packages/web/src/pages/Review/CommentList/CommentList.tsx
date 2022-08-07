@@ -1,18 +1,16 @@
-import { Box, Button, Flex, Link, Text } from '@chakra-ui/react'
+import { Button, Flex } from '@chakra-ui/react'
 import { graphql, usePaginationFragment } from 'react-relay'
 
 import type { CommentList_review$key } from './__generated__/CommentList_review.graphql'
 import type { CommentListPaginationQuery } from './__generated__/CommentListPaginationQuery.graphql'
-import { startTransition } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { NoComments } from '../NoComments/NoComments'
+import { CommentCard } from './CommentCard/CommentCard'
 
 type Props = {
   fragmentRef: CommentList_review$key
 }
 
 export const CommentList = (props: Props) => {
-  const navigate = useNavigate()
   const { data, hasPrevious, isLoadingPrevious, loadPrevious } = usePaginationFragment<CommentListPaginationQuery, CommentList_review$key>(graphql`
     fragment CommentList_review on UserReview 
     @argumentDefinitions (
@@ -22,15 +20,7 @@ export const CommentList = (props: Props) => {
     @refetchable(queryName: "CommentListPaginationQuery") {
       comments(last: $last, before: $before) @connection(key: "Review_comments"){
         edges {
-          node {
-            id
-            user {
-              id
-              username
-              fullName
-            }
-            content
-          }
+          ...CommentCard_comment
         }
       }
     }
@@ -50,29 +40,8 @@ export const CommentList = (props: Props) => {
         {
           !data?.comments?.edges?.length
             ? <NoComments />
-            : data?.comments?.edges?.map(comment => {
-              return (
-                <Box
-                  key={comment?.node?.id}
-                  borderRadius={'md'}
-                  p={'1em'}
-                  _hover={{
-                    bg: 'gray.200',
-                    transitionDuration: '0.5s'
-                  }}
-                >
-                  <Link
-                    onClick={() => {
-                      startTransition(() => navigate(`/profile/${comment?.node?.user?.username}`))
-                    }}
-                  >
-                    {comment?.node?.user?.fullName}
-                  </Link>
-                  <Text>
-                    {comment?.node?.content}
-                  </Text>
-                </Box>
-              )
+            : data?.comments?.edges?.map((comment, index) => {
+              return comment && <CommentCard key={index} fragmentRef={comment} />
             })
         }
       </Flex>
