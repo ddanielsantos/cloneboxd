@@ -45,6 +45,12 @@ export const commentCreate = mutationWithClientMutationId({
     }
     const { id } = fromGlobalId(comment.review)
 
+    if (!id) {
+      return {
+        error: 'Invalid ID'
+      }
+    }
+
     const review = await ReviewModel.findById(id)
 
     if (!review) {
