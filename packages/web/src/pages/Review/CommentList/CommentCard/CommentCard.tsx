@@ -106,7 +106,9 @@ export const CommentCard = (props: Props) => {
     ){
       commentDelete(input: $input) {
         error
-        id @deleteEdge (connections: $connections)
+        comment {
+          id @deleteEdge (connections: $connections)
+        }
       }
     }
   `)

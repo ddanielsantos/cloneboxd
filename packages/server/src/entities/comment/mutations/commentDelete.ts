@@ -1,9 +1,9 @@
 import {
   GraphQLID,
-  GraphQLString,
   GraphQLNonNull
 } from 'graphql'
 import { CommentModel } from '../commentModel'
+import { commentType } from '../commentTypes'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
 import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
@@ -17,10 +17,10 @@ export const commentDelete = mutationWithClientMutationId({
     }
   },
   outputFields: {
-    id: {
-      type: GraphQLID,
+    comment: {
+      type: commentType,
       description: 'The id of the deleted comment',
-      resolve: response => response.id
+      resolve: response => response.comment
     },
     ...errorField
   },
@@ -61,7 +61,7 @@ export const commentDelete = mutationWithClientMutationId({
       })
 
       return {
-        id: comment.id
+        comment: commentToDelete
       }
     } catch (error: unknown) {
       return { error: (error as Error).message }
