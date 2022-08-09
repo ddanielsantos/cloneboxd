@@ -3,15 +3,15 @@ import { startTransition, useState } from 'react'
 import { GoCheck, GoPencil, GoTrashcan, GoX } from 'react-icons/go'
 import { useFragment, useMutation } from 'react-relay'
 import { useNavigate } from 'react-router-dom'
-import { ConnectionHandler, graphql } from 'relay-runtime'
+import { graphql } from 'relay-runtime'
 
 import type { CommentCard_comment$key } from './__generated__/CommentCard_comment.graphql'
 import type { CommentCardUpdateMutation } from './__generated__/CommentCardUpdateMutation.graphql'
 import type { CommentCardDeleteMutation } from './__generated__/CommentCardDeleteMutation.graphql'
 
 type Props = {
-  review: string
   fragmentRef: CommentCard_comment$key
+  connectionId?: string
 }
 
 export const CommentCard = (props: Props) => {
@@ -100,22 +100,26 @@ export const CommentCard = (props: Props) => {
   }
 
   const [commitDelete, isDeleting] = useMutation<CommentCardDeleteMutation>(graphql`
-    mutation CommentCardDeleteMutation($input: commentDeleteInput!){
+    mutation CommentCardDeleteMutation(
+      $input: commentDeleteInput!
+      $connections: [ID!]!
+    ){
       commentDelete(input: $input) {
         error
-        id
+        id @deleteEdge (connections: $connections)
       }
     }
   `)
 
   const handleDelete = (id?: string) => {
-    if (!id) return
+    if (!id || !props.connectionId) return
 
     commitDelete({
       variables: {
         input: {
           id
-        }
+        },
+        connections: [props.connectionId]
       },
       onCompleted: ({ commentDelete }) => {
         if (commentDelete?.error) {
@@ -144,27 +148,6 @@ export const CommentCard = (props: Props) => {
           status: 'error',
           duration: 2500
         })
-      },
-      updater: (store) => {
-        const review = store.get(props.review)
-
-        if (!review) {
-          console.error('no review')
-          return
-        }
-
-        const connection = ConnectionHandler.getConnection(review, 'Review_comments')
-
-        if (!connection) {
-          console.error('no connection')
-          return
-        }
-
-        const comment = store.getRootField('commentDelete')
-
-        if (!comment) return
-
-        ConnectionHandler.deleteNode(connection, comment.getDataID())
       }
     })
   }

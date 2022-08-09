@@ -18,7 +18,7 @@ export const commentDelete = mutationWithClientMutationId({
   },
   outputFields: {
     id: {
-      type: GraphQLString,
+      type: GraphQLID,
       description: 'The id of the deleted comment',
       resolve: response => response.id
     },
