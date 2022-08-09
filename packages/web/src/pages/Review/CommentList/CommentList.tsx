@@ -18,7 +18,9 @@ export const CommentList = (props: Props) => {
       before: { type: String }
     )
     @refetchable(queryName: "CommentListPaginationQuery") {
+      id
       comments(last: $last, before: $before) @connection(key: "Review_comments"){
+        __id
         edges {
           ...CommentCard_comment
         }
@@ -41,7 +43,7 @@ export const CommentList = (props: Props) => {
           !data?.comments?.edges?.length
             ? <NoComments />
             : data?.comments?.edges?.map((comment, index) => {
-              return comment && <CommentCard key={index} fragmentRef={comment} />
+              return comment && <CommentCard key={index} connectionId={data.comments?.__id} fragmentRef={comment} />
             })
         }
       </Flex>

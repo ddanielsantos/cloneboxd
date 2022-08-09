@@ -7,9 +7,11 @@ import { graphql } from 'relay-runtime'
 
 import type { CommentCard_comment$key } from './__generated__/CommentCard_comment.graphql'
 import type { CommentCardUpdateMutation } from './__generated__/CommentCardUpdateMutation.graphql'
+import type { CommentCardDeleteMutation } from './__generated__/CommentCardDeleteMutation.graphql'
 
 type Props = {
   fragmentRef: CommentCard_comment$key
+  connectionId?: string
 }
 
 export const CommentCard = (props: Props) => {
@@ -97,6 +99,61 @@ export const CommentCard = (props: Props) => {
     })
   }
 
+  const [commitDelete, isDeleting] = useMutation<CommentCardDeleteMutation>(graphql`
+    mutation CommentCardDeleteMutation(
+      $input: commentDeleteInput!
+      $connections: [ID!]!
+    ){
+      commentDelete(input: $input) {
+        error
+        comment {
+          id @deleteEdge (connections: $connections)
+        }
+      }
+    }
+  `)
+
+  const handleDelete = (id?: string) => {
+    if (!id || !props.connectionId) return
+
+    commitDelete({
+      variables: {
+        input: {
+          id
+        },
+        connections: [props.connectionId]
+      },
+      onCompleted: ({ commentDelete }) => {
+        if (commentDelete?.error) {
+          toast({
+            title: 'Erro',
+            description: commentDelete.error,
+            status: 'error',
+            duration: 2500
+          })
+          return
+        }
+
+        if (commentDelete?.id) {
+          toast({
+            description: 'comment deleted!',
+            status: 'success',
+            duration: 2500
+          })
+        }
+      },
+      onError: (error) => {
+        console.error(error)
+        toast({
+          title: 'Erro',
+          description: 'An internal error occurred',
+          status: 'error',
+          duration: 2500
+        })
+      }
+    })
+  }
+
   return (
     <Flex
       w='100%'
@@ -151,7 +208,8 @@ export const CommentCard = (props: Props) => {
 
               <IconButton
                 aria-label='delete comment'
-                disabled={true}
+                onClick={() => handleDelete(data?.node?.id)}
+                isLoading={isDeleting}
                 icon={
                   <GoTrashcan size={18} />
                 }
