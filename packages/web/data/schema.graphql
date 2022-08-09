@@ -513,7 +513,7 @@ input commentUpdateInput {
 
 type commentDeletePayload {
   """The id of the deleted comment"""
-  comment: Comment
+  deletedId: ID
   error: String
   clientMutationId: String
 }
