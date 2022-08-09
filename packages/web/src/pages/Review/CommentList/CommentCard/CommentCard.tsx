@@ -106,9 +106,7 @@ export const CommentCard = (props: Props) => {
     ){
       commentDelete(input: $input) {
         error
-        comment {
-          id @deleteEdge (connections: $connections)
-        }
+        deletedId @deleteEdge (connections: $connections)
       }
     }
   `)
@@ -134,7 +132,7 @@ export const CommentCard = (props: Props) => {
           return
         }
 
-        if (commentDelete?.id) {
+        if (commentDelete?.deletedId) {
           toast({
             description: 'comment deleted!',
             status: 'success',
