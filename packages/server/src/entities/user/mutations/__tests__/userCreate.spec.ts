@@ -1,6 +1,5 @@
-import { graphql } from 'graphql'
-import { schema } from '../../../../schemas/schema'
 import { createUser } from '../../fixture/createUser'
+import { makeGraphQLRequest } from '../../../../../test/utils'
 
 type UserCreateResponse = {
   data: {
@@ -34,10 +33,7 @@ describe('UserCreateMutation', () => {
       }
     `
 
-    const userCreateResponse = await graphql({
-      schema,
-      source: userCreateMutation
-    }) as unknown as UserCreateResponse
+    const userCreateResponse = await makeGraphQLRequest<UserCreateResponse>(userCreateMutation, '')
 
     expect(userCreateMutation).toBeDefined()
 
@@ -69,10 +65,7 @@ describe('UserCreateMutation', () => {
       }
     `
 
-    const userCreateResponse = await graphql({
-      schema,
-      source: userCreateMutation
-    }) as unknown as UserCreateResponse
+    const userCreateResponse = await makeGraphQLRequest<UserCreateResponse>(userCreateMutation, '')
 
     expect(userCreateMutation).toBeDefined()
 
@@ -104,10 +97,7 @@ describe('UserCreateMutation', () => {
       }
     `
 
-    const userCreateResponse = await graphql({
-      schema,
-      source: userCreateMutation
-    }) as unknown as UserCreateResponse
+    const userCreateResponse = await makeGraphQLRequest<UserCreateResponse>(userCreateMutation, '')
 
     expect(userCreateMutation).toBeDefined()
 

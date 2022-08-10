@@ -1,9 +1,8 @@
-import { graphql } from 'graphql'
 import { toGlobalId } from 'graphql-relay'
-import { schema } from '../../../../schemas/schema'
 import { createUser } from '../../fixture/createUser'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { UserModel } from '../../userModel'
+import { makeGraphQLRequest } from '../../../../../test/utils'
 
 type UserDeleteResponse = {
   data: {
@@ -36,13 +35,7 @@ describe('UserDeleteMutation', () => {
       }
     `
 
-    const userDeleteResponse = await graphql({
-      schema,
-      source: userDeleteMutation,
-      contextValue: {
-        authorization: `Bearer ${token}`
-      }
-    }) as unknown as UserDeleteResponse
+    const userDeleteResponse = await makeGraphQLRequest<UserDeleteResponse>(userDeleteMutation, token)
 
     expect(userDeleteResponse).toBeDefined()
 

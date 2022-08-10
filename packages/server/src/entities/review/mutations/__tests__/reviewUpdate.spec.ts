@@ -1,9 +1,8 @@
-import { graphql } from 'graphql'
 import { toGlobalId } from 'graphql-relay'
-import { schema } from '../../../../schemas/schema'
 import { createUser } from '../../../user/fixture/createUser'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { createReview } from '../../fixtures/createReview'
+import { makeGraphQLRequest } from '../../../../../test/utils'
 
 type ReviewUpdateResponse = {
   data: {
@@ -58,13 +57,7 @@ describe('ReviewUpdateMutation', () => {
       }
     `
 
-    const reviewUpdateResponse = await graphql({
-      schema,
-      source: reviewUpdateMutation,
-      contextValue: {
-        authorization: `Bearer ${token}`
-      }
-    }) as unknown as ReviewUpdateResponse
+    const reviewUpdateResponse = await makeGraphQLRequest<ReviewUpdateResponse>(reviewUpdateMutation, token)
 
     expect(reviewUpdateResponse).toBeDefined()
 
