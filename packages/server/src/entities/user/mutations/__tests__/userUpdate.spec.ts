@@ -1,6 +1,5 @@
-import { graphql } from 'graphql'
 import { toGlobalId } from 'graphql-relay'
-import { schema } from '../../../../schemas/schema'
+import { makeGraphQLRequest } from '../../../../../test/utils'
 import { createUser } from '../../fixture/createUser'
 import { loginUser } from '../../fixture/loginUser'
 
@@ -42,13 +41,7 @@ describe('UserUpdateMutation', () => {
       }
     `
 
-    const userUpdateResponse = await graphql({
-      schema,
-      source: userUpdateMutation,
-      contextValue: {
-        authorization: `Bearer ${token}`
-      }
-    }) as unknown as UserUpdateResponse
+    const userUpdateResponse = await makeGraphQLRequest<UserUpdateResponse>(userUpdateMutation, token)
 
     expect(userUpdateResponse).toBeDefined()
 

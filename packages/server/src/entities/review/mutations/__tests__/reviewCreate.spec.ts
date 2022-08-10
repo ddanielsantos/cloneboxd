@@ -1,8 +1,7 @@
-import { graphql } from 'graphql'
 import { toGlobalId } from 'graphql-relay'
-import { schema } from '../../../../schemas/schema'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
+import { makeGraphQLRequest } from '../../../../../test/utils'
 
 type CreateReviewResponse = {
   data: {
@@ -17,11 +16,10 @@ type CreateReviewResponse = {
 
 describe('ReviewCreateMutation', () => {
   it('should create a review if the user is logged', async () => {
+    const movieGlobalId = toGlobalId('Movie', '11220')
     const user = await createUser({
       admin: true
     })
-
-    const movieGlobalId = toGlobalId('Movie', '11220')
 
     const { token } = loginUser(user)
 
@@ -40,13 +38,7 @@ describe('ReviewCreateMutation', () => {
       }
     `
 
-    const createReviewResponse = await graphql({
-      schema,
-      source: createReviewMutation,
-      contextValue: {
-        authorization: `Bearer ${token}`
-      }
-    }) as unknown as CreateReviewResponse
+    const createReviewResponse = await makeGraphQLRequest<CreateReviewResponse>(createReviewMutation, token)
 
     expect(createReviewMutation).toBeDefined()
 
@@ -58,7 +50,6 @@ describe('ReviewCreateMutation', () => {
 
   it('should throw an error if the user is not logged', async () => {
     const movieGlobalId = toGlobalId('Movie', '11220')
-
     const createReviewMutation = `
       mutation a {
         reviewCreate (input: {
@@ -74,13 +65,7 @@ describe('ReviewCreateMutation', () => {
       }
     `
 
-    const createReviewResponse = await graphql({
-      schema,
-      source: createReviewMutation,
-      contextValue: {
-        authorization: `Bearer a`
-      }
-    }) as unknown as CreateReviewResponse
+    const createReviewResponse = await makeGraphQLRequest<CreateReviewResponse>(createReviewMutation, '')
 
     expect(createReviewMutation).toBeDefined()
 
