@@ -5,7 +5,9 @@ import { createUser } from '../../fixture/createUser'
 type UserCreateResponse = {
   data: {
     userCreate: {
-      token: string
+      token: {
+        accessToken: string
+      }
       error: string
       clientMutationId: string
     }
@@ -23,7 +25,9 @@ describe('UserCreateMutation', () => {
           password: "123456"
           confirmPassword: "123456"
         }) {
-          token
+          token {
+            accessToken
+          }
           error
           clientMutationId
         }
@@ -56,7 +60,9 @@ describe('UserCreateMutation', () => {
           password: "123456"
           confirmPassword: "123456"
         }) {
-          token
+          token {
+            accessToken
+          }
           error
           clientMutationId
         }
@@ -89,7 +95,9 @@ describe('UserCreateMutation', () => {
           password: "123456"
           confirmPassword: "123456"
         }) {
-          token
+          token {
+            accessToken
+          }
           error
           clientMutationId
         }
