@@ -4,6 +4,17 @@ import { schema } from '../../../../schemas/schema'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
 
+type CreateReviewResponse = {
+  data: {
+    reviewCreate: {
+      review: {
+        id: string
+      },
+      error: string
+    }
+  }
+}
+
 describe('ReviewCreateMutation', () => {
   it('should create a review if the user is logged', async () => {
     const user = await createUser({
@@ -28,17 +39,6 @@ describe('ReviewCreateMutation', () => {
         }
       }
     `
-
-    type CreateReviewResponse = {
-      data: {
-        reviewCreate: {
-          review: {
-            id: string
-          },
-          error: string
-        }
-      }
-    }
 
     const createReviewResponse = await graphql({
       schema,
@@ -73,17 +73,6 @@ describe('ReviewCreateMutation', () => {
         }
       }
     `
-
-    type CreateReviewResponse = {
-      data: {
-        reviewCreate: {
-          review: {
-            id: string
-          },
-          error: string
-        }
-      }
-    }
 
     const createReviewResponse = await graphql({
       schema,
