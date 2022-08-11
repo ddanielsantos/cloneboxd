@@ -2,9 +2,7 @@ import {
   fromGlobalId,
   mutationWithClientMutationId
 } from 'graphql-relay'
-import { Types } from 'mongoose'
 import { commentType } from '../commentTypes'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 import { GraphQLNonNull, GraphQLID, GraphQLString } from 'graphql'
 import { CommentModel } from '../commentModel'
@@ -36,8 +34,7 @@ export const commentCreate = mutationWithClientMutationId({
     ...errorField
   },
   mutateAndGetPayload: async ({ ...comment }: Comment, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-    if (error || !payload) {
+    if (!ctx.user) {
       return {
         error: 'Unauthorized',
         comment: null
@@ -59,7 +56,7 @@ export const commentCreate = mutationWithClientMutationId({
       }
     }
 
-    const user = new Types.ObjectId(payload.id)
+    const user = ctx.user._id
     const document = new CommentModel({
       content: comment.content,
       user

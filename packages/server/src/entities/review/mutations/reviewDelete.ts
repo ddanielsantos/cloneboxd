@@ -5,7 +5,6 @@ import {
 } from 'graphql'
 import { ReviewModel } from '../reviewModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 
 export const reviewDelete = mutationWithClientMutationId({
@@ -24,9 +23,7 @@ export const reviewDelete = mutationWithClientMutationId({
     ...errorField
   },
   mutateAndGetPayload: async ({ id }, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-
-    if (error || payload === null) {
+    if (!ctx.user) {
       return {
         error: 'Unauthorized'
       }
@@ -40,7 +37,7 @@ export const reviewDelete = mutationWithClientMutationId({
       }
     }
 
-    if (payload.id !== reviewToDelete.user.toString()) {
+    if (ctx.user.id !== reviewToDelete.user.toString()) {
       return {
         error: 'Unauthorized'
       }

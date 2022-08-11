@@ -5,7 +5,6 @@ import {
 } from 'graphql'
 import { CommentModel } from '../commentModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { commentType } from '../commentTypes'
 import { errorField } from '../../../graphql/errorField'
 
@@ -29,9 +28,7 @@ export const commentUpdate = mutationWithClientMutationId({
     ...errorField
   },
   mutateAndGetPayload: async ({ ...comment }, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-
-    if (error || payload === null) {
+    if (!ctx.user) {
       return {
         error: 'Unauthorized'
       }
@@ -53,7 +50,7 @@ export const commentUpdate = mutationWithClientMutationId({
       }
     }
 
-    if (payload.id !== commentToUpdate.user.toString()) {
+    if (ctx.user.id !== commentToUpdate.user.toString()) {
       return {
         error: 'Unauthorized'
       }

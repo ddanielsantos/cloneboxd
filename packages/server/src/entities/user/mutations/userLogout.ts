@@ -1,6 +1,5 @@
 import { GraphQLFieldConfig, GraphQLObjectType, GraphQLString } from 'graphql'
 import { Token } from '../../token/TokenModel'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 
 export const userLogout: GraphQLFieldConfig<any, any, any> = {
@@ -11,16 +10,14 @@ export const userLogout: GraphQLFieldConfig<any, any, any> = {
     }
   }),
   resolve: async (_parent, _args, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-
-    if (error || !payload) {
+    if (ctx.user) {
       return {
-        error
+        error: 'Unauthorized'
       }
     }
 
     try {
-      await Token.revoke(payload.id)
+      await Token.revoke(ctx.user.id)
 
       return {
         error: null

@@ -7,7 +7,6 @@ import { IReview, ReviewModel } from '../reviewModel'
 import { validateMovies } from '../../movie/validateMovie'
 import { reviewInputType, reviewType } from '../reviewTypes'
 import { BetaMongoose2GQLInput } from '../../../types/types'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 
 type Review = BetaMongoose2GQLInput<IReview>
@@ -26,9 +25,7 @@ export const reviewCreate = mutationWithClientMutationId({
     ...errorField
   },
   mutateAndGetPayload: async ({ ...review }: Review, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-
-    if (error || payload === null) {
+    if (!ctx.user) {
       return {
         error: 'Unauthorized',
         review: null
@@ -45,7 +42,7 @@ export const reviewCreate = mutationWithClientMutationId({
       }
     }
 
-    const user = new ObjectId(payload.id)
+    const user = ctx.user.id
 
     try {
       const document = new ReviewModel({

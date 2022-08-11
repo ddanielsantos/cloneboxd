@@ -5,7 +5,6 @@ import {
 } from 'graphql'
 import { UserModel } from '../userModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { userType } from '../userTypes'
 import { hashSync, genSaltSync } from 'bcrypt'
 import { errorField } from '../../../graphql/errorField'
@@ -34,16 +33,14 @@ export const userUpdate = mutationWithClientMutationId({
     ...errorField
   },
   mutateAndGetPayload: async ({ id, ...user }, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-
-    if (error || payload === null) {
+    if (!ctx.user) {
       return {
         error: 'Unauthorized',
         result: null
       }
     }
 
-    if (payload.id !== fromGlobalId(id).id) {
+    if (ctx.user.id !== fromGlobalId(id).id) {
       return {
         error: 'Unauthorized'
       }
