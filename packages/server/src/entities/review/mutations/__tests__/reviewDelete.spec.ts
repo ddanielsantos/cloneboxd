@@ -5,7 +5,7 @@ import { createUser } from '../../../user/fixture/createUser'
 import { ReviewModel } from '../../reviewModel'
 import { makeGraphQLRequest } from '../../../../../test/utils'
 
-type ReviewDeleteResponse = {
+type Response = {
   data: {
     reviewDelete: {
       error: string
@@ -25,7 +25,7 @@ describe('ReviewDeleteMutation', () => {
 
     const reviewGlobalId = toGlobalId('Review', review.id)
 
-    const reviewDeleteMutation = `
+    const mutation = `
       mutation a {
         reviewDelete(input: {
           id: "${reviewGlobalId}"
@@ -37,7 +37,7 @@ describe('ReviewDeleteMutation', () => {
       }
     `
 
-    const reviewDeleteResponse = await makeGraphQLRequest<ReviewDeleteResponse>(reviewDeleteMutation, token)
+    const reviewDeleteResponse = await makeGraphQLRequest<Response>(mutation, token, user)
 
     expect(reviewDeleteResponse).toBeDefined()
 

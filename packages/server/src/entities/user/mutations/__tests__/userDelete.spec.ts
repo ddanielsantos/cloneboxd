@@ -4,7 +4,7 @@ import { loginUser } from '../../../user/fixture/loginUser'
 import { UserModel } from '../../userModel'
 import { makeGraphQLRequest } from '../../../../../test/utils'
 
-type UserDeleteResponse = {
+type Response = {
   data: {
     userDelete: {
       error: string
@@ -23,7 +23,7 @@ describe('UserDeleteMutation', () => {
 
     const userGlobalId = toGlobalId('User', user.id)
 
-    const userDeleteMutation = `
+    const mutation = `
       mutation a {
         userDelete(input: {
           id: "${userGlobalId}"
@@ -35,7 +35,7 @@ describe('UserDeleteMutation', () => {
       }
     `
 
-    const userDeleteResponse = await makeGraphQLRequest<UserDeleteResponse>(userDeleteMutation, token)
+    const userDeleteResponse = await makeGraphQLRequest<Response>(mutation, token, user)
 
     expect(userDeleteResponse).toBeDefined()
 
