@@ -4,7 +4,7 @@ import { loginUser } from '../../../user/fixture/loginUser'
 import { createReview } from '../../fixtures/createReview'
 import { makeGraphQLRequest } from '../../../../../test/utils'
 
-type ReviewUpdateResponse = {
+type Response = {
   data: {
     reviewUpdate: {
       review: {
@@ -32,7 +32,7 @@ describe('ReviewUpdateMutation', () => {
     const { token } = loginUser(user)
     const reviewGlobalId = toGlobalId('Review', old.id)
 
-    const reviewUpdateMutation = `
+    const mutation = `
       mutation a {
         reviewUpdate(input: {
           id: "${reviewGlobalId}"
@@ -57,7 +57,7 @@ describe('ReviewUpdateMutation', () => {
       }
     `
 
-    const reviewUpdateResponse = await makeGraphQLRequest<ReviewUpdateResponse>(reviewUpdateMutation, token)
+    const reviewUpdateResponse = await makeGraphQLRequest<Response>(mutation, token, user)
 
     expect(reviewUpdateResponse).toBeDefined()
 

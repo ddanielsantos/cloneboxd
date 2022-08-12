@@ -3,7 +3,7 @@ import { makeGraphQLRequest } from '../../../../../test/utils'
 import { createUser } from '../../fixture/createUser'
 import { loginUser } from '../../fixture/loginUser'
 
-type UserUpdateResponse = {
+type Response = {
   data: {
     userUpdate: {
       user: {
@@ -23,7 +23,7 @@ describe('UserUpdateMutation', () => {
     const { token } = loginUser(old)
     const userGlobalId = toGlobalId('User', old.id)
 
-    const userUpdateMutation = `
+    const mutation = `
       mutation a {
         userUpdate(input: {
           id: "${userGlobalId}"
@@ -41,7 +41,7 @@ describe('UserUpdateMutation', () => {
       }
     `
 
-    const userUpdateResponse = await makeGraphQLRequest<UserUpdateResponse>(userUpdateMutation, token)
+    const userUpdateResponse = await makeGraphQLRequest<Response>(mutation, token, old)
 
     expect(userUpdateResponse).toBeDefined()
 

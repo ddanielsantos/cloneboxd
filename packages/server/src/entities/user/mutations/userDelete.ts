@@ -5,7 +5,6 @@ import {
 } from 'graphql'
 import { UserModel } from '../userModel'
 import { fromGlobalId, mutationWithClientMutationId } from 'graphql-relay'
-import { getHeadersPayload } from '../../../auth/getHeadersPayload'
 import { errorField } from '../../../graphql/errorField'
 
 export const userDelete = mutationWithClientMutationId({
@@ -24,16 +23,14 @@ export const userDelete = mutationWithClientMutationId({
     ...errorField
   },
   mutateAndGetPayload: async ({ id }, ctx) => {
-    const { error, payload } = getHeadersPayload(ctx)
-
-    if (error || payload === null) {
+    if (!ctx.user) {
       return {
         error: 'Unauthorized',
         review: null
       }
     }
 
-    if (payload.id !== fromGlobalId(id).id) {
+    if (ctx.user.id !== fromGlobalId(id).id) {
       return {
         error: 'Unauthorized'
       }

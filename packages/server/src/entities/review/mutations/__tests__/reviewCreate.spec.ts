@@ -3,7 +3,7 @@ import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
 import { makeGraphQLRequest } from '../../../../../test/utils'
 
-type CreateReviewResponse = {
+type Response = {
   data: {
     reviewCreate: {
       review: {
@@ -23,7 +23,7 @@ describe('ReviewCreateMutation', () => {
 
     const { token } = loginUser(user)
 
-    const createReviewMutation = `
+    const mutation = `
       mutation a {
         reviewCreate (input: {
           movie: "${movieGlobalId}"
@@ -38,9 +38,9 @@ describe('ReviewCreateMutation', () => {
       }
     `
 
-    const createReviewResponse = await makeGraphQLRequest<CreateReviewResponse>(createReviewMutation, token)
+    const createReviewResponse = await makeGraphQLRequest<Response>(mutation, token, user)
 
-    expect(createReviewMutation).toBeDefined()
+    expect(mutation).toBeDefined()
 
     const { review, error: createMovieError } = createReviewResponse.data.reviewCreate
 
@@ -50,7 +50,7 @@ describe('ReviewCreateMutation', () => {
 
   it('should throw an error if the user is not logged', async () => {
     const movieGlobalId = toGlobalId('Movie', '11220')
-    const createReviewMutation = `
+    const mutation = `
       mutation a {
         reviewCreate (input: {
           movie: "${movieGlobalId}"
@@ -65,9 +65,9 @@ describe('ReviewCreateMutation', () => {
       }
     `
 
-    const createReviewResponse = await makeGraphQLRequest<CreateReviewResponse>(createReviewMutation, '')
+    const createReviewResponse = await makeGraphQLRequest<Response>(mutation, '')
 
-    expect(createReviewMutation).toBeDefined()
+    expect(mutation).toBeDefined()
 
     const { review, error: createMovieError } = createReviewResponse.data.reviewCreate
 
