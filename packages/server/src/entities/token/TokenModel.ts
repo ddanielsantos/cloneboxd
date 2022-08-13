@@ -22,7 +22,6 @@ const schema = new Schema<IToken, TokenModel>({
     type: Schema.Types.ObjectId,
     ref: 'user',
     required: true,
-    unique: true
   },
   value: {
     type: String

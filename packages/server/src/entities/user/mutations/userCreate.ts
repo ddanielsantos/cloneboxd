@@ -30,11 +30,18 @@ export const userCreate = mutationWithClientMutationId({
       }
     }
 
-    const isEmailAlreadyUsed = !!(await UserModel.findOne({ email: payload.email }))
+    const isEmailAlreadyUsed = await UserModel.findOne({ email: payload.email })
 
     if (isEmailAlreadyUsed) {
       return {
         error: 'Invalid credentials'
+      }
+    }
+    const usernameAlreadyUsed = await UserModel.findOne({ username: payload.username })
+
+    if(usernameAlreadyUsed) {
+      return {
+        error: 'Username already used'
       }
     }
 
@@ -48,12 +55,14 @@ export const userCreate = mutationWithClientMutationId({
     })
 
     try {
-      await document.save()
+      const refreshToken =  await Token.generateRefreshToken(document.id)
 
       const token = {
         accessToken: Token.generateAccessToken(document.id),
-        refreshToken: await Token.generateRefreshToken(document.id)
+        refreshToken
       }
+      
+      await document.save()
 
       return { user: document, token }
     } catch (error: unknown) {
