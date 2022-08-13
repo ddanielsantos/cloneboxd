@@ -17,7 +17,7 @@ type Response = {
 
 describe('ReviewDeleteMutation', () => {
   it('should let the user delete one of his reviews', async () => {
-    const user = await createUser({ admin: false })
+    const user = await createUser({ username: 'user' })
     const review = await createReview()
     const { token } = loginUser(user)
 

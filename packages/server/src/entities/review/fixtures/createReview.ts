@@ -6,7 +6,7 @@ export async function createReview() {
 
   if (review) return review
 
-  const user = await createUser({ admin: false })
+  const user = await createUser({ username: 'user' })
 
   const document = new ReviewModel({
     text: 'cool fixture',

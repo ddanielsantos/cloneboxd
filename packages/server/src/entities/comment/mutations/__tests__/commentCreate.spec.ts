@@ -18,7 +18,7 @@ type Response = {
 
 describe('CreateCommentMutation', () => {
   it('should create a new comment if the user is logged', async () => {
-    const user = await createUser({ admin: false })
+    const user = await createUser({ username: 'user' })
     const review = await createReview()
     const { token } = loginUser(user)
 
