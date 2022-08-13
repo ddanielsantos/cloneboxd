@@ -19,7 +19,7 @@ type Response = {
 
 describe('UserUpdateMutation', () => {
   it('should update a user', async () => {
-    const old = await createUser({ admin: false })
+    const old = await createUser({ username: 'old' })
     const { token } = loginUser(old)
     const userGlobalId = toGlobalId('User', old.id)
 

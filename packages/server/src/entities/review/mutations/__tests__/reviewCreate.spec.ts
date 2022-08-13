@@ -17,9 +17,7 @@ type Response = {
 describe('ReviewCreateMutation', () => {
   it('should create a review if the user is logged', async () => {
     const movieGlobalId = toGlobalId('Movie', '11220')
-    const user = await createUser({
-      admin: true
-    })
+    const user = await createUser({ username: 'user' })
 
     const { token } = loginUser(user)
 

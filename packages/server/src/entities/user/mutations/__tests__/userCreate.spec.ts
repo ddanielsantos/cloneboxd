@@ -45,7 +45,7 @@ describe('UserCreateMutation', () => {
   })
 
   it('should return an error if the email is already in use', async () => {
-    const user = await createUser({ admin: false })
+    const user = await createUser({ username: 'user' })
 
     const userCreateMutation = `
       mutation a {
@@ -77,7 +77,7 @@ describe('UserCreateMutation', () => {
   })
 
   it('should return an error if the username is already in use', async () => {
-    const user = await createUser({ admin: false })
+    const user = await createUser({ username: 'user' })
 
     const userCreateMutation = `
       mutation a {

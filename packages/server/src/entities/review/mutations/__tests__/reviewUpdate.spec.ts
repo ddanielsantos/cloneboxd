@@ -27,7 +27,7 @@ type Response = {
 
 describe('ReviewUpdateMutation', () => {
   it('should update a review', async () => {
-    const user = await createUser({ admin: false })
+    const user = await createUser({ username: 'user' })
     const old = await createReview()
     const { token } = loginUser(user)
     const reviewGlobalId = toGlobalId('Review', old.id)

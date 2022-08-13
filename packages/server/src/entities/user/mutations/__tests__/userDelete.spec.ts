@@ -16,7 +16,7 @@ type Response = {
 
 describe('UserDeleteMutation', () => {
   it('should let the user delete his own account', async () => {
-    const user = await createUser({ admin: false })
+    const user = await createUser({ username: 'user' })
     const { token } = loginUser(user)
 
     const usersBeforeDeletion = await UserModel.count()

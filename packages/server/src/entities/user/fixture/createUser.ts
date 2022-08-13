@@ -2,11 +2,11 @@ import { UserModel } from '../userModel'
 import { genSaltSync, hashSync } from 'bcrypt'
 
 type Options = {
-  admin: boolean
+  username: string
 }
 
 export async function createUser(options: Options) {
-  const user = await UserModel.findOne({ username: 'chad' })
+  const user = await UserModel.findOne({ username: options.username })
 
   if (user) return user
 
@@ -14,9 +14,9 @@ export async function createUser(options: Options) {
 
   const document = new UserModel({
     fullName: 'chad admin',
-    email: 'tester@mail.com',
-    username: 'chad',
-    isAdmin: options.admin,
+    email: `${options.username}@mail.com`,
+    username: options.username,
+    isAdmin: false,
     password: '123456'
   })
 
