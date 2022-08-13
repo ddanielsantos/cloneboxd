@@ -19,7 +19,7 @@ export const Home = () => {
     query HomeQuery {
       ...Greeting__user
     }
-  `, {})
+  `, {}, { fetchPolicy: 'store-and-network' })
 
   return (
     <VStack
