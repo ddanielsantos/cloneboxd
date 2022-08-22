@@ -11,7 +11,8 @@ Cloneboxd it's a web application based on [Letterboxd](https://letterboxd.com), 
 
 ### Demo
 
-![a GIF showing some pages of the application](./demo.gif)
+![image](https://user-images.githubusercontent.com/80872981/186009276-3dd698d1-a994-4f3d-9349-cc97f275a85d.png)
+
 
 ### Stack
 
