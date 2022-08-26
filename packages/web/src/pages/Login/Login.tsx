@@ -130,7 +130,7 @@ export const Login = () => {
         <FormControl
           isInvalid={!!errors.password}
         >
-          <FormLabel mt={'0.5em'} htmlFor='password'>Senha</FormLabel>
+          <FormLabel mt={'0.5em'} htmlFor='password'>Password</FormLabel>
           <Input placeholder="Enter your password"
             type='password'
             min={6}
