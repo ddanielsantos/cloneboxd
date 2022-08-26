@@ -2,7 +2,7 @@ import { toGlobalId } from 'graphql-relay'
 import { loginUser } from '../../../user/fixture/loginUser'
 import { createUser } from '../../../user/fixture/createUser'
 import { makeGraphQLRequest } from '../../../../../test/utils'
-import { createComment } from '../fixtures/commentCreate'
+import { createComment } from '../../fixtures/commentCreate'
 
 type Response = {
   data: {
@@ -32,7 +32,7 @@ describe('DeleteCommentMutation', () => {
         }
       }
     `
-    const response = await makeGraphQLRequest<Response>(mutation, token)
+    const response = await makeGraphQLRequest<Response>(mutation, token, user)
 
     expect(response).toBeDefined()
     expect(response.errors).toBeFalsy()
