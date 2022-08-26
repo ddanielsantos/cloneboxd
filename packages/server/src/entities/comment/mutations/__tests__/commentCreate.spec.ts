@@ -1,7 +1,7 @@
 import { toGlobalId } from 'graphql-relay'
-import { loginUser } from '../../../user/fixture/loginUser'
 import { createReview } from '../../../review/fixtures/createReview'
 import { createUser } from '../../../user/fixture/createUser'
+import { loginUser } from '../../../user/fixture/loginUser'
 import { makeGraphQLRequest } from '../../../../../test/utils'
 
 type Response = {
@@ -19,8 +19,8 @@ type Response = {
 describe('CreateCommentMutation', () => {
   it('should create a new comment if the user is logged', async () => {
     const user = await createUser({ username: 'user' })
-    const review = await createReview()
     const { token } = loginUser(user)
+    const review = await createReview()
 
     const globalId = toGlobalId('UserReview', review.id)
 
@@ -30,6 +30,7 @@ describe('CreateCommentMutation', () => {
           review: "${globalId}"
           content: "agreed"
         }) {
+          error
           comment {
             id
           }
@@ -37,8 +38,7 @@ describe('CreateCommentMutation', () => {
       } 
     `
 
-    const response = await makeGraphQLRequest<Response>(mutation, token)
-
+    const response = await makeGraphQLRequest<Response>(mutation, token, user)
     expect(response).toBeDefined()
     expect(response.errors).toBeFalsy()
     expect(response.data.commentCreate.comment.id).toBeDefined()

@@ -29,8 +29,6 @@ export const commentDelete = mutationWithClientMutationId({
       }
     }
 
-    console.log('mutation ', ctx.user)
-
     if (!ctx.user) {
       return {
         error: 'Unauthorized'

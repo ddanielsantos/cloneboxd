@@ -1,4 +1,4 @@
-import { CommentModel } from '../../commentModel'
+import { CommentModel } from '../commentModel'
 
 export async function createComment(user: { id?: string }) {
   const comment = await CommentModel.findOne({ user: user.id })
