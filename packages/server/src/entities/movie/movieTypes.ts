@@ -9,8 +9,8 @@ import { creditType } from '../credit/creditType'
 import { nodeInterface } from '../../graphql/nodeInterface'
 import { globalIdField, connectionDefinitions } from 'graphql-relay'
 import { searchMovieById, searchMovieCredits } from '../../services/tmdb/api'
+import { mapCastCrewToEntity } from '../../services/tmdb/mapCastCrewToEntity'
 
-// TODO: ageGroups & rating
 export const movieType = new GraphQLObjectType({
   name: 'Movie',
   description: 'Movie type',
@@ -40,6 +40,15 @@ export const movieType = new GraphQLObjectType({
         return data?.overview
       }
     },
+    genres: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+      description: `Movie's genres`,
+      resolve: async movie => {
+        const { data } = await searchMovieById(movie.id)
+        const genres = data?.genres.map(id => id.name)
+        return genres
+      }
+    },
     releaseDate: {
       type: new GraphQLNonNull(GraphQLString),
       description: `Movie's global release date`,
@@ -50,49 +59,12 @@ export const movieType = new GraphQLObjectType({
       description: `Movie's poster path`,
       resolve: movie => movie.poster_path
     },
-    genres: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: `Movie's genres`,
-      resolve: async movie => {
-        const { data } = await searchMovieById(movie.id)
-        const genres = data?.genres.map(id => id.name)
-        return genres
-      }
-    },
-    ageGroups: {
-      type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
-      description: `Movie's age group`,
-      resolve: movie => {
-        // movie.ageGroup
-        return ['E']
-      }
-    },
-    rating: {
-      type: new GraphQLNonNull(GraphQLFloat),
-      description: `Movie's rating according to users`,
-      resolve: async movie => {
-        // find from mongodb
-        return 0
-      }
-    },
     cast: {
       type: new GraphQLList(creditType),
       description: `Movie's cast`,
       resolve: async movie => {
         const { data } = await searchMovieCredits(movie.id)
-        const actors = data?.cast.map(actor => {
-          return {
-            role: actor.character,
-            person: {
-              id: actor.id,
-              name: actor.name,
-              nacionality: 'BRA',
-              dateOfBirth: '01/01/1970'
-            }
-          }
-        })
-
-        return actors
+        return data?.cast.map(mapCastCrewToEntity)
       }
     },
     crew: {
@@ -100,19 +72,7 @@ export const movieType = new GraphQLObjectType({
       description: `Movie's crew  `,
       resolve: async movie => {
         const { data } = await searchMovieCredits(movie.id)
-        const actors = data?.crew.map(actor => {
-          return {
-            role: actor.job,
-            person: {
-              id: actor.id,
-              name: actor.name,
-              nacionality: 'BRA',
-              dateOfBirth: '01/01/1970'
-            }
-          }
-        })
-
-        return actors
+        return data?.crew.map(mapCastCrewToEntity)
       }
     }
   })
