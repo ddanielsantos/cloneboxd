@@ -29,7 +29,7 @@
     "mongoose": "^6.5.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.1.2",
+    "@faker-js/faker": "^7.4.0",
     "@swc/core": "^1.2.170",
     "@swc/jest": "^0.2.20",
     "@types/bcrypt": "^5.0.0",
