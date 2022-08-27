@@ -11,6 +11,6 @@ updates:
     directory: "/packages/web"
     schedule:
       interval: "daily"
-     labels:
+    labels:
       - "npm"
       - "web"
