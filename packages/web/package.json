@@ -12,13 +12,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chakra-ui/react": "2.0.0-next.4",
+    "@chakra-ui/react": "2.2.9",
     "@emotion/react": "11",
     "@emotion/styled": "11",
     "@fontsource/inter": "^4.5.11",
     "@hookform/resolvers": "^2.8.8",
     "axios": "^0.27.2",
-    "framer-motion": "6",
+    "framer-motion": "7",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.30.0",
@@ -47,7 +47,7 @@
     "relay-compiler": "^14.1.0",
     "relay-config": "^12.0.1",
     "typescript": "^4.5.4",
-    "vite": "^2.9.8",
+    "vite": "^3.0.9",
     "vite-plugin-relay": "^1.0.7"
   }
 }
