@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" 
+    directory: "/packages/server" 
+    schedule:
+      interval: "daily"
+    labels:
+      - "npm"
+      - "server"
+  - package=ecosystem: "npm"
+    directory: "/packages/web"
+    schedule:
+      interval: "daily"
+     labels:
+      - "npm"
+      - "web"
