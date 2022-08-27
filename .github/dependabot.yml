@@ -7,7 +7,7 @@ updates:
     labels:
       - "npm"
       - "server"
-  - package=ecosystem: "npm"
+  - package-ecosystem: "npm"
     directory: "/packages/web"
     schedule:
       interval: "daily"
