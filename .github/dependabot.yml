@@ -1,19 +1,9 @@
 version: 2
 updates:
   - package-ecosystem: "npm" 
-    directory: "/packages/server" 
+    directory: "/" 
     schedule:
       interval: "daily"
     labels:
       - "npm"
       - "server"
-  - package-ecosystem: "npm"
-    directory: "/packages/web"
-    schedule:
-      interval: "daily"
-    labels:
-      - "npm"
-      - "web"
-  
-  - name: Dependabot Auto Merge
-  uses: ahmadnassri/action-dependabot-auto-merge@v2.3.1
