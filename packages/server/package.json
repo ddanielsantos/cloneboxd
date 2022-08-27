@@ -33,7 +33,7 @@
     "@swc/core": "^1.2.170",
     "@swc/jest": "^0.2.20",
     "@types/bcrypt": "^5.0.0",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^28.1.8",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.7",
