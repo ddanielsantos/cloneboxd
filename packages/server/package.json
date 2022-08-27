@@ -45,7 +45,7 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-promise": "^6.0.1",
     "jest": "^28.1.0",
     "mongodb-memory-server": "^8.6.0",
     "ts-jest": "^28.0.3",
