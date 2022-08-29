@@ -35,7 +35,7 @@ export const MovieDetails = () => {
       singleMovie(id: $id) {
         title
         releaseDate
-        rating
+        rating        
         description
         posterPath
         cast {
@@ -68,28 +68,6 @@ export const MovieDetails = () => {
     }
   `, { id: movieId ?? '' })
 
-  function getAverageRating(): number | string {
-    if (
-      !data.movieSummary?.totalWatches ||
-      !data?.movieSummary?.reviewsPerRating
-    ) {
-      return 'No reviews'
-    }
-
-    const ratingSum = data.movieSummary.reviewsPerRating.reduce((acc, curr) => {
-      const { count, rating } = curr || {}
-
-      if (count && rating) {
-        return (count * rating) + acc
-      }
-
-      return acc
-    }, 0) || 0
-
-    return (ratingSum / data.movieSummary.totalWatches).toFixed(2)
-  }
-
-  const averageRating = getAverageRating()
   const { reviewsPerRating } = data.movieSummary || {}
 
   // creates a mutable copy
@@ -141,7 +119,7 @@ export const MovieDetails = () => {
 
             <Text
               fontSize={'md'}
-            >{averageRating} &#9733;</Text>
+            >{data.singleMovie?.rating} &#9733;</Text>
           </HStack>
 
         </GridItem>

@@ -10,6 +10,7 @@ import { nodeInterface } from '../../graphql/nodeInterface'
 import { globalIdField, connectionDefinitions } from 'graphql-relay'
 import { searchMovieById, searchMovieCredits } from '../../services/tmdb/api'
 import { mapCastCrewToEntity } from '../../services/tmdb/mapCastCrewToEntity'
+import { ReviewModel } from '../review/reviewModel'
 
 export const movieType = new GraphQLObjectType({
   name: 'Movie',
@@ -29,6 +30,21 @@ export const movieType = new GraphQLObjectType({
         const { data } = await searchMovieById(movie.id)
 
         return data?.runtime + ' min'
+      }
+    },
+    rating: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      description: 'Average rating of the movie according to the users',
+      resolve: async movie => {
+        const movieRatings = await ReviewModel.find({ movie: `${movie.id}` })
+
+        const sum = movieRatings.reduce((prev, curr) => {
+          return prev + curr.rating
+        }, 0)
+
+        const avg = sum / movieRatings.length
+
+        return avg.toFixed(2)
       }
     },
     description: {
