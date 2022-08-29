@@ -22,15 +22,15 @@ class ErrorBoundaryRetry extends Component<Props, State> {
     error: null
   }
 
-  public static getDerivedStateFromError (_: Error): State {
-    return { hasError: true, error: { message: _.message, source: _.cause } }
+  public static getDerivedStateFromError(_: Error): State {
+    return { hasError: true, error: { message: _.message, source: (_.cause as Error) } }
   }
 
-  public componentDidCatch (error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo)
   }
 
-  public render () {
+  public render() {
     if (this.state.hasError) {
       return (
         <Center>
