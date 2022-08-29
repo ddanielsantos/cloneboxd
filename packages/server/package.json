@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "dev": "tsnd --respawn --clear --transpile-only index.ts",
+    "dev": "tsnd --respawn --clear --transpile-only --exit-child index.ts",
     "start": "node dist/index.js",
     "populate": "tsnd --clear --transpile-only src/scripts/populateDatabase.ts",
     "test": "jest --runInBand --detectOpenHandles",
