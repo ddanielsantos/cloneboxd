@@ -42,7 +42,7 @@ export const movieType = new GraphQLObjectType({
           return prev + curr.rating
         }, 0)
 
-        const avg = sum / movieRatings.length
+        const avg = sum / (movieRatings.length || 1)
 
         return avg.toFixed(2)
       }
