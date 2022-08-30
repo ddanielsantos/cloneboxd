@@ -1,4 +1,4 @@
-import { Box, Avatar, Text, Link, Flex } from '@chakra-ui/react'
+import { Box, Avatar, Text, Link, Flex, useColorMode } from '@chakra-ui/react'
 import { GoComment } from 'react-icons/go'
 import { startTransition } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +12,7 @@ type Props = {
 
 export const ReviewCard = ({ data }: Props) => {
   const navigate = useNavigate()
-
+  const { colorMode } = useColorMode()
   const response = useFragment(graphql`
     fragment ReviewCard__review on UserReview {
       id
@@ -35,7 +35,7 @@ export const ReviewCard = ({ data }: Props) => {
         startTransition(() => navigate(`/review/${response.id}`))
       }}
       _hover={{
-        bg: 'gray.200',
+        bg: colorMode === 'dark' ? 'gray.700' : 'gray.300',
         transitionDuration: '0.5s'
       }}
       gap={'1em'}

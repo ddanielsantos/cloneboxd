@@ -24,7 +24,7 @@ import { graphql, useLazyLoadQuery } from 'react-relay'
 import { MovieDetailsQuery } from './__generated__/MovieDetailsQuery.graphql'
 import { LatestReviews } from './LatestReviews/LatestReviews'
 import { TopReviews } from './TopReviews/TopReviews'
-import { Bar, BarChart, XAxis } from 'recharts'
+import { Bar, BarChart, Cell, ResponsiveContainer, XAxis } from 'recharts'
 
 export const MovieDetails = () => {
   const { colorMode } = useColorMode()
@@ -179,7 +179,8 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    data.singleMovie?.cast?.map((actor, index) => <Tooltip key={index} inside={actor?.person.name || ''} popup={actor?.role || ''} />)
+                    data.singleMovie?.cast?.map((actor, index) =>
+                      <Tooltip key={index} inside={actor?.person.name || ''} popup={actor?.role || ''} />)
                   }
                 </Flex>
               </TabPanel>
@@ -191,7 +192,8 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    data.singleMovie?.crew?.map((crew, index) => <Tooltip key={index} inside={crew?.person.name || ''} popup={crew?.role || 'a+'} />)
+                    data.singleMovie?.crew?.map((crew, index) =>
+                      <Tooltip key={index} inside={crew?.person.name || ''} popup={crew?.role || ''} />)
                   }
                 </Flex>
               </TabPanel>
@@ -203,7 +205,9 @@ export const MovieDetails = () => {
                   gap={1}
                 >
                   {
-                    data.singleMovie?.genres.map((genre, index) => <Box key={index} padding={1} bg={colorMode === 'light' ? 'gray.200' : 'whiteAlpha.300'} cursor={'pointer'} borderRadius={'md'} _hover={{ bg: colorMode === 'light' ? 'gray.400' : 'gray.500', transitionDuration: '0.5s' }} fontSize={'sm'} >{genre}</Box>)
+                    data.singleMovie?.genres.map((genre, index) =>
+                      <Tooltip key={index + (genre || '')} inside={genre} />
+                    )
                   }
                 </Flex>
               </TabPanel>
@@ -228,15 +232,28 @@ export const MovieDetails = () => {
               Rating distribution:
             </Text>
 
-            <BarChart
-              data={chartData}
-              width={200}
+            <ResponsiveContainer
+              width={'100%'}
               height={120}
             >
-              <XAxis dataKey="rating" />
-              <Bar dataKey={'count'}
-              />
-            </BarChart>
+              <BarChart data={chartData}>
+                <XAxis
+                  dataKey={'rating'}
+                  angle={-45}
+                />
+                <Bar
+                  dataKey={'count'}
+                  radius={[3, 3, 0, 0]}
+                >
+                  {
+                    chartData?.map((_, index) => {
+                      return <Cell fill='#718096' key={index} />
+                    })
+                  }
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+
           </Box>
 
           <VStack
