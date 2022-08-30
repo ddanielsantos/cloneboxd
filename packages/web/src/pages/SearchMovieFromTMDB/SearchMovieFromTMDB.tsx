@@ -1,5 +1,5 @@
 import { graphql } from 'relay-runtime'
-import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, Spinner, VStack } from '@chakra-ui/react'
+import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, Spinner, VStack, useColorMode } from '@chakra-ui/react'
 import { startTransition, useState, Fragment, Suspense, Dispatch, SetStateAction } from 'react'
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay'
 
@@ -97,6 +97,7 @@ type Props = {
 
 const SearchResult = ({ queryRef }: Props): JSX.Element => {
   const navigate = useNavigate()
+  const { colorMode } = useColorMode()
   const { searchMovieFromTMDB } = usePreloadedQuery<SearchMovieFromTMDB_Query>(query, queryRef)
 
   if (searchMovieFromTMDB?.edges?.length === 0) {
@@ -139,7 +140,7 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
                   startTransition(() => navigate('/movie/' + edge.node?.id))
                 }}
                 _hover={{
-                  bg: 'gray.700',
+                  bg: colorMode === 'dark' ? 'gray.700' : 'gray.300',
                   transitionDuration: '0.5s'
                 }}
               >
