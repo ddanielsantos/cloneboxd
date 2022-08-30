@@ -1,10 +1,11 @@
 import { graphql } from 'relay-runtime'
-import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, Spinner } from '@chakra-ui/react'
+import { Box, Image, Button, Flex, Input, Text, Grid, GridItem, Divider, Spinner, VStack } from '@chakra-ui/react'
 import { startTransition, useState, Fragment, Suspense, Dispatch, SetStateAction } from 'react'
 import { PreloadedQuery, usePreloadedQuery, useQueryLoader } from 'react-relay'
 
 import type { SearchMovieFromTMDB_Query } from './__generated__/SearchMovieFromTMDB_Query.graphql'
 import { useNavigate } from 'react-router-dom'
+import { Header } from '../../components/Header/Header'
 
 const IMAGE_URL_PREFIX = 'https://image.tmdb.org/t/p/w92'
 
@@ -15,6 +16,7 @@ const query = graphql`
         node {
           id
           title
+          description
           posterPath
           releaseDate
         }
@@ -28,14 +30,15 @@ const SearchBar = ({ search, setTitleToSearch }: { search: () => void, setTitleT
     <>
       <Text
         mb={'1em'}
-        fontSize="3xl"
-        fontWeight="extrabold"
+        fontSize="2xl"
+        fontWeight="medium"
       >
         What movie are you looking for?
       </Text>
 
       <Flex
         gap="0.5em"
+        mb={'1em'}
       >
         <Input
           placeholder='enter the movie name here'
@@ -62,35 +65,29 @@ export const SearchMovieFromTMDB = (_: any): JSX.Element => {
     })
   }
 
-  if (queryRef == null) {
-    return (
+  return (
+    <
+      VStack
+      w={'100%'}
+      h={'100%'}
+      minH={'100vh'}
+    >
+      <Header />
       <Box
-        minH={'100vh'}
         as="main"
         h={'100%'}
         p={'1em'}
         w={['100%', '100%', '48em']}
       >
         <SearchBar search={search} setTitleToSearch={setTitleToSearch} />
+
+        {queryRef &&
+          <Suspense fallback={<Spinner />}>
+            <SearchResult queryRef={queryRef} />
+          </Suspense>
+        }
       </Box>
-    )
-  }
-
-  return (
-    <Box
-      minH={'100vh'}
-      as="main"
-      h={'100%'}
-      p={'1em'}
-      w={['100%', '100%', '48em']}
-    >
-      <SearchBar search={search} setTitleToSearch={setTitleToSearch} />
-
-      <Suspense fallback={<Spinner />}>
-        <SearchResult queryRef={queryRef} />
-      </Suspense>
-
-    </Box>
+    </VStack>
   )
 }
 
@@ -105,7 +102,6 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
   if (searchMovieFromTMDB?.edges?.length === 0) {
     return (
       <Box
-        // p={3}
         mt="3em"
       >
         <Text
@@ -118,16 +114,10 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
   }
 
   return (
-    <Grid
+    <VStack
       gap={'0.5em'}
+      w='100%'
     >
-      <Text
-        my={'1em'}
-        fontSize="2xl"
-        fontWeight={'bold'}
-      >
-        Result:
-      </Text>
       {
         searchMovieFromTMDB && searchMovieFromTMDB?.edges?.map((edge, index) => {
           if (!edge?.node) {
@@ -138,34 +128,31 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
             <Fragment
               key={index}
             >
-              <GridItem
-                display={'flex'}
+              <Flex
+                w={'100%'}
                 borderRadius={'md'}
-                // bg={'gray.100'}
-                // border={"1px solid red"}
-                p={'1em'}
                 gap={'0.5em'}
+                p='1em'
                 cursor={'pointer'}
-                alignItems={'center'}
-                // TODO: in the movie details page, check if the movie id resolves to a movie
+                alignItems={'flex-start'}
                 onClick={() => {
                   startTransition(() => navigate('/movie/' + edge.node?.id))
                 }}
                 _hover={{
-                  bg: 'gray.100',
+                  bg: 'gray.700',
                   transitionDuration: '0.5s'
                 }}
               >
                 {
                   edge.node.posterPath && <Image
+                    borderRadius={'5px'}
                     src={IMAGE_URL_PREFIX + edge.node.posterPath}
                   />
                 }
                 <Flex
-                  flexDir={'row'}
-                  alignSelf='flex-start'
-                  gap='0.5em'
-                  alignItems='baseline'
+                  flexDirection={'column'}
+                  flexShrink={1}
+                  px={1}
                 >
                   <Text
                     fontWeight={'bold'}
@@ -182,13 +169,24 @@ const SearchResult = ({ queryRef }: Props): JSX.Element => {
                       edge.node.releaseDate && new Date(edge.node.releaseDate).getFullYear()
                     }
                   </Text>
+
+                  <Text
+                  >
+                    {
+                      edge.node.description.slice(0, 120)
+                    }
+                    {
+                      edge.node.description.length > 120 && '...'
+                    }
+                  </Text>
                 </Flex>
-              </GridItem>
+
+              </Flex>
               <Divider />
             </Fragment>
           )
         })
       }
-    </Grid>
+    </VStack>
   )
 }
