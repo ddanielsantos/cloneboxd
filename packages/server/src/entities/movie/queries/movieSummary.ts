@@ -67,7 +67,7 @@ export const movieSummary: GraphQLFieldConfig<any, any, Args> = {
     return {
       totalWatches,
       reviewsPerRating,
-      uniqueWatches: uniqueWatches.count
+      uniqueWatches: uniqueWatches?.count || 0
     }
   }
 }
