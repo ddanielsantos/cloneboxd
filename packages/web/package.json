@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.7.13",
-    "@types/react": "^18.0.9",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.3",
     "@types/react-relay": "^14.1.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
