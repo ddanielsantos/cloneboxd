@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",
-    "@swc/core": "^1.2.246",
+    "@swc/core": "^1.2.247",
     "@swc/jest": "^0.2.20",
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.0.0",
