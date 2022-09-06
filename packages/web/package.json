@@ -25,7 +25,7 @@
     "react-icons": "^4.3.1",
     "react-relay": "^14.1.0",
     "react-router-dom": "6",
-    "recharts": "^2.1.13",
+    "recharts": "^2.1.14",
     "relay-runtime": "^14.1.0",
     "yup": "^0.32.11"
   },
